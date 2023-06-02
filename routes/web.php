@@ -23,6 +23,6 @@ Route::get('/test', function () {
     return view('welcome');
 });
 
-Route::get('/info', function () {
+Route::get('/info2', function () {
     return view('welcome');
 });
