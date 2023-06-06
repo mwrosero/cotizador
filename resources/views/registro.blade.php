@@ -9,17 +9,17 @@
         <div class="col-12">
             <div class="accordion mt-3" id="formRegistro">
                 <div class="card accordion-item active">
-                <h2 class="accordion-header d-flex align-items-center">
-                    <button
-                    type="button"
-                    class="accordion-button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#formRegistro-1"
-                    aria-expanded="true"
-                    >
-                    <span>Paso 1.</span> Datos de la Empresa
-                    </button>
-                </h2>
+                    <h2 class="accordion-header d-flex align-items-center">
+                        <button
+                        type="button"
+                        class="accordion-button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#formRegistro-1"
+                        aria-expanded="true"
+                        >
+                        <span>Paso 1.</span> Datos de la Empresa
+                        </button>
+                    </h2>
                     <div id="formRegistro-1" class="accordion-collapse collapse show">
                         <div class="accordion-body">
                             <div class="row">
@@ -127,130 +127,125 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="accordion-item card">
-                <h2 class="accordion-header d-flex align-items-center">
-                    <button
-                    type="button"
-                    class="accordion-button collapsed"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#formRegistro-2"
-                    aria-expanded="true"
-                    >
-                    Paso 2. Datos de contacto
-                    </button>
-                </h2>
-                <div id="formRegistro-2" class="accordion-collapse collapse show">
-                    <div class="accordion-body">
-                        <div class="row">
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="telefonoEmpresa" class="form-label">Teléfono Empresa</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="telefonoEmpresa"
-                                placeholder=""
-                                />
+                    <h2 class="accordion-header d-flex align-items-center">
+                        <button
+                        type="button"
+                        class="accordion-button collapsed"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#formRegistro-2"
+                        aria-expanded="true"
+                        >
+                        Paso 2. Datos de contacto
+                        </button>
+                    </h2>
+                    <div id="formRegistro-2" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="telefonoEmpresa" class="form-label">Teléfono Empresa</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="telefonoEmpresa"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="correoEmpresa" class="form-label">Correo Empresa</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="correoEmpresa"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="personaContacto" class="form-label">Persona Contacto</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="personaContacto"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="telefonoContacto" class="form-label">Teléfono Contacto</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="telefonoContacto"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="correoContacto" class="form-label">Correo Contacto</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="correoContacto"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-4 mb-3">
+                                    <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto</label>
+                                    <input
+                                    type="text"
+                                    class="form-control"
+                                    id="cargoPersonaContacto"
+                                    placeholder=""
+                                    />
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="button" class="btn btn-primary">Crear Empresa</button>
+                                    <button type="button" class="btn btn-outline-primary">Continuar</button>
+                                </div>
                             </div>
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="correoEmpresa" class="form-label">Correo Empresa</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="correoEmpresa"
-                                placeholder=""
-                                />
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="personaContacto" class="form-label">Persona Contacto</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="personaContacto"
-                                placeholder=""
-                                />
-                            </div>
-                            
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="telefonoContacto" class="form-label">Teléfono Contacto</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="telefonoContacto"
-                                placeholder=""
-                                />
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="correoContacto" class="form-label">Correo Contacto</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="correoContacto"
-                                placeholder=""
-                                />
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto</label>
-                                <input
-                                type="text"
-                                class="form-control"
-                                id="cargoPersonaContacto"
-                                placeholder=""
-                                />
-                            </div>
-                            <div class="col-12 text-end">
-                                <button type="button" class="btn btn-primary">Crear Empresa</button>
-                                <button type="button" class="btn btn-outline-primary">Continuar</button>
-                            </div>
-                            
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>
     </div>
-
     <!-- MODAL GIRO NEGOCIO -->
     <!-- Modal -->
     <div class="modal fade" id="modalGiroNegocio" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel1">Registrar Giro de Negocio</h5>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-12 mb-3">
-                  <label for="gironNegocio" class="form-label">Giro de Negocio</label>
-                  <input type="text" id="gironNegocio" class="form-control" placeholder="" />
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Registrar Giro de Negocio</h5>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
                 </div>
-                <div class="col-12 mb-3">
-                    <label for="descripcionGiroNegocio" class="form-label">Descripción</label>
-                    <input
-                      type="text"
-                      id="descripcionGiroNegocio"
-                      class="form-control"
-                      placeholder=""
-                    />
-                  </div>
-                <div class="col-12 mb-3">
-              </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <label for="gironNegocio" class="form-label">Giro de Negocio</label>
+                            <input type="text" id="gironNegocio" class="form-control" placeholder="" />
+                        </div>
+                        <div class="col-12 mb-3">
+                            <label for="descripcionGiroNegocio" class="form-label">Descripción</label>
+                            <input
+                            type="text"
+                            id="descripcionGiroNegocio"
+                            class="form-control"
+                            placeholder=""
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary ">Guardar</button>
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                Cerrar
-              </button>
-              <button type="button" class="btn btn-primary">Guardar</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 @endsection
 
