@@ -18,6 +18,12 @@
           "name": "eCommerce",
           "icon": "circle",
           "slug": "dashboard-ecommerce"
+        },
+        {
+          "url": "/",
+          "name": "AKOLD",
+          "icon": "circle",
+          "slug": "dashboard-ecommerce"
         }
       ]
     },
