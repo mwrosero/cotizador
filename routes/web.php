@@ -14,42 +14,6 @@ use App\Http\Controllers\SeguridadesController;
 |
 */
 
-<<<<<<< HEAD
-Route::get('/dashboard', function () {
-    return view('dashboard');
-});
-
-Route::get('/registro', function () {
-    return view('cotizador.registro');
-});
-
-Route::get('/cotizacion', function () {
-    return view('cotizador.cotizacion');
-});
-
-Route::get('/clientes', function () {
-    return view('cotizador.clientes');
-});
-
-Route::get('/cotizaciones', function () {
-    return view('cotizador.cotizaciones');
-});
-
-=======
-/*
->>>>>>> developer
-Route::get('/login', function () {
-    return view('login.login');
-});
-
-Route::get('/olvidecontrasena', function () {
-    return view('login.olvidecontrasena');
-});
-
-Route::get('/recuperar-contrasena', function () {
-    return view('login.recuperar-contrasena');
-});*/
-
 Route::middleware('guest')->group(function () {
     Route::get('/login', [SeguridadesController::class, 'login'])->name('login');
     Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar');
