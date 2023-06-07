@@ -1,535 +1,277 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<html
+  lang="en"
+  class="light-style layout-navbar-fixed layout-menu-fixed"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="../../assets/"
+  data-template="vertical-menu-template-starter"
+>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="noindex, nofollow">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://code.jquery.com/jquery-3.6.0.min.js">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    
+    <title>@yield('title')</title>
+    <meta name="description" content="" />
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="../../assets/vendor/fonts/fontawesome.css" />
+    <link rel="stylesheet" href="../../assets/vendor/fonts/tabler-icons.css" />
+    <link rel="stylesheet" href="../../assets/vendor/fonts/flag-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="../../assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="../../assets/css/demo.css" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/node-waves/node-waves.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/select2/select2.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
    
- <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Cloudways Laravel</title>
+    <!-- Page CSS -->
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+    <!-- Helpers -->
+    <script src="../../assets/vendor/js/helpers.js"></script>
 
-    <style type="text/css">
-        @font-face {
-            font-family: 'proxima_nova';
-            src: url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.eot');
-            src: url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.eot?#iefix') format('embedded-opentype'),
-                url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.woff') format('woff'),
-                url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.ttf') format('truetype'),
-                url('https://litmus.com/fonts/Emails/proximanova-regular-webfont.svg#proxima_nova_rgregular') format('svg');
-            font-weight: 400;
-            font-style: normal;
-        }
-        
-        @font-face {
-            font-family: 'proxima_nova';
-            src: url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.eot');
-            src: url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.eot?#iefix') format('embedded-opentype'),
-                url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.woff') format('woff'),
-                url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.ttf') format('truetype'),
-                url('https://litmus.com/fonts/Emails/proximanova-bold-webfont.svg#proxima_nova_rgbold') format('svg');
-            font-weight: 600;
-            font-style: normal;
-        }
-
-        * {
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            overflow-x: hidden;
-        }
-
-        body {
-            padding: 0;
-            margin: 0;
-            color: #1a1a1a;
-            font-size: 15px;
-            font-family: 'proxima_nova';
-            font-weight: 400;
-        }
-
-        a {
-            display: inline-block;
-            text-decoration: none !important;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .container {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding-left: 15px;
-            padding-right: 15px;
-        }
-
-        .img-responsive
-        {
-            display: inline-block;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .cw_glb_btn {
-            color: #0E134F;
-            font-size: 16px;
-            font-weight: 600;
-            display: inline-block;
-            background-color: #39DCB1;
-            border-radius: 6px !important;
-            padding: 15px 20px;
-            min-width: 220px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .cw_glb_btn:hover, .cw_glb_btn:focus, .cw_glb_btn:active {
-            background-color: #74ffda !important;
-        }
-
-        .lrvl_wlcm_bnr_sec
-        {
-            background: #1c2bf7;
-            background: -moz-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -webkit-gradient(left bottom, right top, color-stop(0%, #1c2bf7), color-stop(100%, #061c59));
-            background: -webkit-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -o-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -ms-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c2bf7', endColorstr='#061c59', GradientType=1);
-            padding: 60px 0 80px;
-        }
-
-        .lrvl_wlcm_bnr_mainBox h1
-        {
-            color: #fff;
-            font-size: 48px;
-            font-weight: 600;
-            margin: 30px 0;
-        }
-
-        .lrvl_wlcm_mid_sec
-        {
-            background: #fff;
-            padding-bottom: 80px;
-        }
-
-        .lrvl_wlcm_mid_mainBox
-        {
-            display: flex;
-        }
-
-        .lrvl_wlcm_mid_lftBox
-        {
-            flex: 1;
-        }
-
-        .lrvl_wlcm_version
-        {
-            color: #0A1E43;
-            opacity: 0.7;
-            font-size: 14px;
-            padding: 20px 0 30px;
-        }
-
-        .lrvl_wlcm_mid_lftBox
-        {
-            position: relative;
-        }
-
-        .lrvl_wlcm_mid_lftBox ul
-        {
-            margin: 0;
-            padding: 0;
-        }
-
-        .lrvl_wlcm_mid_lftBox ul li
-        {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .lrvl_wlcm_mid_lftBox ul li a
-        {
-            color: #0A1E43;
-            font-size: 18px;
-            padding: 15px;
-            display: block;
-            border-left: 2px solid rgba(196, 196, 196, 0.5);
-        }
-
-        .lrvl_wlcm_mid_lftBox ul li a.active
-        {
-            color: #2F39BF;
-            font-weight: 600;
-            border-color: #2F39BF;
-        }
-
-        .lrvl_wlcm_mid_lftBox_fxd
-        {
-            position: fixed;
-            top: 100px;
-            z-index: 999;
-        }
-
-        .lrvl_wlcm_mid_rhtBox
-        {
-            flex: 2;
-        }
-
-        .lrvl_wlcm_mid_rht_txtBox
-        {
-            margin-bottom: 20px;
-        }
-        
-        .lrvl_wlcm_mid_rht_txtBox h2
-        {
-            color: #0E134F;
-            font-size: 36px;
-            font-weight: 600;
-            margin: 0 0 30px;
-        }
-
-        .lrvl_wlcm_mid_rht_txtBox ul
-        {
-            margin: 0;
-            padding: 0;
-        }
-
-        .lrvl_wlcm_mid_rht_txtBox ul li
-        {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .lrvl_wlcm_mid_rht_txtBox ul li a
-        {
-            color: #0A1E43;
-            font-size: 18px;
-            font-weight: 600;
-            padding: 20px;
-            margin-bottom: 20px;
-            background: rgba(248, 249, 251, 0.5);
-            display: block;
-        }
-
-        .lrvl_wlcm_mid_rht_txtBox ul li a:hover,
-        .lrvl_wlcm_mid_rht_txtBox ul li a:focus,
-        .lrvl_wlcm_mid_rht_txtBox ul li a:active
-        {
-            color: #2F39BF;
-        }
-
-        .lrvl_wlcm_signUp_sec
-        {
-            background: #1c2bf7;
-            background: -moz-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -webkit-gradient(left bottom, right top, color-stop(0%, #1c2bf7), color-stop(100%, #061c59));
-            background: -webkit-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -o-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: -ms-linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            background: linear-gradient(45deg, #1c2bf7 0, #061c59 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#1c2bf7', endColorstr='#061c59', GradientType=1);
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .lrvl_wlcm_signUp_mainBox h3
-        {
-            color: #fff;
-            font-size: 36px;
-            font-weight: 600;
-            margin: 0 0 30px;
-        }
-
-        .lrvl_wlcm_ftr_sec
-        {
-            background: #050826;
-            padding: 20px 0;
-        }
-
-        .lrvl_wlcm_ftr_sec p
-        {
-            color: #fff;
-            font-size: 15px;
-            margin: 0;
-            text-align: center;
-        }
-
-        @media (max-width: 1200px)
-        {
-            .container {
-                width: 970px;
-            }
-        }
-
-        @media (max-width: 992px)
-        {
-            .container {
-                width: 750px;
-            }
-
-            .lrvl_wlcm_bnr_sec
-            {
-                padding: 50px;
-            }
-
-            .lrvl_wlcm_bnr_mainBox h1 {
-                font-size: 32px;
-                margin: 20px 0;
-            }
-
-            .lrvl_wlcm_mid_lftBox ul li a,
-            .lrvl_wlcm_mid_rht_txtBox ul li a
-            {
-                font-size: 16px;
-            }
-
-            .lrvl_wlcm_mid_rht_txtBox h2
-            {
-                font-size: 26px;
-                margin-bottom: 10px;
-            }
-
-            .lrvl_wlcm_signUp_sec
-            {
-                padding: 50px 0 40px;
-            }
-
-            .lrvl_wlcm_signUp_mainBox h3 {
-                font-size: 26px;
-                line-height: 36px;
-                margin-bottom: 20px;
-            }
-
-            .lrvl_wlcm_signUp_mainBox h3 br
-            {
-                display: none;
-            }
-        }
-
-        @media (max-width: 767px)
-        {
-            .container {
-                width: 100%;
-            }
-
-            .lrvl_wlcm_bnr_sec {
-                padding: 50px 0 40px;
-                text-align: center;
-            }
-
-            .lrvl_wlcm_version
-            {
-                padding-bottom: 0;
-            }
-
-            .lrvl_wlcm_mid_sec {
-                padding-bottom: 30px;
-            }
-
-            .lrvl_wlcm_mid_mainBox {
-                display: block;
-            }
-
-            .lrvl_wlcm_mid_lftBox
-            {
-                margin-bottom: 20px;
-            }
-
-            .lrvl_wlcm_mid_lftBox ul
-            {
-                padding: 20px 0 10px;
-            }
-
-            .lrvl_wlcm_mid_lftBox_fxd {
-                top: 0px;
-                background: #fff;
-                border-bottom: 2px solid #2F39BF;
-            }
-            
-            .lrvl_wlcm_mid_lftBox ul li
-            {
-                display: inline-block;
-            }
-
-            .lrvl_wlcm_mid_lftBox ul li a {
-                font-size: 14px;
-                padding: 10px;
-                background-color: rgba(196, 196, 196, 0.5);
-                border: 0 !important;
-                border-radius: 6px;
-            }
-
-            .lrvl_wlcm_mid_lftBox ul li a.active
-            {
-                color: #fff;
-                background-color: #2F39BF;
-            }
-
-            .lrvl_wlcm_mid_rht_txtBox ul li a {
-                font-size: 15px;
-                padding: 15px;
-                margin-bottom: 10px;
-            }
-        }
-
-        @media (max-width: 500px)
-        {
-            .cw_glb_btn
-            {
-                width: 100%;
-            }
-
-            .lrvl_wlcm_mid_lftBox ul li,
-            .lrvl_wlcm_mid_lftBox ul li a
-            {
-                width: 100%;
-                text-align: center;
-            }
-        }
-    </style>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="../../assets/vendor/js/template-customizer.js"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="../../assets/js/config.js"></script>
   </head>
-  <body>
-    <section class="lrvl_wlcm_bnr_sec">
-        <div class="container">
-            <div class="lrvl_wlcm_bnr_mainBox">
-                <div class="lrvl_wlcm_bnr_imgBox">
-                    <img src="https://www.cloudways.com/wp-content/uploads/2021/02/cw-laravel-logo.png" alt="Cloudways Laravel" class="img-responsive">
-                </div>
-                <h1>Getting Started with Laravel</h1>
-            </div>
-        </div>
-    </section>
 
-    <section class="lrvl_wlcm_mid_sec">
-        <div class="container">
-            <div class="lrvl_wlcm_version">
-            <div class="lrvl_wlcm_mid_mainBox">
-                <div class="lrvl_wlcm_mid_lftBox">
-                    <ul>
-                        <li><a href="javascript:void(0);" data-target="section1" class="active">Getting Started Guides</a></li>
-                        <li><a href="javascript:void(0);" data-target="section2">Deployment Guides</a></li>
-                        <li><a href="javascript:void(0);" data-target="section3">Using Cloudways Features</a></li>
-                        <li><a href="javascript:void(0);" data-target="section4">Optimization Guides</a></li>
+  <body>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper layout-content-navbar">
+        <!-- Menu -->
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <div class="app-brand demo">
+                <a href="index.html" class="app-brand-link">
+                <span class="app-brand-logo demo">
+                    <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                        fill="#7367F0"
+                    />
+                    <path
+                        opacity="0.06"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                        fill="#161616"
+                    />
+                    <path
+                        opacity="0.06"
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                        fill="#161616"
+                    />
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                        fill="#7367F0"
+                    />
+                    </svg>
+                </span>
+                <span class="app-brand-text demo menu-text fw-bold">Bienvenidos</span>
+                </a>
+                <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+                <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+                </a>
+            </div>
+            <div class="menu-inner-shadow"></div>
+            <ul class="menu-inner py-1">
+            <!-- Page -->
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                        <div data-i18n="Page 1">Opciones</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="registro" class="menu-link">
+                            <div data-i18n="Registro">Registro</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="cotizacion" class="menu-link">
+                            <div data-i18n="Cotizacion">Cotizacion</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="mis-clientes" class="menu-link">
+                            <div data-i18n="Mis-clientes">Mis clientes</div>
+                            </a>
+                        </li>
+                    </ul>
+                    <ul class="menu-sub">
+                        <li class="menu-item">
+                            <a href="mis-cotizacion" class="menu-link">
+                            <div data-i18n="Mis-Cotizaciones">Mis Cotizaciones</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+          <!-- Navbar -->
+            <nav
+                class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                id="layout-navbar">
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                        <i class="ti ti-menu-2 ti-sm"></i>
+                    </a>
+                </div>
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <div class="navbar-nav align-items-center">
+                        <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
+                        <i class="ti ti-sm"></i>
+                        </a>
+                    </div>
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                        <!-- User -->
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+                                <div class="avatar avatar-online">
+                                    <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar avatar-online">
+                                                    <img src="../../assets/img/avatars/1.png" alt class="h-auto rounded-circle" />
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <span class="fw-semibold d-block">John Doe</span>
+                                                <small class="text-muted">Admin</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="ti ti-user-check me-2 ti-sm"></i>
+                                        <span class="align-middle">My Profile</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="ti ti-settings me-2 ti-sm"></i>
+                                        <span class="align-middle">Settings</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <span class="d-flex align-items-center align-middle">
+                                        <i class="flex-shrink-0 ti ti-credit-card me-2 ti-sm"></i>
+                                        <span class="flex-grow-1 align-middle">Billing</span>
+                                        <span class="flex-shrink-0 badge badge-center rounded-pill bg-label-danger w-px-20 h-px-20"
+                                            >2</span
+                                        >
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="ti ti-logout me-2 ti-sm"></i>
+                                        <span class="align-middle">Log Out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--/ User -->
                     </ul>
                 </div>
+            </nav>
 
-                <div class="lrvl_wlcm_mid_rhtBox">
-                    <div class="lrvl_wlcm_mid_rht_txtBox" id="section1">
-                        <h2>Getting Started Guides</h2>
-                        <ul>
-                            <li><a href="https://support.cloudways.com/how-do-i-take-my-website-live-from-cloudways/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How Do I Take My Website Live from Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/deploy-laravel-on-cloudways/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Deploy Laravel Project on Cloudways Server</a></li>
-                            <li><a href="https://support.cloudways.com/how-to-manage-your-databases-using-the-integrated-database-manager/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Manage Your Databases Using the Cloudways Database Manager</a></li>
-                            <li><a href="https://support.cloudways.com/configure-gmail-smtp/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Configure Gmail SMTP</a></li>
-                            <li><a href="https://www.cloudways.com/blog/setup-https-ssl-on-laravel/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Setup HTTPS SSL certificates on Laravel</a></li>
-                            <li><a href="https://www.cloudways.com/blog/integrate-cdn-in-laravel/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Integrate CloudwaysCDN with Laravel Applications</a></li>
-                            <li><a href="https://support.cloudways.com/what-can-i-do-from-the-packages-tab-of-server-settings-packages-section/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">What can I do from Packages tab of Cloudways Platform</a></li>
-                        </ul>
-                    </div>
+          <!-- / Navbar -->
 
-                    <div class="lrvl_wlcm_mid_rht_txtBox" id="section2">
-                        <h2>Deployment Guides</h2>
-                        <ul>
-                            <li><a href="https://www.cloudways.com/blog/deploy-through-gitlab/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Deploy Apps Using GitLab on Cloudways Platform</a></li>
-                            <li><a href="https://www.cloudways.com/blog/deploy-php-application/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Deploy PHP Application With Best Web Tools in Minutes</a></li>
-                            <li><a href="https://www.cloudways.com/blog/php-laravel-envoyer-deployment/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Deploy PHP Application via Laravel Envoyer</a></li>
-                            <li><a href="https://www.cloudways.com/blog/deploy-gitlab-ci-cd/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Using GitLab CI/CD on Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/how-to-automate-git-deployment-using-webhooks/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Automatically Deploy From Git to Server Using Webhooks</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="lrvl_wlcm_mid_rht_txtBox" id="section3">
-                        <h2>Using Cloudways Features</h2>
-                        <ul>
-                            <li><a href="https://www.cloudways.com/blog/install-laravel-horizon/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Install Laravel Horizon on Cloudways</a></li>
-                            <li><a href="https://www.cloudways.com/blog/laravel-cron-job-scheduling/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Laravel Cron Jobs Scheduling on Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/configure-supervisord-on-cloudways/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Configure Laravel Supervisord on Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/how-to-change-php-fpm-settings/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Change PHP-FPM Settings</a></li>
-                            <li><a href="https://support.cloudways.com/how-to-install-phpmyadmin-on-cloudways/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Install PHPMyAdmin on Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/can-i-use-cloudflare-cdn/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Use Cloudflare CDN on Cloudways</a></li>
-                            <li><a href="https://support.cloudways.com/setting-up-remote-mysql-database-connections/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Setup MySQL Remote Connection to Database</a></li>
-                            <li><a href="https://support.cloudways.com/allow-remote-mysql-database-connections/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Whitelist IP Addresses for Remote MySQL Connections</a></li>
-                            <li><a href="https://www.cloudways.com/blog/send-email-in-laravel/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Send Email in Laravel Using Prebuilt Tools</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="lrvl_wlcm_mid_rht_txtBox" id="section4">
-                        <h2>Optimization Guides</h2>
-                        <ul>
-                            <li><a href="https://www.cloudways.com/blog/laravel-performance-optimization/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Ultimate Laravel Performance Optimization Guide</a></li>
-                            <li><a href="https://www.cloudways.com/blog/integrate-laravel-cache/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">How to Use Laravel Cache For Fast Performance</a></li>
-                            <li><a href="https://www.cloudways.com/blog/best-laravel-security-practices/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Best Practices to Improve Laravel App's Security</a></li>
-                            <li><a href="https://www.cloudways.com/blog/prevent-laravel-xss-exploits/?utm_source=php-stack-page&utm_medium=php-stack-page&utm_campaign=php-stack-page" target="_blank">Laravel Validation & Sanitization to Prevent XSS Exploits</a></li>
-                        </ul>
-                    </div>
+          <!-- Content wrapper -->
+          <!-- Content wrapper -->
+            <div class="content-wrapper">
+                <!-- Content -->
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    @yield('content')
                 </div>
-            </div>
+            </div> 
+          <!-- Content wrapper -->
         </div>
-    </section>
+        <!-- / Layout page -->
+      
 
-    <section class="lrvl_wlcm_signUp_sec">
-        <div class="container">
-            <div class="lrvl_wlcm_signUp_mainBox"> 
-                <h3>Be a Part of Exciting Discussion <br/>on Cloudways User Group</h3>
-                <a href="https://www.facebook.com/groups/CloudwaysUsers" target="_blank" class="cw_glb_btn">JOIN NOW</a>
-            </div>
-        </div>
-    </section>
+      <!-- Overlay -->
+        <div class="layout-overlay layout-menu-toggle"></div>
 
-    <footer class="lrvl_wlcm_ftr_sec">
-        <p>© 2022 Cloudways Ltd. All rights reserved</p>
-    </footer>
+      <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+        <div class="drag-target"></div>
+    </div>
+    <!-- / Layout wrapper -->
 
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    
+    <script src="../../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../assets/vendor/js/bootstrap.js"></script>
+    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../assets/vendor/libs/node-waves/node-waves.js"></script>
 
-    <script type="text/javascript">
-        $('.lrvl_wlcm_mid_lftBox ul li a').on('click',function () {
-            let get_data_id = $(this).data('target');
-            $('html, body').stop().animate({
-                scrollTop: $('#' + get_data_id).offset().top - 20
-            }, 500);
-        });
+    <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../../assets/js/ui-popover.js"></script>
+  
+    <!-- endbuild -->
 
-        $(window).on('scroll', () => {
-            let get_win_scroll = $(window).scrollTop();
-            let get_win_height = $(window).height() - 100;
-            let get_top_offset = $('.lrvl_wlcm_mid_sec').offset().top;
-            let get_bottom_offset = $('.lrvl_wlcm_signUp_sec').offset().top;
-            let get_sideNav_width = $('.lrvl_wlcm_mid_lftBox ul').outerWidth();
+    <!-- Vendors JS -->
+    <script src="../../assets/vendor/libs/select2/select2.js"></script>
+    <script src="../../assets/js/forms-selects.js"></script>
+    
+    <!-- Main JS -->
+    {{-- <script src="../../assets/js/main.js"></script> --}}
 
-            //Fixed Right Menu
-            if((get_win_scroll >= get_top_offset) && ((get_win_scroll + get_win_height) <= get_bottom_offset))
-            {
-                $('.lrvl_wlcm_mid_lftBox ul').css('width', get_sideNav_width);
-                $('.lrvl_wlcm_mid_lftBox ul').addClass('lrvl_wlcm_mid_lftBox_fxd');
-            } else {
-                $('.lrvl_wlcm_mid_lftBox ul').removeClass('lrvl_wlcm_mid_lftBox_fxd');
-            }
-
-            //Check Current Fold
-            var get_content_offset = new Array();
-            $('.lrvl_wlcm_mid_rht_txtBox').each(function() {
-                get_content_offset.push($(this).offset().top - 100);
-            });
-
-            for( var i=0; i<= get_content_offset.length; i++){
-                if($(this).scrollTop() >= get_content_offset[i]){
-                    $('.lrvl_wlcm_mid_lftBox ul li a').removeClass('active');
-                    $('.lrvl_wlcm_mid_lftBox ul li a').eq(i).addClass('active');
-                }
-            }
-        });    
-    </script>
-
+    <!-- Page JS -->
   </body>
 </html>
