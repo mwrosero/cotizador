@@ -1,4 +1,6 @@
-@extends('welcome')
+@extends('dashboard')
+@extends('panels/sidebar')
+@extends('panels/submenu')
 @section('title')
     Veris-Registro
 @endsection

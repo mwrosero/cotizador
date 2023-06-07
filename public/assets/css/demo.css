@@ -114,3 +114,24 @@
   text-align: center;
   margin-top: 1rem;
 }
+ .bg-fondo {
+  background-color: white!important;
+ }
+/*Login*/
+ .bg-eliminarb{
+  box-shadow: none!important;
+ }
+
+ .bg-colortext{
+   color: rgba(23, 29, 73, 1);
+ }
+
+ .bg-colortext2{
+  color:  rgba(139, 151, 163, 1);
+  
+ }
+ .bg-colorboton{
+  background: linear-gradient(0deg, #3962E6, #3962E6),
+  linear-gradient(0deg, #DBE0E4, #DBE0E4);
+
+ }

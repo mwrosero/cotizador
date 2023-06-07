@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/dashboard', function () {
+    return view('dashboard');
 });
 
 Route::get('/registro', function () {
@@ -31,4 +31,16 @@ Route::get('/mis-clientes', function () {
 
 Route::get('/mis-cotizacion', function () {
     return view('mis-cotizacion');
+});
+
+Route::get('/login', function () {
+    return view('login.login');
+});
+
+Route::get('/olvidecontrasena', function () {
+    return view('login.olvidecontrasena');
+});
+
+Route::get('/recuperar-contrasena', function () {
+    return view('login.recuperar-contrasena');
 });

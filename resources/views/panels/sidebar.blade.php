@@ -1,98 +1,79 @@
-@php
-$configData = Helper::applClasses();
-@endphp
-<div
-  class="main-menu menu-fixed {{ $configData['theme'] === 'dark' || $configData['theme'] === 'semi-dark' ? 'menu-dark' : 'menu-light' }} menu-accordion menu-shadow"
-  data-scroll-to-active="true">
-  <div class="navbar-header">
-    <ul class="nav navbar-nav flex-row">
-      <li class="nav-item me-auto">
-        <a class="navbar-brand" href="{{ url('/') }}">
-          <span class="brand-logo">
-            <svg viewbox="0 0 139 95" version="1.1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" height="24">
-              <defs>
-                <lineargradient id="linearGradient-1" x1="100%" y1="10.5120544%" x2="50%" y2="89.4879456%">
-                  <stop stop-color="#000000" offset="0%"></stop>
-                  <stop stop-color="#FFFFFF" offset="100%"></stop>
-                </lineargradient>
-                <lineargradient id="linearGradient-2" x1="64.0437835%" y1="46.3276743%" x2="37.373316%" y2="100%">
-                  <stop stop-color="#EEEEEE" stop-opacity="0" offset="0%"></stop>
-                  <stop stop-color="#FFFFFF" offset="100%"></stop>
-                </lineargradient>
-              </defs>
-              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g id="Artboard" transform="translate(-400.000000, -178.000000)">
-                  <g id="Group" transform="translate(400.000000, 178.000000)">
-                    <path class="text-primary" id="Path"
-                      d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
-                      style="fill:currentColor"></path>
-                    <path id="Path1"
-                      d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
-                      fill="url(#linearGradient-1)" opacity="0.2"></path>
-                    <polygon id="Path-2" fill="#000000" opacity="0.049999997"
-                      points="69.3922914 32.4202615 32.8435758 70.5039241 54.0490008 16.1851325"></polygon>
-                    <polygon id="Path-21" fill="#000000" opacity="0.099999994"
-                      points="69.3922914 32.4202615 32.8435758 70.5039241 58.3683556 20.7402338"></polygon>
-                    <polygon id="Path-3" fill="url(#linearGradient-2)" opacity="0.099999994"
-                      points="101.428699 0 83.0667527 94.1480575 130.378721 47.0740288"></polygon>
-                  </g>
-                </g>
-              </g>
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a href="index.html" class="app-brand-link">
+        <span class="app-brand-logo demo">
+            <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                fill="#7367F0"
+            />
+            <path
+                opacity="0.06"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                fill="#161616"
+            />
+            <path
+                opacity="0.06"
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                fill="#161616"
+            />
+            <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                fill="#7367F0"
+            />
             </svg>
-          </span>
-          <h2 class="brand-text">Vuexy</h2>
+        </span>
+        <span class="app-brand-text demo menu-text fw-bold">Bienvenidos</span>
         </a>
-      </li>
-      <li class="nav-item nav-toggle">
-        <a class="nav-link modern-nav-toggle pe-0" data-toggle="collapse">
-          <i class="d-block d-xl-none text-primary toggle-icon font-medium-4" data-feather="x"></i>
-          <i class="d-none d-xl-block collapse-toggle-icon font-medium-4 text-primary" data-feather="disc"
-            data-ticon="disc"></i>
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+        <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+        <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
         </a>
-      </li>
+    </div>
+    <div class="menu-inner-shadow"></div>
+    <ul class="menu-inner py-1">
+    <!-- Page -->
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div data-i18n="Page 1">Opciones</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="registro" class="menu-link">
+                    <div data-i18n="Registro">Registro</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="cotizacion" class="menu-link">
+                    <div data-i18n="Cotizacion">Cotizacion</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="mis-clientes" class="menu-link">
+                    <div data-i18n="Mis-clientes">Mis clientes</div>
+                    </a>
+                </li>
+            </ul>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="mis-cotizacion" class="menu-link">
+                    <div data-i18n="Mis-Cotizaciones">Mis Cotizaciones</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
-  </div>
-  <div class="shadow-bottom"></div>
-  <div class="main-menu-content">
-    <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
-      {{-- Foreach menu item starts --}}
-      @if (isset($menuData[0]))
-        @foreach ($menuData[0]->menu as $menu)
-          @if (isset($menu->navheader))
-            <li class="navigation-header">
-              <span>{{ __('locale.' . $menu->navheader) }}</span>
-              <i data-feather="more-horizontal"></i>
-            </li>
-          @else
-            {{-- Add Custom Class with nav-item --}}
-            @php
-              $custom_classes = '';
-              if (isset($menu->classlist)) {
-                  $custom_classes = $menu->classlist;
-              }
-            @endphp
-            <li
-              class="nav-item {{ $custom_classes }} {{ Route::currentRouteName() === $menu->slug ? 'active' : '' }}">
-              <a href="{{ isset($menu->url) ? url($menu->url) : 'javascript:void(0)' }}" class="d-flex align-items-center"
-                target="{{ isset($menu->newTab) ? '_blank' : '_self' }}">
-                <i data-feather="{{ $menu->icon }}"></i>
-                <span class="menu-title text-truncate">{{ __('locale.' . $menu->name) }}</span>
-                @if (isset($menu->badge))
-                  <?php $badgeClasses = 'badge rounded-pill badge-light-primary ms-auto me-1'; ?>
-                  <span
-                    class="{{ isset($menu->badgeClass) ? $menu->badgeClass : $badgeClasses }}">{{ $menu->badge }}</span>
-                @endif
-              </a>
-              @if (isset($menu->submenu))
-                @include('panels/submenu', ['menu' => $menu->submenu])
-              @endif
-            </li>
-          @endif
-        @endforeach
-      @endif
-      {{-- Foreach menu item ends --}}
-    </ul>
-  </div>
-</div>
-<!-- END: Main Menu-->
+</aside>
