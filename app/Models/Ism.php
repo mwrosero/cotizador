@@ -2,46 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use session;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
-class User extends Authenticatable
+class Ism extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public const BASE_URL = 'https://api-phantomx.veris.com.ec/seguridad/v1';
 
     static function call(Array $config)
     {
@@ -49,13 +19,13 @@ class User extends Authenticatable
         curl_setopt($ch, CURLOPT_URL, $config['endpoint']);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
 
         // METHOD
         if( $config['method'] == 'POST' )
             curl_setopt($ch, CURLOPT_POST, 1);
-        else if( $config['method'] == 'GET' )
+        else if( $config['method'] == 'GET' || $config['method'] == 'PUT' )
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $config['method']);
+
 
         // AUTH
         if( isset($config['token']) && !isset($config['data'])){
@@ -64,14 +34,15 @@ class User extends Authenticatable
         }
 
         // POST DATA
-        if( isset($config['data']) && $config['method'] == 'POST' ){
+        if( isset($config['data']) && ($config['method'] == 'POST' || $config['method'] == 'PUT' ) ){
             $data_serialized = json_encode($config['data']);
-            //dd($data_serialized);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data_serialized);
             
             $header = [];
             $header[] = 'Content-Type: application/json';
             $header[] = 'Content-Length: ' . strlen($data_serialized);
+            $header[] = 'content-language: es';
+            
             if( isset($config['token']) )
                 $header[] = 'Authorization: Bearer ' . $config['token'];
             
@@ -105,38 +76,52 @@ class User extends Authenticatable
     /*
     * getToken
     * ----------------------------------------------
-    * Peticion al webservice de Veris para obtener el token
+    * Peticion al webservice de ISM para obtener el token
     * de acceso para las peticiones CURL. Esto se debe
     * ejecutar una sola vez por sessión.
     * ----------------------------------------------
     */
     static function getToken()
     {
-        //if(!Session::has('accessToken')){
-            $token = session('accessToken', null);
+        $token = session('accessToken', null);
 
-            if( $token !== null ){
-                return $token;
-            }
+        /*if( $token !== null ){
+            return $token;
+        }*/
 
-            $username = 'usuario';
-            $password = 'contrasena';
-            $method = '/seguridades/obtenerToken?usuario=usuario&contrasena=contrasena&fechaInicio=10/01/2019&fechaFin=11/02/2022';
-            $result = self::call([
-                'endpoint' => self::BASE_URL.$method,
-                'method'   => 'GET',
-                'username' => $username,
-                'password' => $password
-            ]);
-            
-            /*echo self::BASE_URL.$method;
-            dd($result);*/
-            
-            session(['accessToken' => $result->token]);
-            return $result->token;
-            
-            /*session(['accessToken' => "123"]);
-            return "123";*/
-        //}
+
+        $username = '';
+        $password = '';
+        $method = '/generaToken';
+        //dump(self::BASE_URL.$method);
+        $result = self::call([
+            'endpoint' => self::BASE_URL.$method,
+            'method'   => 'POST',
+            'username' => $username,
+            'password' => $password
+        ]);
+        /*dump(self::BASE_URL.$method);
+        dd($result);*/
+        /*$curl = curl_init();
+
+        curl_setopt_array($curl, array(
+          CURLOPT_URL => self::BASE_URL.$method,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_ENCODING => '',
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 0,
+          CURLOPT_FOLLOWLOCATION => true,
+          CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_HTTPHEADER => array(
+            'Authorization: Basic d3N3ZWJhdXJvcmE6bjNVRTYwQHMzUnYxYzEwQFczYkF1UjByYQ=='
+          ),
+        ));
+
+        $result = curl_exec($curl);*/
+
+        session(['accessToken' => $result->accesToken]);
+        return $result->accesToken;
     }
+
 }

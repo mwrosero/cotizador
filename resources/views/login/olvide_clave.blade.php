@@ -14,7 +14,7 @@
                 <p class="fs-4 mb-1 pt-2 text-center bg-colortext fw-bold">Olvidé mi Contraseña</p>
                 <p class="fs-6 mb-4  text-center bg-colortext">Ingresa tu Usuario o Correo Electrónico </p>
   
-                <form id="formAuthentication" class="mb-3" action="recuperar-contrasena" >
+                <form id="formAuthentication" class="mb-3" action="/recuperar-clave" >
                   <div class="mb-3">
                     <label for="email" class="form-label bg-colortext fw-bold mt-2">Usuario o Correo Electrónico</label>
                     <input
