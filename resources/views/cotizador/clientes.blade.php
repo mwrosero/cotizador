@@ -1,4 +1,5 @@
-@extends('welcome')
+@extends('dashboard')
+@extends('panels/sidebar')
 @section('title')
     Veris-Mis_clientes
 @endsection

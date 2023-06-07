@@ -18,19 +18,19 @@ Route::get('/dashboard', function () {
 });
 
 Route::get('/registro', function () {
-    return view('registro');
+    return view('cotizador.registro');
 });
 
 Route::get('/cotizacion', function () {
-    return view('cotizacion');
+    return view('cotizador.cotizacion');
 });
 
-Route::get('/mis-clientes', function () {
-    return view('mis-clientes');
+Route::get('/clientes', function () {
+    return view('cotizador.clientes');
 });
 
-Route::get('/mis-cotizacion', function () {
-    return view('mis-cotizacion');
+Route::get('/cotizaciones', function () {
+    return view('cotizador.cotizaciones');
 });
 
 Route::get('/login', function () {

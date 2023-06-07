@@ -1,6 +1,6 @@
 @extends('dashboard')
 @extends('panels/sidebar')
-@extends('panels/submenu')
+
 @section('title')
     Veris - Cotizacion
 @endsection
