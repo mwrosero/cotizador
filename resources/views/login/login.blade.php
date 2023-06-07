@@ -18,15 +18,16 @@
       <p class="fs-6 mb-4 fw-bold bg-colortext">Iniciar Sesión</p>
       
 
-      <form id="formAuthentication" class="mb-3" action="registro" >
+      <form id="formAuthentication" class="mb-3" action="/autenticar" method="POST">
+        @csrf
         <div class="mb-3">
-          <label for="email" class="form-label bg-colortext fw-bold">Usuario</label>
+          <label for="user" class="form-label bg-colortext fw-bold">Usuario</label>
           <input
             type="text"
             class="form-control"
-            id="email"
-            name="email-username"
-            placeholder="Enter your email or username"
+            id="user"
+            name="user"
+            placeholder="Usuario o Correo Electrónico"
             autofocus
             required
           />
@@ -53,10 +54,10 @@
           <button class="btn btn-primary d-grid w-100 bg-colorboton" type="submit" onclick="">Entrar</button>
         </div>
         <div class="mb-1 text-center">
-            <label class="form-check-label bg-colortext" for="noCerrarSeesion"> No cerrar sesión </label>
+            <!-- <label class="form-check-label bg-colortext" for="noCerrarSeesion"> No cerrar sesión </label> -->
         </div>
         <div class="mb-1 text-center">
-            <a class="bg-colortext" href="olvidecontrasena"> Olvide mi Contraseña</a>
+            <a class="bg-colortext" href="/olvide-clave"> Olvide mi Contraseña</a>
         </div>
         
       </form>
