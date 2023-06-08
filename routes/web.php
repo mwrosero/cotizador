@@ -25,7 +25,7 @@ Route::middleware('guest')->group(function () {
 
 //Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['loggedUser']], function () {
-    Route::get('/', [DashboardController::class, 'home'])->name('home');
+    Route::get('/', [DashboardController::class, 'home'])->name('home')->withoutMiddleware(['guest']);;
 
     Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout');
 

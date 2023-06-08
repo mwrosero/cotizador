@@ -17,12 +17,12 @@ class IsmMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (Session::has('userData')) {
-            // El valor está presente en la sesión, continuar con el siguiente middleware o ruta
+            // dump(7);
             return $next($request);
         } else {
-            // El valor no está presente en la sesión, redirigir o responder según sea necesario
+            // dump(8);
             return redirect()->route('login');
         }
-
+        //dd(0);
     }
 }
