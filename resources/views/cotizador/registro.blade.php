@@ -1,10 +1,11 @@
 @extends('dashboard')
 @extends('panels/sidebar')
-@extends('panels/submenu')
+
 @section('title')
     Veris-Registro
 @endsection
 @section('content')
+
     <h4 class="fw-bold"> Registrar Empresa</h4>
     <h5 class="fw-bold">Agregar clientes en tu cartera de ventas</h5>
     <div class="row">

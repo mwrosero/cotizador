@@ -135,3 +135,30 @@
   linear-gradient(0deg, #DBE0E4, #DBE0E4);
 
  }
+
+ .menu-item.menu-open > .menu-link {
+  /* Estilos para el enlace del menú principal cuando está abierto */
+  /* Por ejemplo: */
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.menu-sub.menu-open {
+  /* Estilos para el submenú cuando está abierto */
+  /* Por ejemplo: */
+  display: block;
+}
+
+.menu-sub.menu-open .menu-item {
+  /* Estilos para cada ítem del submenú cuando está abierto */
+  /* Por ejemplo: */
+  padding: 10px;
+ 
+}
+
+.menu-sub.menu-open .menu-item:last-child {
+  /* Estilos para el último ítem del submenú cuando está abierto */
+  /* Por ejemplo: */
+  border-bottom: none;
+}
+
