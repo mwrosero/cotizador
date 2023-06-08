@@ -11,6 +11,6 @@ class DashboardController extends Controller
 {
   /*Dashboard Home*/
   public function home(){
-    return view('cotizacion');
+    return view('cotizador.cotizacion');
   }
 }
