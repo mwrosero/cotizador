@@ -21,6 +21,10 @@ Route::middleware('guest')->group(function () {
     
     Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
     Route::get('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
+
+    Route::get('/cotizacion', function () {
+        return view('cotizador.cotizacion');
+    })->withoutMiddleware(['loggedUser']);
 });
 
 //Route::middleware('auth')->group(function () {
@@ -38,7 +42,7 @@ Route::group(['middleware' => ['loggedUser']], function () {
     });
 
     Route::get('/cotizacion', function () {
-        return view('cotizacion');
+        return view('cotizador.cotizacion');
     });
 
     Route::get('/mis-clientes', function () {

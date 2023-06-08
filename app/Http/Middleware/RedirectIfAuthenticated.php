@@ -18,10 +18,11 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, string ...$guards): Response
     {
-        if (Session::has('userData')) {
+        /*if (Session::has('userData')) {
             return $next($request);
         }else{
             return redirect('login');
-        }
+        }*/
+        return $next($request);
     }
 }
