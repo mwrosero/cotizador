@@ -14,14 +14,20 @@
                 <p class="fs-4 mb-1 pt-2 text-center bg-colortext fw-bold">Olvidé mi Contraseña</p>
                 <p class="fs-6 mb-4  text-center bg-colortext">Ingresa tu Usuario o Correo Electrónico </p>
   
-                <form id="formAuthentication" class="mb-3" action="/recuperar-clave" >
+                <form id="formAuthentication" class="mb-3" method="post" action="/recuperar-clave" >
+                  @csrf
+                  @if (session()->has('mensaje'))
+                    <div class="alert alert-warning">
+                        {{ session('mensaje') }}
+                    </div>
+                  @endif
                   <div class="mb-3">
-                    <label for="email" class="form-label bg-colortext fw-bold mt-2">Usuario o Correo Electrónico</label>
+                    <label for="user" class="form-label bg-colortext fw-bold mt-2">Usuario o Correo Electrónico</label>
                     <input
                       type="text"
                       class="form-control"
-                      id="email"
-                      name="email-username"
+                      id="user"
+                      name="user"
                       autofocus
                       required
                     />

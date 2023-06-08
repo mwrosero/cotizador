@@ -85,8 +85,21 @@ class SeguridadesController extends Controller
     }
 
     /*Login*/
-    public function recuperar_clave(){
-        return view('login.recuperar_clave');
+    public function recuperar_clave(Request $request){
+        $data = $request->all();
+        $user = $data['user'];
+
+        $method = '/usuarios/solicitud_recuperacion_clave';
+
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            //'token'    => Ism::getToken(),
+            'data'     => ['usuario' => strtoupper($user)],
+            'method'   => 'POST'
+        ]);
+
+        session()->flash('mensaje', $response->message);
+        return view('login.olvide_clave');
     }
 
     /*Logout*/

@@ -20,7 +20,7 @@ Route::middleware('guest')->group(function () {
     Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar')->withoutMiddleware(['loggedUser']);
     
     Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
-    Route::get('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
+    Route::post('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
 
     Route::get('/cotizacion', function () {
         return view('cotizador.cotizacion');
