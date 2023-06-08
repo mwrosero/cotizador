@@ -12,25 +12,34 @@ class Ism extends Model
     use HasFactory;
 
     public const BASE_URL = 'https://api-phantomx.veris.com.ec/seguridad/v1';
+    public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
+    public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
+    public const CODIGOSUCURSAL = 12;
 
     static function call(Array $config)
     {
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_URL, $config['endpoint']);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         // METHOD
-        if( $config['method'] == 'POST' )
+        if( $config['method'] == 'POST' ){
             curl_setopt($ch, CURLOPT_POST, 1);
-        else if( $config['method'] == 'GET' || $config['method'] == 'PUT' )
+        }else if( $config['method'] == 'GET' || $config['method'] == 'PUT' ){
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $config['method']);
+        }
 
+        $header = [];
+        $header[] = 'Application: ' . self::APPLICATION;
+        $header[] = 'IdOrganizacion: ' . self::IDORGANIZACION;
 
         // AUTH
         if( isset($config['token']) && !isset($config['data'])){
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_ANY);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $config['token'] ));
+            //curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $config['token'] ));
+            $header[] = 'Authorization: Bearer ' . $config['token'];
         }
 
         // POST DATA
@@ -38,23 +47,29 @@ class Ism extends Model
             $data_serialized = json_encode($config['data']);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data_serialized);
             
-            $header = [];
             $header[] = 'Content-Type: application/json';
             $header[] = 'Content-Length: ' . strlen($data_serialized);
             $header[] = 'content-language: es';
             
-            if( isset($config['token']) )
+            if( isset($config['token']) ){
                 $header[] = 'Authorization: Bearer ' . $config['token'];
-            
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            }
         }
 
+        if( isset($config['basic']) ){
+            $header[] = 'Authorization: Basic ' . $config['basic'];
+            $header[] = 'Content-Type: application/json';
+        }
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         // LOGIN
         if( isset($config['username']) && isset($config['password'])){
             curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
             curl_setopt($ch, CURLOPT_USERPWD, $config['username'].":".$config['password']);
         }
+
+        // dump($header);
         
         // API CALL
         try{
