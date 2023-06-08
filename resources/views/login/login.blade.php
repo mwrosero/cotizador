@@ -20,6 +20,11 @@
 
       <form id="formAuthentication" class="mb-3" action="/autenticar" method="POST">
         @csrf
+        @if (session()->has('mensaje'))
+          <div class="alert alert-warning">
+              {{ session('mensaje') }}
+          </div>
+        @endif
         <div class="mb-3">
           <label for="user" class="form-label bg-colortext fw-bold">Usuario</label>
           <input
@@ -30,6 +35,9 @@
             placeholder="Usuario o Correo Electrónico"
             autofocus
             required
+            @if (session()->has('user'))
+              {{ session('user') }}
+            @endif
           />
         </div>
         <div class="mb-3 form-password-toggle">
