@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeguridadesController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,31 +15,18 @@ use App\Http\Controllers\SeguridadesController;
 |
 */
 
-/*
-Route::get('/login', function () {
-    return view('login.login');
-});
-
-Route::get('/olvidecontrasena', function () {
-    return view('login.olvidecontrasena');
-});
-
-Route::get('/recuperar-contrasena', function () {
-    return view('login.recuperar-contrasena');
-});*/
-
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [SeguridadesController::class, 'login'])->name('login');
-    Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar');
+    Route::get('/login', [SeguridadesController::class, 'login'])->name('login')->withoutMiddleware(['loggedUser']);
+    Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar')->withoutMiddleware(['loggedUser']);
     
-    Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave');
-    Route::get('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave');
+    Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
+    Route::get('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/', [SeguridadesController::class, 'login'])->name('login');
-    Route::get('/admin', [NombreDelControlador::class, 'nombreDelMetodo'])->name('admin');
-    Route::get('/clientes', [NombreDelControlador::class, 'nombreDelMetodo'])->name('clientes');
+//Route::middleware('auth')->group(function () {
+Route::group(['middleware' => ['loggedUser']], function () {
+    Route::get('/', [DashboardController::class, 'home'])->name('home');
+
     Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', function () {

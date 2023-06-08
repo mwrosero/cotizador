@@ -2,26 +2,27 @@
 
 namespace App\Http\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Session;
 
-class RedirectIfAuthenticated
+class IsmMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string ...$guards): Response
+    public function handle(Request $request, Closure $next): Response
     {
         if (Session::has('userData')) {
+            // El valor está presente en la sesión, continuar con el siguiente middleware o ruta
             return $next($request);
-        }else{
-            return redirect('login');
+        } else {
+            // El valor no está presente en la sesión, redirigir o responder según sea necesario
+            return redirect()->route('login');
         }
+
     }
 }
