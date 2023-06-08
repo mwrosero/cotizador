@@ -4,13 +4,28 @@
     <ul class="menu-inner py-1">
     <!-- Page -->
         <li class="menu-item menu-open">
-            <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <i class=""></i>
-                <div data-i18n="Layouts">Opciones</div>
-            </a>
 
             <ul class="list-unstyled menu-sub menu-open">
-                <li class="list-inline-item">
+                <?php 
+                    foreach (Session::get('menu') as $key => $value):
+                ?>
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class=""></i>
+                            <div data-i18n="Layouts">{{ $value->nombreModulo }}</div>
+                        </a>
+                <?php
+                        foreach ($value->opciones as $k => $v):
+                ?>
+                            <li class="list-inline-item">
+                                <a href="/{{ $v->vista }}" class="menu-link">
+                                    <div data-i18n="Collapsed menu">{{ $v->detalleOpcion }}</div>
+                                </a>
+                            </li>
+                <?php            
+                        endforeach;
+                    endforeach;
+                ?>
+                <!-- <li class="list-inline-item">
                     <a href="/registro" class="menu-link">
                         <div data-i18n="Collapsed menu">Registro</div>
                     </a>
@@ -29,7 +44,7 @@
                     <a href="/cotizaciones" class="menu-link">
                         <div data-i18n="Content nav + Sidebar">Mis Cotizaciones</div>
                     </a>
-                </li>
+                </li> -->
 
             </ul>
         </li>

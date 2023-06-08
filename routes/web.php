@@ -29,27 +29,23 @@ Route::middleware('guest')->group(function () {
 
 //Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['loggedUser']], function () {
-    Route::get('/', [DashboardController::class, 'home'])->name('home')->withoutMiddleware(['guest']);;
+    Route::get('/', [DashboardController::class, 'home'])->name('home')->withoutMiddleware(['guest']);
 
-    Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout');
+    Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout')->withoutMiddleware(['guest']);
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
-
-    Route::get('/registro', function () {
+    Route::get('/registro-clientes', function () {
         return view('registro');
-    });
+    })->withoutMiddleware(['guest']);
 
-    Route::get('/cotizacion', function () {
+    Route::get('/cotizador', function () {
         return view('cotizador.cotizacion');
-    });
+    })->withoutMiddleware(['guest']);
 
-    Route::get('/mis-clientes', function () {
+    Route::get('/consulta-clientes', function () {
         return view('mis-clientes');
-    });
+    })->withoutMiddleware(['guest']);
 
-    Route::get('/mis-cotizacion', function () {
+    Route::get('/consulta-cotizaciones', function () {
         return view('mis-cotizacion');
-    });
+    })->withoutMiddleware(['guest']);
 });
