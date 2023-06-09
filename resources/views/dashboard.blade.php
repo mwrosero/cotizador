@@ -157,7 +157,7 @@
     <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
     <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
     <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
-    <script src="../../assets/vendor/js/menu.js"></script>
+    
     <script src="../../assets/js/ui-popover.js"></script>
 
     
@@ -174,18 +174,18 @@
     <script src="../../assets/vendor/libs/datatables-buttons/datatables-buttons.js"></script>
     <script src="../../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.js"></script>
 
-    <script src="../../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
-    <script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
-    <script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>
+    <!-- <script src="../../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script> -->
+    <!-- <script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script> -->
+    <!-- <script src="../../assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script> -->
 
     
     <!-- Main JS -->
+    <script src="../../assets/vendor/js/menu.js"></script>
     <script src="../../assets/js/main.js"></script>
-    {{-- <script src="../../assets/js/main.js"></script> --}}
 
     <!-- Page JS -->
-    <script src="../../assets/js/app-access-permission.js"></script>
-    <script src="../../assets/js/modal-add-permission.js"></script>
-    <script src="../../assets/js/modal-edit-permission.js"></script>
+    <!-- <script src="../../assets/js/app-access-permission.js"></script> -->
+    <!-- <script src="../../assets/js/modal-add-permission.js"></script> -->
+    <!-- <script src="../../assets/js/modal-edit-permission.js"></script> -->
   </body>
 </html>

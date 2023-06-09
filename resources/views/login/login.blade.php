@@ -55,7 +55,9 @@
               aria-describedby="password"
               required
             />
-
+            <span id="togglePassword" class="input-group-text cursor-pointer"
+              ><i class="ti ti-eye-off"></i
+            ></span>
           </div>
         </div>
         <div class="mb-3">
@@ -72,4 +74,18 @@
       
     </div>
   </div>
+  <script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword');
+
+    togglePassword.addEventListener('click', function() {
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        togglePassword.innerHTML = '<i class="ti ti-eye"></i>';
+      } else {
+        passwordInput.type = 'password';
+        togglePassword.innerHTML = '<i class="ti ti-eye-off"></i>';
+      }
+    });
+  </script>
 @endsection
