@@ -7,7 +7,7 @@
 
 @section('content')
     <h4 class="fw-bold">Cotizador</h4>
-    <h5>Cotizaciones de servicios veris</h5>
+    <h5 class="text-primary">Cotizaciones de servicios veris</h5>
     <div class="row mb-3">
     <!-- Accordion with Icon -->
         <div class="col-md mb-4 mb-md-2">
@@ -16,12 +16,12 @@
                     <h2 class="accordion-header d-flex align-items-center">
                         <button
                         type="button"
-                        class="accordion-button text-primary"
+                        class="accordion-button"
                         data-bs-toggle="collapse"
                         data-bs-target="#accordionWithIcon-1"
                         aria-expanded="true"
                         >
-                        Paso1. Seccion de Cliente
+                        <span class="fw-bold">Paso 1.</span> <span class="text-primary ms-3">Selección cliente</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-1" class="accordion-collapse collapse show">
@@ -71,12 +71,12 @@
                     <h2 class="accordion-header d-flex align-items-center">
                         <button
                         type="button"
-                        class="accordion-button collapsed text-primary"
+                        class="accordion-button collapsed"
                         data-bs-toggle="collapse"
                         data-bs-target="#accordionWithIcon-2"
                         aria-expanded="false"
                         >
-                        Paso 2. Selección de tipos de servicios
+                        <span class="fw-bold"> Paso 2.</span> <span class="text-primary ms-3"> Seleccción de tipo de servicios</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-2" class="accordion-collapse collapse">
@@ -122,12 +122,12 @@
                     <h2 class="accordion-header d-flex align-items-center">
                         <button
                         type="button"
-                        class="accordion-button collapsed text-primary"
+                        class="accordion-button collapsed "
                         data-bs-toggle="collapse"
                         data-bs-target="#accordionWithIcon-3"
                         aria-expanded="false"
                         >
-                        Paso 3. Planificación del Chequeo
+                        <span class="fw-bold"> Paso 3.</span> <span class="text-primary ms-3"> Planificación del Chequeo</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-3" class="accordion-collapse collapse">
@@ -159,12 +159,12 @@
                     <h2 class="accordion-header d-flex align-items-center">
                         <button
                             type="button"
-                            class="accordion-button collapsed text-primary"
+                            class="accordion-button collapsed "
                             data-bs-toggle="collapse"
                             data-bs-target="#accordionWithIcon-4"
                             aria-expanded="false"
                         >
-                        Paso 4. Selección del grupo de Perfil
+                        <span class="fw-bold">Paso 4.</span> <span class="text-primary ms-3">Selección de Grupo de Perfil</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-4" class="accordion-collapse collapse">
@@ -173,28 +173,32 @@
                                 <div class="col-12 text-end">
                                     <button
                                         type="button"
-                                        class="btn btn-primary"
+                                        class="btn btn-primary mb-4"
                                         data-bs-toggle="modal"
                                         data-bs-target="#modalNuevoGrupo"
                                         title="Agregar Grupo"
                                         >
-                                        Agregar Grupos
+                                        Nuevo Grupo
                                     </button>
                                 </div>
                                 <div class="col-12">
                                     <div class="card">
-                                        <div class="card-datatable table-responsive">
-                                            <table class="dt-multilingual table">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Razón de Grupo</th>
-                                                        <th>Descriptión</th>
-                                                        <th>Origen Creado</th>   
-                                                    </tr>
-                                                </thead>
-                                            </table>
+                                        
+                                        <div class="card-datatable text-nowrap">
+                                          <table class="datatables-ajax table">
+                                            <thead>
+                                              <tr>
+                                                <th>Rázon Grupo</th>
+                                                <th>Descripción</th>
+                                                <th>Origen Creador</th>
+                                              </tr>
+                                            </thead>
+                                          </table>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-12 text-end mt-4">
+                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
                                 </div>
                             </div>
                         </div>
@@ -209,12 +213,55 @@
                             data-bs-target="#accordionWithIcon-5"
                             aria-expanded="false"
                         >
-                        Paso 5. Cotización
+                        <span class="fw-bold"> Paso 5.</span> <span class="text-primary ms-3">Cotización</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-5" class="accordion-collapse collapse">
                         <div class="accordion-body">
-                            
+                            <div class="row">
+                                <div class="col-12 col-sm-8">
+                                        <button type="button" class="btn btn-outline-primary">
+                                            Descargar Plantilla
+                                        </button>
+                                </div>
+                                <div class="col-12 col-sm-2">
+                                    <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
+                                        <span class="d-none d-sm-block">Subir Plantilla</span>
+                                        <i class="ti ti-upload d-block d-sm-none"></i>
+                                        <input
+                                          type="file"
+                                          id="upload"
+                                          class="account-file-input"
+                                          hidden
+                                          accept="pdf"
+                                        />
+                                      </label>
+                                    
+                                               
+                                </div>
+                                
+                                <div class="col-12">
+                                    <form class="source-item pt-4 px-0 px-sm-4">
+                                        <div class="mb-3" data-repeater-list="group-a">
+                                          <div class="repeater-wrapper pt-0 pt-md-4" data-repeater-item>
+                                            <div class="d-flex border rounded position-relative pe-0">
+                                              <div class="row w-100 p-3">
+                                                
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="row pb-4">
+                                          <div class="col-12">
+                                            <button type="button" class="btn btn-primary" data-repeater-create>Add Item</button>
+                                          </div>
+                                        </div>
+                                      </form>
+                                </div>
+                                <div class="col-12 text-end mt-4">
+                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -227,12 +274,16 @@
                             data-bs-target="#accordionWithIcon-6"
                             aria-expanded="false"
                         >
-                        Paso 6. Resumen de la Cotización
+                        <span class="fw-bold"> Paso 6.</span> <span class="text-primary ms-3"> Resumen de la Cotización</span>
                         </button>
                     </h2>
                     <div id="accordionWithIcon-6" class="accordion-collapse collapse">
                         <div class="accordion-body">
-                            
+                            <div class="row">
+                                <div class="col-12 text-end mt-4">
+                                    <button type="button" id="guardarCotizacion" class="btn btn-primary">Guradar Cotizacion</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

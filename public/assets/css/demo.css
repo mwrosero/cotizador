@@ -139,8 +139,9 @@
  .menu-item.menu-open > .menu-link {
   /* Estilos para el enlace del menú principal cuando está abierto */
   /* Por ejemplo: */
-  background-color: #f0f0f0;
-  color: #333;
+  background-color:  rgba(23, 29, 73, 1);
+  
+  color: #ffffff;
 }
 
 .menu-sub.menu-open {
