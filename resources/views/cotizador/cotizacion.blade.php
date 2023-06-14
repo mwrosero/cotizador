@@ -1,26 +1,23 @@
-@extends('dashboard')
-@extends('panels/sidebar')
-
+@extends('template.dashboard')
 @section('title')
     Veris - Cotizacion
 @endsection
+@section('title-section')
+    Cotizador
+@endsection
 
 @section('content')
-    <h4 class="fw-bold">Cotizador</h4>
-    <h5>Cotizaciones de servicios veris</h5>
     <div class="row mb-3">
     <!-- Accordion with Icon -->
         <div class="col-md mb-4 mb-md-2">
             <div class="accordion mt-3" id="accordionWithIcon">
                 <div class="card accordion-item active">
                     <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                        type="button"
-                        class="accordion-button text-primary"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#accordionWithIcon-1"
-                        aria-expanded="true"
-                        >
+                        <button type="button"
+                            class="accordion-button text-primary"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#accordionWithIcon-1"
+                            aria-expanded="true">
                         Paso1. Seccion de Cliente
                         </button>
                     </h2>
@@ -61,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="col-12 text-end">
-                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
+                                    <button type="button" id="continuarFormulario" class="btn bg-veris">Continuar</button>
                                 </div>
                             </div>
                         </div>
