@@ -109,8 +109,9 @@ class SeguridadesController extends Controller
 
     /*Logout*/
     public function logout(){
+        //dd(0);
         // Session::forget('user');
         Session::flush();
-        return redirect()->route('/');
+        return redirect()->route('login');
     }
 }
