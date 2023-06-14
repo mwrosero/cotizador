@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SeguridadesController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CotizadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +21,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar')->withoutMiddleware(['loggedUser']);
     
     Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
-    Route::get('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
+    Route::post('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
+    Route::get('/reestablecer-clave', [SeguridadesController::class, 'reestablecer_clave'])->name('reestablecer_clave')->withoutMiddleware(['loggedUser']);
 
     Route::get('/cotizacion', function () {
         return view('cotizador.cotizacion');
@@ -29,27 +31,18 @@ Route::middleware('guest')->group(function () {
 
 //Route::middleware('auth')->group(function () {
 Route::group(['middleware' => ['loggedUser']], function () {
-    Route::get('/', [DashboardController::class, 'home'])->name('home');
+    Route::get('/', [DashboardController::class, 'home'])->name('home')->withoutMiddleware(['guest']);
 
-    Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout');
+    Route::get('/logout', [SeguridadesController::class, 'logout'])->name('logout')->withoutMiddleware(['guest']);
+    
+    /*Cotizador*/
+    Route::prefix('cotizador')->group(function () {
+        Route::get('/registro-clientes', [CotizadorController::class, 'registroCliente'])->name('registro_clientes')->withoutMiddleware(['guest']);
+        
+        Route::get('/cotizador', [CotizadorController::class, 'cotizador'])->name('cotizar')->withoutMiddleware(['guest']);
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    });
-
-    Route::get('/registro', function () {
-        return view('registro');
-    });
-
-    Route::get('/cotizacion', function () {
-        return view('cotizador.cotizacion');
-    });
-
-    Route::get('/mis-clientes', function () {
-        return view('mis-clientes');
-    });
-
-    Route::get('/mis-cotizacion', function () {
-        return view('mis-cotizacion');
+        Route::get('/consulta-clientes', [CotizadorController::class, 'clientes'])->name('consulta-clientes')->withoutMiddleware(['guest']);
+        
+        Route::get('/consulta-cotizaciones', [CotizadorController::class, 'cotizaciones'])->name('consulta-cotizaciones')->withoutMiddleware(['guest']);
     });
 });
