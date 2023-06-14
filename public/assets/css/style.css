@@ -1,0 +1,38 @@
+/*Sidebar*/
+.bg-menu-theme{
+    background: #171D49 !important;
+    color: #fff !important;
+}
+
+a.menu-link{
+    background: none !important;
+    color: #fff !important;
+}
+
+.logo-sidebar{
+    height: 75px;
+}
+
+/*Login*/
+.logo-login {
+    max-width: 175px;
+}
+
+/*Componentes*/
+
+.bg-veris{
+    background: #3962E6;
+    color: #fff;
+}
+
+.bg-veris:hover{
+    background: #3962E6;
+    color: #fff;
+    opacity: 0.8;
+}
+
+/*Select2*/
+.select2-results__option[role=option][aria-selected=true] {
+    background-color: #3962e6 !important;
+    color: #fff;
+}

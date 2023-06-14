@@ -9,8 +9,8 @@ use App\Models\Ism;
 
 class DashboardController extends Controller
 {
-  /*Dashboard Home*/
-  public function home(){
-    return view('cotizador.cotizacion');
-  }
+    /*Dashboard Home*/
+    public function home(){
+        return view('cotizador.cotizacion');
+    }
 }

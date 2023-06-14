@@ -20,7 +20,7 @@ class SeguridadesController extends Controller
         $user = $data['user'];
         $password = $data['password'];
 
-        $method = '/usuarios/verificacion_cuenta';
+        $method = '/seguridad/v1/usuarios/verificacion_cuenta';
         $param = '?usuario='.strtoupper($user);
 
         $response = Ism::call([
@@ -31,7 +31,7 @@ class SeguridadesController extends Controller
         ]);
 
         if($response->code == 200){
-            $method = '/autenticacion/login';
+            $method = '/seguridad/v1/autenticacion/login';
 
             $response = Ism::call([
                 'endpoint'  => Ism::BASE_URL.$method,
@@ -44,7 +44,7 @@ class SeguridadesController extends Controller
                         Session::put('userData', $response->data);
                         Session::put('accessToken', $response->data->idToken);
                         
-                        $method = '/usuarios/'.$response->data->secuenciaUsuario.'/modulos_opciones_acceso';
+                        $method = '/seguridad/v1/usuarios/'.$response->data->secuenciaUsuario.'/modulos_opciones_acceso';
                         $param = '?codigoSucursal='.Ism::CODIGOSUCURSAL;
 
                         $response = Ism::call([
@@ -89,7 +89,7 @@ class SeguridadesController extends Controller
         $data = $request->all();
         $user = $data['user'];
 
-        $method = '/usuarios/solicitud_recuperacion_clave';
+        $method = '/seguridad/v1/usuarios/solicitud_recuperacion_clave';
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method,
@@ -102,9 +102,15 @@ class SeguridadesController extends Controller
         return view('login.olvide_clave');
     }
 
+    /*Reestablecer clave*/
+    public function reestablecer_clave(){
+        return view('login.reestablecer_clave');
+    }
+
     /*Logout*/
-    public function miFuncion(){
+    public function logout(){
         // Session::forget('user');
         Session::flush();
+        return redirect()->route('/');
     }
 }
