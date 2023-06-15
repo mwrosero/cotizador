@@ -15,7 +15,7 @@ class Ism extends Model
     public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
     public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
     public const CODIGOSUCURSAL = 12;
-    public const PERPAGE = 10;
+    public const PERPAGE = 20;
 
     static function call(Array $config)
     {

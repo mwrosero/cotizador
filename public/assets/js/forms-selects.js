@@ -23,8 +23,9 @@ $(function () {
     select2.each(function () {
       var $this = $(this);
       $this.wrap('<div class="position-relative"></div>').select2({
-        placeholder: 'Select value',
-        dropdownParent: $this.parent()
+        placeholder: 'Selecciona una opción',
+        dropdownParent: $this.parent(),
+        language: 'es'
       });
     });
   }
@@ -45,7 +46,8 @@ $(function () {
       templateSelection: renderIcons,
       escapeMarkup: function (es) {
         return es;
-      }
+      },
+      language: 'es'
     });
   }
 });

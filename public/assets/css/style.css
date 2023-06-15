@@ -1,3 +1,11 @@
+/*HTML*/
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
 /*Sidebar*/
 .bg-menu-theme{
     background: #171D49 !important;
@@ -11,6 +19,18 @@ a.menu-link{
 
 .logo-sidebar{
     height: 75px;
+}
+
+#pin-menu{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.logo-sidebar-iso {
+    height: 60px;
+    margin: auto;
+    display: none;
 }
 
 /*Login*/
@@ -33,6 +53,22 @@ a.menu-link{
 
 /*Select2*/
 .select2-results__option[role=option][aria-selected=true] {
+    background-color: #3962e6 !important;
+    color: #fff;
+}
+
+/*Acordion*/
+.accordion-button{
+    color: #3860e2 !important;
+}
+
+/*Paginacion*/
+.pagination{
+    justify-content: center;
+}
+
+.page-item.active .page-link, .pagination li.active > a:not(.page-link) {
+    border-color: #3962e6 !important;
     background-color: #3962e6 !important;
     color: #fff;
 }
