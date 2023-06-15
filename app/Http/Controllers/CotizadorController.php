@@ -18,15 +18,45 @@ class CotizadorController extends Controller
     }
 
     public function clientes(Request $request){
-        /*$method = '/comercial/v1/clientes';
-        $param = '?codigoSucursal='.Ism::CODIGOSUCURSAL;
+        $tipoFiltro = $request->query('tipoFiltro', '');
+        $valorFiltro = $request->query('valorFiltro', '');
+        $customFilter = "";
+        if($tipoFiltro != "" && $valorFiltro != ""){
+            $customFilter = "&tipoFiltro=".$tipoFiltro."&valorFiltro=".urlencode($valorFiltro);
+        }
+
+        $method = '/comercial/v1/clientes';
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado='.$request->query('estado', 'TODOS').'&infoEmpresarial=true&codigoCliente='.urlencode($request->query('codigoCliente', '')).'&tipoPersona='.$request->query('tipoPersona','').$customFilter;
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
-            'token'    => $response->data->idToken,
+            'token'    => Session::get('userData')->idToken,
             'method'   => 'GET'
-        ]);*/
-        return view('cotizador.clientes');
+        ]);
+
+        // dd($response);
+
+        $totalRegistros = $response->data->totalRows; // Número total de registros
+        $registrosPorPagina = count($response->data->row); // Número de registros en la página actual
+
+        $elementosPorPagina = Ism::PERPAGE; // Define el número de elementos por página según tus necesidades
+        $totalPaginas = ceil($totalRegistros / $elementosPorPagina);
+
+        $paginaActual = $request->query('page', '1'); // Define la página actual según tus necesidades
+        $datosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
+            $response->data->row, // Datos de la página actual
+            $totalRegistros, // Número total de registros
+            $elementosPorPagina, // Número de elementos por página
+            $paginaActual, // Página actual
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(), // Ruta actual
+                'pageName' => 'page', // Nombre del parámetro de la página en la URL
+            ]
+        );
+
+        return view('cotizador.clientes')
+            ->with('datosPaginados', $datosPaginados)
+            ->with('data',$response);
     }
 
     public function cotizaciones(){

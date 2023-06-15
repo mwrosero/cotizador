@@ -12,39 +12,39 @@
                 <form class="card-body" id="form-registro" action="/guardar-empresa" method="POST">
                     <h6>1. Datos de la Empresa</h6>
                     <div class="row g-3">
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="ruc" class="form-label">Ruc</label>
                             <input type="text"
-                            class="form-control"
-                            id="ruc"
-                            name="ruc" 
-                            placeholder="" />
+                                class="form-control"
+                                id="ruc"
+                                name="ruc" 
+                                placeholder="" />
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="codigoCiiu" class="form-label">Código CIIU</label>
                             <input type="text"
-                            class="form-control"
-                            id="codigoCiiu"
-                            name="codigoCiiu" 
-                            placeholder="" />
+                                class="form-control"
+                                id="codigoCiiu"
+                                name="codigoCiiu" 
+                                placeholder="" />
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="razonSocial" class="form-label">Razón Social</label>
                             <input type="text"
-                            class="form-control"
-                            id="razonSocial"
-                            name="razonSocial" 
-                            placeholder="" />
+                                class="form-control"
+                                id="razonSocial"
+                                name="razonSocial" 
+                                placeholder="" />
                         </div>
-                        <div class="col-11 col-sm-5 col-md-3 mb-3">
+                        <div class="col-10 col-sm-5 col-md-3">
                             <label for="giroNegocio" class="form-label">Giro de Negocio</label>
                             <input type="text"
-                            class="form-control"
-                            id="giroNegocio"
-                            name="giroNegocio" 
-                            placeholder="" />
+                                class="form-control"
+                                id="giroNegocio"
+                                name="giroNegocio" 
+                                placeholder="" />
                         </div>
-                        <div class="col-1 col-sm-1 col-md-1 pt-4 mb-3">
+                        <div class="col-2 col-sm-1 col-md-1 pt-4">
                             <button type="button"
                                 class="btn bg-veris w-100"
                                 data-bs-toggle="modal"
@@ -54,7 +54,7 @@
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="grupoEmpresa" class="form-label">Grupo de Empresa 
                                 <i type="button"
                                     class="fa-solid fa-circle-info"
@@ -69,89 +69,84 @@
                                 <option>lorem</option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="tipoEmpresa" class="form-label">Tipo de Empresa</label>
                             <select id="tipoEmpresa" name="tipoEmpresa" class="form-select select2 w-100" data-style="btn-default">
                                 <option value="N">Natural</option>
                                 <option value="J">Juridica</option>
                             </select>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="razonComercial" class="form-label">Razón Comercial</label>
                             <input type="text"
-                            class="form-control"
-                            id="razonComercial"
-                            name="razonComercial"
-                            placeholder=""/>
+                                class="form-control"
+                                id="razonComercial"
+                                name="razonComercial"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="representacionLegal" class="form-label">Representación Legal</label>
                             <input type="text"
-                            class="form-control"
-                            id="representacionLegal"
-                            name="representacionLegal"
-                            placeholder=""/>
+                                class="form-control"
+                                id="representacionLegal"
+                                name="representacionLegal"
+                                placeholder=""/>
                         </div>
                     </div>
                     <hr class="my-4 mx-n4" />
                     <h6>2. Datos de Contacto</h6>
                     <div class="row g-3">
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="telefonoEmpresa" class="form-label">Teléfono Empresa</label>
                             <input
-                            type="text"
-                            class="form-control"
-                            id="telefonoEmpresa"
-                            name="telefonoEmpresa"
-                            placeholder=""/>
+                                type="text"
+                                class="form-control"
+                                id="telefonoEmpresa"
+                                name="telefonoEmpresa"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="correoEmpresa" class="form-label">Correo Empresa</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="correoEmpresa"
-                            name="correoEmpresa"
-                            placeholder=""/>
+                            <input type="text"
+                                class="form-control"
+                                id="correoEmpresa"
+                                name="correoEmpresa"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="personaContacto" class="form-label">Persona Contacto</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="personaContacto"
-                            name="personaContacto"
-                            placeholder=""/>
+                            <input type="text"
+                                class="form-control"
+                                id="personaContacto"
+                                name="personaContacto"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="telefonoContacto" class="form-label">Teléfono Contacto</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="telefonoContacto"
-                            name="telefonoContacto"
-                            placeholder=""/>
+                            <input type="text"
+                                class="form-control"
+                                id="telefonoContacto"
+                                name="telefonoContacto"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="correoContacto" class="form-label">Correo Contacto</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="correoContacto"
-                            name="correoContacto"
-                            placeholder=""/>
+                            <input type="text"
+                                class="form-control"
+                                id="correoContacto"
+                                name="correoContacto"
+                                placeholder=""/>
                         </div>
-                        <div class="col-12 col-sm-6 col-md-4 mb-3">
+                        <div class="col-12 col-sm-6 col-md-4">
                             <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto</label>
-                            <input
-                            type="text"
-                            class="form-control"
-                            id="cargoPersonaContacto"
-                            name="cargoPersonaContacto"
-                            placeholder=""/>
+                            <input type="text"
+                                class="form-control"
+                                id="cargoPersonaContacto"
+                                name="cargoPersonaContacto"
+                                placeholder=""/>
                         </div>
                         <div class="col-12 text-end">
-                            <button type="button" class="btn bg-veris">Crear Empresa</button>
+                            <button type="submit" class="btn bg-veris">Crear Empresa</button>
                         </div>
                     </div>
                 </form>
