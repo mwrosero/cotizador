@@ -40,7 +40,7 @@
             <ul class="menu-sub">
                 <li class="menu-item">
                     <a href="/{{ $value->vista }}/{{ $v->vista }}" class="menu-link">
-                        <div data-i18n="{{ $v->detalleOpcion }}">{{ $v->detalleOpcion }}</div>
+                        <div class="fs-14" data-i18n="{{ $v->detalleOpcion }}">{{ $v->detalleOpcion }}</div>
                     </a>
                 </li>
             </ul>
