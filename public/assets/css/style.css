@@ -1,10 +1,20 @@
 /*HTML*/
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
+.fs-8{font-size: 8px;}
+.fs-9{font-size: 9px;}
+.fs-10{font-size: 10px;}
+.fs-11{font-size: 11px;}
+.fs-12{font-size: 12px;}
+.fs-13{font-size: 13px;}
+.fs-14{font-size: 14px;}
+.fs-18{font-size: 18px;}
+.fs-45{font-size: 45px;}
 
 /*Sidebar*/
 .bg-menu-theme{
@@ -39,6 +49,9 @@ a.menu-link{
 }
 
 /*Componentes*/
+.txt-veris{
+    color: #3962E6 !important;
+}
 
 .bg-veris{
     background: #3962E6;
@@ -51,10 +64,29 @@ a.menu-link{
     opacity: 0.8;
 }
 
+.sk-veris .sk-chase-dot:before{
+    background-color: #3962E6;
+}
+
+.bg-alt{
+    background: #F76B1C;
+    color: #fff;
+}
+
+.bg-alt:hover{
+    background: #F76B1C;
+    color: #fff;
+    opacity: 0.8;
+}
+
 /*Select2*/
 .select2-results__option[role=option][aria-selected=true] {
     background-color: #3962e6 !important;
     color: #fff;
+}
+
+.select2-container--default .select2-results__option--highlighted:not([aria-selected=true]) {
+    color: #3962e6 !important;
 }
 
 /*Acordion*/
@@ -71,4 +103,10 @@ a.menu-link{
     border-color: #3962e6 !important;
     background-color: #3962e6 !important;
     color: #fff;
+}
+
+/*Bootstrap*/
+.form-label {
+    color: #171d49;
+    font-weight: 700;
 }

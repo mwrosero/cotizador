@@ -12,6 +12,10 @@
             <div class="card accordion-item active">
                 <h2 class="accordion-header" id="headingOne">
                     <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter me-2" width="17" height="17" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                           <path d="M4 4h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414v7l-6 2v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227z"></path>
+                        </svg>
                         Filtros de búsqueda
                     </button>
                 </h2>
@@ -66,7 +70,17 @@
                                     value="{{ old('valorFiltro', request()->get('valorFiltro')) }}"
                                     placeholder="" />
                             </div>
-                            <div class="col-12 col-sm-6 col-md-4">
+                            <div class="col-2 col-sm-1 col-md-1">
+                                <a href="{{ request()->url() }}" type="button" class="btn bg-alt w-100 mt-0 mt-sm-4" title="Limpiar Filtro">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-x" width="17" height="17" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                       <path d="M13.785 19.405l-4.785 1.595v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414"></path>
+                                       <path d="M22 22l-5 -5"></path>
+                                       <path d="M17 22l5 -5"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="col-10 col-sm-5 col-md-3">
                                 <button type="submit" class="btn bg-veris w-100 mt-0 mt-sm-4">Buscar</button>
                             </div>
                         </div>
