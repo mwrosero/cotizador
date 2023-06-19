@@ -47,8 +47,8 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="tipoEmpresa" class="form-label">Tipo de Empresa</label>
-                            <select id="tipoEmpresa" name="tipoEmpresa" required class="form-select select2 w-100" data-style="btn-default">
+                            <label for="tipoPersona" class="form-label">Tipo de Persona</label>
+                            <select id="tipoPersona" name="tipoPersona" required class="form-select select2 w-100" data-style="btn-default">
                                 <option value="N">Natural</option>
                                 <option value="J">Juridica</option>
                             </select>
