@@ -51,9 +51,10 @@
     <link rel="stylesheet" href="../../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="../../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="../../assets/vendor/libs/formvalidation/dist/css/formValidation.min.css" />
+    <link rel="stylesheet" href="../../assets/vendor/libs/swiper/swiper.css" />
    
     <!-- Page CSS -->
-
+    <link rel="stylesheet" href="../../assets/vendor/css/pages/ui-carousel.css" />
     <!-- Helpers -->
     <script src="../../assets/vendor/js/helpers.js"></script>
 
@@ -258,8 +259,8 @@
     <script src="../../assets/vendor/libs/hammer/hammer.js"></script>
     <script src="../../assets/vendor/libs/i18n/i18n.js"></script>
     <script src="../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
-    <script src="../../assets/vendor/js/menu.js"></script>
     <script src="../../assets/js/ui-popover.js"></script>
+    
 
     
   
@@ -275,9 +276,12 @@
     <script src="../../assets/vendor/libs/datatables-buttons/datatables-buttons.js"></script>
     <script src="../../assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.js"></script>
     <script src="../../assets/vendor/libs/datatables/jquery.dataTables.js"></script>
+
+    <script src="../../assets/vendor/libs/swiper/swiper.js"></script>
+    
    
      <!-- Flat Picker -->
-     
+    
      <script src="../../assets/vendor/libs/flatpickr/flatpickr.js"></script>
      <script src="../../assets/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
      <script src="../../assets/vendor/libs/cleavejs/cleave.js"></script>
@@ -286,7 +290,9 @@
     {{-- <script src="../../assets/js/main.js"></script> --}}
 
     <!-- Page JS -->
+    <script src="../../assets/js/ui-carousel.js"></script>
     <script src="../../assets/js/tables-datatables-advanced.js"></script>
     <script src="../../assets/js/app-invoice-add.js"></script>
+   
   </body>
 </html>

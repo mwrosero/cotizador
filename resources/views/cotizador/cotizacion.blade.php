@@ -7,34 +7,18 @@
 @endsection
 
 @section('content')
-<<<<<<< HEAD
-    <h4 class="fw-bold">Cotizador</h4>
-    <h5 class="text-primary">Cotizaciones de servicios veris</h5>
-=======
->>>>>>> developer
     <div class="row mb-3">
     <!-- Accordion with Icon -->
         <div class="col-md mb-4 mb-md-2">
             <div class="accordion mt-3" id="accordionWithIcon">
                 <div class="card accordion-item active">
                     <h2 class="accordion-header d-flex align-items-center">
-<<<<<<< HEAD
-                        <button
-                        type="button"
-                        class="accordion-button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#accordionWithIcon-1"
-                        aria-expanded="true"
-                        >
-                        <span class="fw-bold">Paso 1.</span> <span class="text-primary ms-3">Selección cliente</span>
-=======
                         <button type="button"
                             class="accordion-button text-primary"
                             data-bs-toggle="collapse"
                             data-bs-target="#accordionWithIcon-1"
                             aria-expanded="true">
                         Paso1. Seccion de Cliente
->>>>>>> developer
                         </button>
                     </h2>
                     <div id="accordionWithIcon-1" class="accordion-collapse collapse show">

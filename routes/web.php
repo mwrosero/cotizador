@@ -27,6 +27,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/cotizacion', function () {
         return view('cotizador.cotizacion');
     })->withoutMiddleware(['loggedUser']);
+
 });
 
 //Route::middleware('auth')->group(function () {
@@ -45,4 +46,8 @@ Route::group(['middleware' => ['loggedUser']], function () {
         
         Route::get('/consulta-cotizaciones', [CotizadorController::class, 'cotizaciones'])->name('consulta-cotizaciones')->withoutMiddleware(['guest']);
     });
+
+    Route::get('/prestaciones', function () {
+        return view('cotizador.prestaciones');
+    })->withoutMiddleware(['guest']);
 });
