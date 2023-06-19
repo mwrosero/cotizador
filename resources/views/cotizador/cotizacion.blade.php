@@ -170,8 +170,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3">
-                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                <div class="row mt-3" id="box-prestaciones">
+                    <!--div class="col-12 col-sm-6 col-md-4 mb-2">
                         <div class="card">
                             <div class="card h-100">
                                 <div class="card-header d-flex justify-content-between">
@@ -217,46 +217,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4 mb-2">
-                        <div class="card">
-                            <div class="card h-100">
-                                <div class="card-header d-flex justify-content-between">
-                                    <div class="card-title mb-0">
-                                        <h5 class="mb-0">Hematología</h5>
-                                    </div>
-                                </div>
-                                <div class="card-body">
-                                    <ul class="p-0 m-0">
-                                        <li class="mb-1 d-flex align-items-center">
-                                            <input type="checkbox" id="ck_input_1" class="me-2">
-                                            <label for="ck_input_1" class="flex-fill fs-12">HEMOGLOBINA</label>
-                                            <div class="align-self-start input-group input-price ms-2">
-                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
-                                                <input type="text" id="input_1" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
-                                            </div>
-                                        </li>
-                                        <li class="mb-1 d-flex align-items-center">
-                                            <input type="checkbox" id="ck_input_2" class="me-2">
-                                            <label for="ck_input_2" class="flex-fill fs-12">HEMATOCRITO</label>
-                                            <div class="align-self-start input-group input-price ms-2">
-                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
-                                                <input type="text" id="input_2" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
-                                            </div>
-                                        </li>
-                                        <li class="mb-1 d-flex align-items-center">
-                                            <input type="checkbox" id="ck_input_3" class="me-2">
-                                            <label for="ck_input_3" class="flex-fill fs-12">FROTIS SANGRE PERIFERICA</label>
-                                            <div class="align-self-start input-group input-price ms-2">
-                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
-                                                <input type="text" id="input_3" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </div-->
                 </div>
             </div>
             <div class="modal-footer">
@@ -271,11 +232,13 @@
 <script>
     window.onload = async () => {
         await obtenerNivel1();
-        // await obtenerPrestaciones();
+        await obtenerPrestaciones();
+        showPrestaciones();
 
         $('body').on('click touch', '.swiper-slide', function(){
             $('.swiper-slide').removeClass('item-selected');
             $(this).addClass('item-selected');
+            showPrestaciones();
         })
 
     }
@@ -311,6 +274,62 @@
                 nextEl: '.swiper-button-next'
             }
         });
+    }
+
+    async function obtenerPrestaciones(){
+        let args = [];
+        args["endpoint"] = api_url+"/comercial/v1/tarifarios/1-1-4/detalle/?idTarifario=1-1-4&incluirPrestacionesNoParametrizadas=false";
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+        console.log(data);
+        let elem = "";
+
+        $.each(data.data, function(key, value){
+            $.each(value.servicios, function(k, v){
+                $.each(v.servicios, function(k1, v1){
+                    elem = "";
+                    console.log("-----"+v1.nombreServicio);
+                    elem += `<div class="col-12 col-sm-6 col-md-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
+                            <div class="shadow bg-white prestaciones-item">
+                            <div class="card shadow-none">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                <h6 class="mb-0">${ v1.nombreServicio }</h6>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="p-0 m-0">`
+                    $.each(v1.prestaciones, function(k2, v2){
+                        console.log(v2.nombrePrestacion);
+                        elem += `       <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="me-2">
+                                            <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-10 fw-bold">$</span>
+                                                <input type="text" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>`;
+                    })
+                elem += `           </ul>
+                                </div>
+                            </div>
+                            </div>
+                        </div>`;
+                $('#box-prestaciones').append(elem);
+                })
+            });
+            $('.prestaciones-item').each(function() {
+                new PerfectScrollbar(this);
+            });
+        })
+    }
+
+    function showPrestaciones(){
+        $('.servicio').hide();
+        $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
     }
 </script>
 <style>
@@ -385,6 +404,12 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+    .servicio {
+        display: none;
+    }
+    .prestaciones-item{
+        max-height: 400px;
     }
 </style>
 @endsection
