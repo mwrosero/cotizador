@@ -69,6 +69,23 @@
         {{-- <script src="../../../assets/vendor/js/template-customizer.js"></script> --}}
         <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
         <script src="../../../assets/js/config.js"></script>
+        <style>
+            body{
+                background: url(../../../assets/img/veris/bg-login.svg) no-repeat right bottom;
+                background-attachment: fixed;
+                background-size: contain;
+            }
+            body:after {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 6px;
+                background: #FF9E19;
+                z-index: 1;
+                left: 0;
+                bottom: 0px;
+            }
+        </style>
     </head>
 
     <body class="bg-fondo">

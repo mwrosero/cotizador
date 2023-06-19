@@ -66,6 +66,7 @@
         <link rel="stylesheet" href="../../../assets/vendor/libs/select2/select2.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/toastr/toastr.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/animate-css/animate.css" />
+        <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
         <!-- Page CSS -->
         <link rel="stylesheet" href="../../../assets/vendor/css/pages/cards-advance.css" />
@@ -153,11 +154,14 @@
     <script src="../../../assets/js/forms-selects.js"></script>
     <script src="../../../assets/vendor/libs/toastr/toastr.js"></script>
     <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" />
+    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
     <!-- Main JS -->
     <script src="../../../assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="../../../assets/js/dashboards-analytics.js"></script>
+    <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script>
 
     <!-- ISM -->
     <script src="../../../assets/js/ism-helper.js"></script>
