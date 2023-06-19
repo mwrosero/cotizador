@@ -64,17 +64,22 @@
         <link rel="stylesheet" href="../../../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/select2/select2.css" />
+        <link rel="stylesheet" href="../../../assets/vendor/libs/toastr/toastr.css" />
+        <link rel="stylesheet" href="../../../assets/vendor/libs/animate-css/animate.css" />
+        <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
         <!-- Page CSS -->
         <link rel="stylesheet" href="../../../assets/vendor/css/pages/cards-advance.css" />
+        
         <!-- Helpers -->
         <script src="../../../assets/vendor/js/helpers.js"></script>
-
-        <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
-        <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-        <!-- <script src="../../../assets/vendor/js/template-customizer.js"></script> -->
-        <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
         <script src="../../../assets/js/config.js"></script>
+        <script>
+            const _token = "{{ session('userData')->idToken }}";
+            const _application = "{{ \App\Models\Ism::APPLICATION }}";
+            const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
+            const api_url = "https://api-phantomx.veris.com.ec";
+        </script>
     </head>
 
     <body>
@@ -120,35 +125,45 @@
     </div>
     <!-- / Layout wrapper -->
 
-<!-- Core JS -->
-<!-- build:js assets/vendor/js/core.js -->
-<script src="../../../assets/vendor/libs/jquery/jquery.js"></script>
-<script src="../../../assets/vendor/libs/popper/popper.js"></script>
-<script src="../../../assets/vendor/js/bootstrap.js"></script>
-<script src="../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-<script src="../../../assets/vendor/libs/node-waves/node-waves.js"></script>
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="../../../assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="../../../assets/vendor/libs/popper/popper.js"></script>
+    <script src="../../../assets/vendor/js/bootstrap.js"></script>
+    <script src="../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="../../../assets/vendor/libs/node-waves/node-waves.js"></script>
 
-<script src="../../../assets/vendor/libs/hammer/hammer.js"></script>
-<script src="../../../assets/vendor/libs/i18n/i18n.js"></script>
-<script src="../../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="../../../assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="../../../assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="../../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
-<script src="../../../assets/vendor/js/menu.js"></script>
-<!-- endbuild -->
+    <script src="../../assets/vendor/libs/block-ui/block-ui.js"></script>
 
-<!-- Vendors JS -->
-<script src="../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
-<script src="../../../assets/vendor/libs/swiper/swiper.js"></script>
-<script src="../../../assets/vendor/libs/datatables/jquery.dataTables.js"></script>
-<script src="../../../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-<script src="../../../assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
-<script src="../../../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
-<script src="../../../assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js"></script>
-<script src="../../../assets/vendor/libs/select2/select2.js"></script>
-<script src="../../../assets/js/forms-selects.js"></script>
-<!-- Main JS -->
-<script src="../../../assets/js/main.js"></script>
+    <script src="../../../assets/vendor/js/menu.js"></script>
+    <!-- endbuild -->
 
-<!-- Page JS -->
-<script src="../../../assets/js/dashboards-analytics.js"></script>
-</body>
+    <!-- Vendors JS -->
+    <script src="../../../assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="../../../assets/vendor/libs/swiper/swiper.js"></script>
+    <script src="../../../assets/vendor/libs/datatables/jquery.dataTables.js"></script>
+    <script src="../../../assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="../../../assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
+    <script src="../../../assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
+    <script src="../../../assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js"></script>
+    <script src="../../../assets/vendor/libs/select2/select2.js"></script>
+    <script src="../../../assets/js/forms-selects.js"></script>
+    <script src="../../../assets/vendor/libs/toastr/toastr.js"></script>
+    <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" />
+    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+
+    <!-- Main JS -->
+    <script src="../../../assets/js/main.js"></script>
+
+    <!-- Page JS -->
+    <script src="../../../assets/js/dashboards-analytics.js"></script>
+    <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script>
+
+    <!-- ISM -->
+    <script src="../../../assets/js/ism-helper.js"></script>
+    </body>
 </html>

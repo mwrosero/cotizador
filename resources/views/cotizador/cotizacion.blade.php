@@ -7,344 +7,385 @@
 @endsection
 
 @section('content')
-    <div class="row mb-3">
-    <!-- Accordion with Icon -->
-        <div class="col-md mb-4 mb-md-2">
-            <div class="accordion mt-3" id="accordionWithIcon">
-                <div class="card accordion-item active">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button type="button"
-                            class="accordion-button text-primary"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accordionWithIcon-1"
-                            aria-expanded="true">
-                        Paso1. Seccion de Cliente
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-1" class="accordion-collapse collapse show">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <div class="input-group input-group-merge">
-                                        <input
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="Buscar"
-                                        aria-label="Search..."
-                                        aria-describedby="busquedaCliente"
-                                        />
-                                        <span class="input-group-text" id="busquedaCliente"><i class="ti ti-search"></i></span>
-                                    </div>
-                                    <label for="busquedaCliente" class="form-label mt-3">Unicomer del Ecuador S.A</label>
-                                </div>
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label for="text">Ruc: </label>
-                                            <label for="ruc">092561470001</label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label for="text">Razón Social: </label>
-                                            <label for="razonSocial">Unicomer dEL Ecuador S.A.</label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-3">
-                                            <label for="text">Usuario Creador: </label>
-                                            <label for="usuarioCreador">Usuario2</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 text-end">
-                                    <button type="button" id="continuarFormulario" class="btn bg-veris">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item card">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                        type="button"
-                        class="accordion-button collapsed"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#accordionWithIcon-2"
-                        aria-expanded="false"
-                        >
-                        <span class="fw-bold"> Paso 2.</span> <span class="text-primary ms-3"> Seleccción de tipo de servicios</span>
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-2" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <label for="tipoServicio" class="form-label">¿Qué servico deseas cotizar?</label>
-                                    <div class="select2-dark">
-                                        <select id="tipoServicio" class="select2 form-select" multiple>
-                                            <option value="1" >Servicio de chequeo Ocupacional</option>
-                                            <option value="2" >Servicio de chequeo Preocupacional</option>
-                                            <option value="3">Servicio de chequeo Postocupacional</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <label for="lugarServicio" class="form-label">¿Dónde deseas el servico?</label>
-                                    <div class="select2-dark">
-                                        <select id="lugarServicio" class="select2 form-select" multiple>
-                                            <option value="1" >En el lugar de la empresa</option>
-                                            <option value="2" >En el centro medico Veris</option>
-                                            <option value="3">Otros</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <label for="detalleLugar" class="form-label">Por favor detallar el lugar</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="detalleLugar"
-                                        placeholder=""
-                                        />
-                                </div>
-                                <div class="col-12 text-end">
-                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item card">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                        type="button"
-                        class="accordion-button collapsed "
-                        data-bs-toggle="collapse"
-                        data-bs-target="#accordionWithIcon-3"
-                        aria-expanded="false"
-                        >
-                        <span class="fw-bold"> Paso 3.</span> <span class="text-primary ms-3"> Planificación del Chequeo</span>
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-3" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <label for="inicioChequeo" class="form-label">¿Cuándo deseas que inicie el chequeo?</label>
-                                    <div class="col-md-10">
-                                        <input class="form-control" type="date" value="2021-06-18" id="inicioChequeo" />
-                                    </div>
-                                </div>
-                                <div class="col-12 col-sm-6 col-md-4 mb-3">
-                                    <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?</label>
-                                    <input
-                                    type="text"
-                                    class="form-control text-center"
-                                    id="diasServicio"
-                                    placeholder=""
-                                    />
-                                </div>
-                                <div class="col-12 text-end">
-                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item card">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                            type="button"
-                            class="accordion-button collapsed "
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accordionWithIcon-4"
-                            aria-expanded="false"
-                        >
-                        <span class="fw-bold">Paso 4.</span> <span class="text-primary ms-3">Selección de Grupo de Perfil</span>
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-4" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 text-end">
-                                    <button
-                                        type="button"
-                                        class="btn btn-primary mb-4"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalNuevoGrupo"
-                                        title="Agregar Grupo"
-                                        >
-                                        Nuevo Grupo
-                                    </button>
-                                </div>
-                                <div class="col-12">
-                                    <div class="card">
-                                        
-                                        <div class="card-datatable text-nowrap">
-                                          <table class="datatables-ajax table">
-                                            <thead>
-                                              <tr>
-                                                <th>Rázon Grupo</th>
-                                                <th>Descripción</th>
-                                                <th>Origen Creador</th>
-                                              </tr>
-                                            </thead>
-                                          </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 text-end mt-4">
-                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item card">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                            type="button"
-                            class="accordion-button collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accordionWithIcon-5"
-                            aria-expanded="false"
-                        >
-                        <span class="fw-bold"> Paso 5.</span> <span class="text-primary ms-3">Cotización</span>
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-5" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 col-sm-8">
-                                        <button type="button" class="btn btn-outline-primary">
-                                            Descargar Plantilla
-                                        </button>
-                                </div>
-                                <div class="col-12 col-sm-2">
-                                    <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
-                                        <span class="d-none d-sm-block">Subir Plantilla</span>
-                                        <i class="ti ti-upload d-block d-sm-none"></i>
-                                        <input
-                                          type="file"
-                                          id="upload"
-                                          class="account-file-input"
-                                          hidden
-                                          accept="pdf"
-                                        />
-                                      </label>
-                                    
-                                               
-                                </div>
-                                
-                                <div class="col-12">
-                                    <form class="source-item pt-4 px-0 px-sm-4">
-                                        <div class="mb-3" data-repeater-list="group-a">
-                                          <div class="repeater-wrapper pt-0 pt-md-4" data-repeater-item>
-                                            <div class="d-flex border rounded position-relative pe-0">
-                                              <div class="row w-100 p-3">
-                                                
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="row pb-4">
-                                          <div class="col-12">
-                                            <button type="button" class="btn btn-primary" data-repeater-create>Add Item</button>
-                                          </div>
-                                        </div>
-                                      </form>
-                                </div>
-                                <div class="col-12 text-end mt-4">
-                                    <button type="button" id="continuarFormulario" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="accordion-item card">
-                    <h2 class="accordion-header d-flex align-items-center">
-                        <button
-                            type="button"
-                            class="accordion-button collapsed"
-                            data-bs-toggle="collapse"
-                            data-bs-target="#accordionWithIcon-6"
-                            aria-expanded="false"
-                        >
-                        <span class="fw-bold"> Paso 6.</span> <span class="text-primary ms-3"> Resumen de la Cotización</span>
-                        </button>
-                    </h2>
-                    <div id="accordionWithIcon-6" class="accordion-collapse collapse">
-                        <div class="accordion-body">
-                            <div class="row">
-                                <div class="col-12 text-end mt-4">
-                                    <button type="button" id="guardarCotizacion" class="btn btn-primary">Guradar Cotizacion</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--/ Accordion with Icon -->
-    <!-- MODAL GIRO NEGOCIO -->
-    <!-- Modal -->
-    <div class="modal fade" id="modalNuevoGrupo" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel1">Agregar Grupos</h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <div class="input-group input-group-merge">
-                                <input
-                                type="text"
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h6 class="txt-veris">Seleccionar Cliente</h6>
+                <div class="row g-3">
+                    <div class="col-11 col-md-6">
+                        <div class="input-group input-group-merge">
+                            <input type="text"
                                 class="form-control"
                                 placeholder="Buscar"
                                 aria-label="Search..."
-                                aria-describedby="busquedaCliente"
-                                />
-                                <span class="input-group-text" id="busquedaCliente"><i class="ti ti-search"></i></span>
-                            </div>
-                        </div>
-                        <div class="col-12 mb-3 text-center">
-                            <div class="row">
-                                <label for="nombreGrupo"> Nombre el grupo: Grupo A</label>
-                                <label for="numMiembrosServicio" class="form-label">¿Para cuántos miembros deseas el servicio?</label>
-                            </div>
-                            <input
-                            type="text"
-                            id="numMiembrosServicio"
-                            class="form-control"
-                            placeholder=""
-                            />
+                                aria-describedby="infoCliente"/>
+                            <span class="input-group-text" id="busquedaCliente"><i class="ti ti-search"></i></span>
                         </div>
                     </div>
+                    <div class="col-1 d-none">
+                        <div class="sk-chase sk-veris">
+                            <div class="sk-chase-dot"></div>
+                            <div class="sk-chase-dot"></div>
+                            <div class="sk-chase-dot"></div>
+                            <div class="sk-chase-dot"></div>
+                            <div class="sk-chase-dot"></div>
+                            <div class="sk-chase-dot"></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Cliente</label>
+                                <p>Michael Rosero Peralta</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Cédula/RUC</label>
+                                <p>0923796304001</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Giro de Negocio</label>
+                                <p>Empresa de Informática</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Nombre Contacto</label>
+                                <p>Isabela Devera Delgado</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Correo electrónico</label>
+                                <p>isabela.devera@akold.com</p>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-4">
+                                <label class="form-label fs-12">Teléfono</label>
+                                <p>0988036344</p>
+                            </div>
+                        </div>                            
+                    </div>
                 </div>
-                <div class="modal-footer"> 
-                    <div class="row">
-                        <div class="col-6">
-                            <button type="button" class="btn btn-primary">Agregar</button>
+                <hr class="my-4 mx-n4" />
+                <h6 class="txt-veris">Tipos de Servicios</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="tipoServicio" class="form-label">¿Qué servico deseas cotizar?</label>
+                        <div class="select2-dark">
+                            <select id="tipoServicio" class="select2 form-select" multiple>
+                                <option value="1" >Ocupacional</option>
+                                <option value="2" >Pre-Ocupacional</option>
+                                <option value="3">Post-Ocupacional</option>
+                            </select>
                         </div>
-                        <div class="col-6">
-                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                                Cancelar
-                            </button>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="lugarServicio" class="form-label">¿Dónde deseas el servico?</label>
+                        <div class="select2-dark">
+                            <select id="lugarServicio" class="select2 form-select" multiple>
+                                <option value="1" >En el lugar de la empresa</option>
+                                <option value="2" >En el centro medico Veris</option>
+                                <option value="3">Otros</option>
+                            </select>
                         </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="centroMedico" class="form-label">Centrales Médicas</label>
+                        <div class="select2-dark">
+                            <select id="centroMedico" class="select2 form-select" multiple>
+                                <option value="1" >Mall del Sol</option>
+                                <option value="2" >CC El Dorado</option>
+                                <option value="3">Kennedy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="detalleLugar" class="form-label">Por favor detallar el lugar</label>
+                        <input type="text"
+                            class="form-control"
+                            id="detalleLugar"
+                            placeholder="" />
+                    </div>
+                </div>
+                <hr class="my-4 mx-n4" />
+                <h6 class="txt-veris">Planificación del Chequeo</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <label for="inicioChequeo" class="form-label">¿Cuándo deseas que inicie el chequeo?</label>
+                        <input type="date" 
+                            class="form-control" 
+                            id="inicioChequeo"/>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?</label>
+                        <input type="text"
+                            class="form-control"
+                            id="diasServicio"
+                            placeholder=""/>
+                    </div>
+                </div>
+                <hr class="my-4 mx-n4" />
+                <h6 class="txt-veris">Prestaciones</h6>
+                <div class="row g-3">
+                    <div class="col-12">
+                        <button type="button"
+                            id="btn-prestaciones"
+                            class="btn bg-veris"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalPrestaciones"
+                            title="Seleccionar Prestaciones"
+                            >
+                            <i class="fa-solid fa-laptop-medical me-2"></i>
+                            Seleccionar Prestaciones
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<!-- MODAL PRESTACIONES -->
+<!-- Modal -->
+<div class="modal fade" id="modalPrestaciones" aria-labelledby="modalPrestacionesLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        {{-- <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down"> --}}
+        <div class="modal-content p-2">
+            {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+            <div class="modal-header">
+                <div class="col-12">
+                    <label for="grupoPerfil" class="form-label">Grupo Perfil</label>
+                    <div class="select2-dark">
+                        <select id="grupoPerfil" class="select2 form-select">
+                            <option value="1" >Grupo 1</option>
+                            <option value="2" >Grupo 2</option>
+                            <option value="3" >Grupo 3</option>
+                            <option value="4" >Grupo 4</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="swiper-container rounded" id="scroll-tags">
+                            <div class="swiper-button-prev swiper-button-white custom-icon"></div>
+                            <ul class="swiper-wrapper" id="list-nivel-1"></ul>
+                            <div class="swiper-button-next swiper-button-white custom-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        <div class="card">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                        <h5 class="mb-0">Hematología</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="p-0 m-0">
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_1" class="me-2">
+                                            <label for="ck_input_1" class="flex-fill fs-12">HEMOGLOBINA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_1" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_2" class="me-2">
+                                            <label for="ck_input_2" class="flex-fill fs-12">HEMATOCRITO</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_2" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_3" class="me-2">
+                                            <label for="ck_input_3" class="flex-fill fs-12">FROTIS SANGRE PERIFERICA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_3" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_4" class="me-2">
+                                            <label for="ck_input_4" class="flex-fill fs-12">I. RETICULOCITARIO + HB. RETICULOCITARIA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_4" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        <div class="card">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                        <h5 class="mb-0">Hematología</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="p-0 m-0">
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_1" class="me-2">
+                                            <label for="ck_input_1" class="flex-fill fs-12">HEMOGLOBINA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_1" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_2" class="me-2">
+                                            <label for="ck_input_2" class="flex-fill fs-12">HEMATOCRITO</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_2" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_3" class="me-2">
+                                            <label for="ck_input_3" class="flex-fill fs-12">FROTIS SANGRE PERIFERICA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_3" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-veris">Guardar</button>
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    window.onload = async () => {
+        await obtenerNivel1();
+        // await obtenerPrestaciones();
 
+        $('body').on('click touch', '.swiper-slide', function(){
+            $('.swiper-slide').removeClass('item-selected');
+            $(this).addClass('item-selected');
+        })
+
+    }
+
+    async function obtenerNivel1(){
+        let args = [];
+        args["endpoint"] = api_url+"/comercial/v1/convenios/consulta_servicios_primer_nivel/?idTarifario=1-1-4";
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+        console.log(data);
+        let elem = "";
+        $.each(data.data, function(key, value){
+            let _class = '';
+            if(key == 0){
+                _class = 'item-selected';
+            }
+            elem += `<li codigoServicio-rel='${value.codigoServicio}' class="swiper-slide ${_class}">${value.nombreServicio}</li>`;
+        })
+        $('#list-nivel-1').append(elem);
+        var swiper = new Swiper(".swiper-container", {
+            slidesPerView: "auto",
+            freeMode: {
+                enabled: true,
+                sticky: true,
+            },
+            spaceBetween: 10,
+            mousewheel: true,
+            navigation: {
+                prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next'
+            }
+        });
+    }
+</script>
+<style>
+    .item-selected {
+        background: #3962e6;
+        color: #fff;
+    }
+
+    .scroll-btn:hover{
+        opacity: 0.8;
+    }
+
+    .swiper-container {
+      width: 100%;
+      height: 50px;
+      overflow: hidden;
+    }
+    
+    .swiper-container {
+        width: 100%;
+        border: 1px solid #dbdade;
+    }
+
+    .swiper-slide {
+        cursor: pointer;
+        padding: 0.9rem !important;
+        width: auto !important;
+    }
+
+    .swiper-slide-active2 {
+        background-color: #95D5B2;
+        border-radius: 25px;
+    }
+
+    .swiper-container ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .swiper-container a {
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-button-next {
+        right: -5px;
+        top: 35px;
+        color: #3962e6 !important;
+        /*opacity: 1 !important;*/
+    }
+
+    .swiper-button-prev {
+        left: -5px;
+        top: 35px;
+        color: #3962e6 !important;
+        /*opacity: 1 !important;*/
+    }
+
+    .swiper-button-prev.custom-icon::after, 
+    .swiper-button-next.custom-icon::after{
+        font-size: 16px;
+    }
+
+    .input-price{
+        width: 85px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
 @endsection
 
