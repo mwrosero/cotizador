@@ -160,7 +160,104 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pt-2">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="swiper-container rounded" id="scroll-tags">
+                            <div class="swiper-button-prev swiper-button-white custom-icon"></div>
+                            <ul class="swiper-wrapper" id="list-nivel-1"></ul>
+                            <div class="swiper-button-next swiper-button-white custom-icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        <div class="card">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                        <h5 class="mb-0">Hematología</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="p-0 m-0">
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_1" class="me-2">
+                                            <label for="ck_input_1" class="flex-fill fs-12">HEMOGLOBINA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_1" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_2" class="me-2">
+                                            <label for="ck_input_2" class="flex-fill fs-12">HEMATOCRITO</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_2" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_3" class="me-2">
+                                            <label for="ck_input_3" class="flex-fill fs-12">FROTIS SANGRE PERIFERICA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_3" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_4" class="me-2">
+                                            <label for="ck_input_4" class="flex-fill fs-12">I. RETICULOCITARIO + HB. RETICULOCITARIA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_4" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 mb-2">
+                        <div class="card">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between">
+                                    <div class="card-title mb-0">
+                                        <h5 class="mb-0">Hematología</h5>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="p-0 m-0">
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_1" class="me-2">
+                                            <label for="ck_input_1" class="flex-fill fs-12">HEMOGLOBINA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_1" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_2" class="me-2">
+                                            <label for="ck_input_2" class="flex-fill fs-12">HEMATOCRITO</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_2" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                        <li class="mb-1 d-flex align-items-center">
+                                            <input type="checkbox" id="ck_input_3" class="me-2">
+                                            <label for="ck_input_3" class="flex-fill fs-12">FROTIS SANGRE PERIFERICA</label>
+                                            <div class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-12">$</span>
+                                                <input type="text" id="input_3" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn bg-veris">Guardar</button>
@@ -173,7 +270,14 @@
 </div>
 <script>
     window.onload = async () => {
-        obtenerNivel1();
+        await obtenerNivel1();
+        // await obtenerPrestaciones();
+
+        $('body').on('click touch', '.swiper-slide', function(){
+            $('.swiper-slide').removeClass('item-selected');
+            $(this).addClass('item-selected');
+        })
+
     }
 
     async function obtenerNivel1(){
@@ -185,9 +289,103 @@
 
         const data = await call(args);
         console.log(data);
+        let elem = "";
         $.each(data.data, function(key, value){
+            let _class = '';
+            if(key == 0){
+                _class = 'item-selected';
+            }
+            elem += `<li codigoServicio-rel='${value.codigoServicio}' class="swiper-slide ${_class}">${value.nombreServicio}</li>`;
         })
+        $('#list-nivel-1').append(elem);
+        var swiper = new Swiper(".swiper-container", {
+            slidesPerView: "auto",
+            freeMode: {
+                enabled: true,
+                sticky: true,
+            },
+            spaceBetween: 10,
+            mousewheel: true,
+            navigation: {
+                prevEl: '.swiper-button-prev',
+                nextEl: '.swiper-button-next'
+            }
+        });
     }
 </script>
+<style>
+    .item-selected {
+        background: #3962e6;
+        color: #fff;
+    }
+
+    .scroll-btn:hover{
+        opacity: 0.8;
+    }
+
+    .swiper-container {
+      width: 100%;
+      height: 50px;
+      overflow: hidden;
+    }
+    
+    .swiper-container {
+        width: 100%;
+        border: 1px solid #dbdade;
+    }
+
+    .swiper-slide {
+        cursor: pointer;
+        padding: 0.9rem !important;
+        width: auto !important;
+    }
+
+    .swiper-slide-active2 {
+        background-color: #95D5B2;
+        border-radius: 25px;
+    }
+
+    .swiper-container ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .swiper-container a {
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-button-next {
+        right: -5px;
+        top: 35px;
+        color: #3962e6 !important;
+        /*opacity: 1 !important;*/
+    }
+
+    .swiper-button-prev {
+        left: -5px;
+        top: 35px;
+        color: #3962e6 !important;
+        /*opacity: 1 !important;*/
+    }
+
+    .swiper-button-prev.custom-icon::after, 
+    .swiper-button-next.custom-icon::after{
+        font-size: 16px;
+    }
+
+    .input-price{
+        width: 85px;
+        flex-shrink: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
 @endsection
 
