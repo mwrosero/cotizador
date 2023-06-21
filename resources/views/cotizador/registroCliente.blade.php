@@ -100,20 +100,71 @@
                         </div>
                     </div>
                     <hr class="my-4 mx-n4" />
-                    <h6 class="txt-veris">Datos de Contacto</h6>
-                    {{-- <i class="fa-regular fa-id-badge"></i> --}}
+                    <h6 class="txt-veris">Datos de Localidad</h6>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoEmpresa" class="form-label">Teléfono Empresa</label>
-                            <input type="number"
-                                inputmode="numeric" 
-                                pattern="[0-9]*"
-                                step="1"
+                            <label for="pais" class="form-label">País</label>
+                            <select id="pais" name="pais" required class="form-select select2 w-100" data-style="btn-default">
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="provincia" class="form-label">Provincia</label>
+                            <select id="provincia" name="provincia" required class="form-select select2 w-100" data-style="btn-default">
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <select id="ciudad" name="ciudad" required class="form-select select2 w-100" data-style="btn-default">
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text"
                                 class="form-control"
-                                id="telefonoEmpresa"
-                                name="telefonoEmpresa"
+                                id="direccion"
+                                name="direccion"
                                 required 
                                 placeholder=""/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="telefonoMovilOficina" class="form-label">Teléfono Celular Oficinas</label>
+                            <div class="row">
+                                <div class="col-4 col-sm-6 col-md-6 col-lg-4">
+                                    <select id="telefonoMovilOficinaCode" name="telefonoMovilOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
+                                    </select>
+                                </div>
+                                <div class="col-8 col-sm-6 col-md-6 col-lg-8">
+                                    <input type="number"
+                                        inputmode="numeric" 
+                                        pattern="[0-9]*"
+                                        step="1"
+                                        class="form-control"
+                                        id="telefonoMovilOficina"
+                                        name="telefonoMovilOficina"
+                                        required 
+                                        placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas</label>
+                            <div class="row">
+                                <div class="col-4 col-sm-6 col-md-6 col-lg-4">
+                                    <select id="telefonoFijoOficinaCode" name="telefonoFijoOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
+                                    </select>
+                                </div>
+                                <div class="col-8 col-sm-6 col-md-6 col-lg-8">
+                                    <input type="number"
+                                        inputmode="numeric" 
+                                        pattern="[0-9]*"
+                                        step="1"
+                                        class="form-control"
+                                        id="telefonoFijoOficina"
+                                        name="telefonoFijoOficina"
+                                        required 
+                                        placeholder=""/>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
                             <label for="correoEmpresa" class="form-label">Correo Empresa</label>
@@ -124,6 +175,11 @@
                                 required 
                                 placeholder=""/>
                         </div>
+                    </div>
+                    <hr class="my-4 mx-n4" />
+                    <h6 class="txt-veris">Datos de Contacto</h6>
+                    {{-- <i class="fa-regular fa-id-badge"></i> --}}
+                    <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
                             <label for="personaContacto" class="form-label">Persona Contacto</label>
                             <input type="text"
@@ -134,16 +190,44 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoContacto" class="form-label">Teléfono Contacto</label>
-                            <input type="number"
-                                inputmode="numeric" 
-                                pattern="[0-9]*"
-                                step="1"
-                                class="form-control"
-                                id="telefonoContacto"
-                                name="telefonoContacto"
-                                required 
-                                placeholder=""/>
+                            <label for="telefonoMovilContacto" class="form-label">Teléfono Celular Contacto</label>
+                            <div class="row">
+                                <div class="col-4 col-sm-6 col-md-6 col-lg-4">
+                                    <select id="telefonoMovilContactoCode" name="telefonoMovilContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
+                                    </select>
+                                </div>
+                                <div class="col-8 col-sm-6 col-md-6 col-lg-8">
+                                    <input type="number"
+                                        inputmode="numeric" 
+                                        pattern="[0-9]*"
+                                        step="1"
+                                        class="form-control"
+                                        id="telefonoMovilContacto"
+                                        name="telefonoMovilContacto"
+                                        required 
+                                        placeholder=""/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto</label>
+                            <div class="row">
+                                <div class="col-4 col-sm-6 col-md-6 col-lg-4">
+                                    <select id="telefonoFijoContactoCode" name="telefonoFijoContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
+                                    </select>
+                                </div>
+                                <div class="col-8 col-sm-6 col-md-6 col-lg-8">
+                                    <input type="number"
+                                        inputmode="numeric" 
+                                        pattern="[0-9]*"
+                                        step="1"
+                                        class="form-control"
+                                        id="telefonoFijoContacto"
+                                        name="telefonoFijoContacto"
+                                        required 
+                                        placeholder=""/>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
                             <label for="correoContacto" class="form-label">Correo Contacto</label>
@@ -215,6 +299,81 @@
         window.onload = async () => {
             obtenerGirosNegocio();
             obtenerGrupoEmpresa();
+
+            await cargarPaises();
+            await cargarProvincias();
+            await cargarCiudades();
+
+            $('body').on('change','#pais',function(){
+                cargarProvincias();
+            });
+
+            // $('body').on('change','#provincia',function(){
+            //     cargarCiudades();
+            // });
+        }
+
+        async function cargarPaises(){
+            let args = [];
+            args["endpoint"] = api_url+"/general/v1/paises";
+            args["method"] = "GET";
+            args["bodyType"] = "json";
+            args["showLoader"] = false;
+
+            const data = await call(args);
+            $('#pais').empty();
+            $('#telefonoMovilOficinaCode').empty();
+            $('#telefonoFijoOficinaCode').empty();
+            $('#telefonoMovilContactoCode').empty();
+            $('#telefonoFijoContactoCode').empty();
+            $.each(data.data, function(key, value){
+                var classSel = "";
+                if(value.esDefault){
+                    classSel = "selected";
+                }
+                $('#pais').append(`<option value="${value.codigoPais}" ${classSel}>${value.nombrePais}</option>`);
+                $('#telefonoMovilOficinaCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoFijoOficinaCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoMovilContactoCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoFijoContactoCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+            })
+        }
+
+        async function cargarProvincias(){
+            let args = [];
+            args["endpoint"] = api_url+"/general/v1/provincias?codigoPais="+getInput('pais');
+            args["method"] = "GET";
+            args["bodyType"] = "json";
+            args["showLoader"] = false;
+
+            const data = await call(args);
+            $('#provincia').empty();
+            $.each(data.data, function(key, value){
+                var classSel = "";
+                if(value.esDefault){
+                    classSel = "selected";
+                }
+                $('#provincia').append(`<option value="${value.codigoProvincia}" ${classSel}>${value.nombreProvincia}</option>`);
+            });
+            cargarCiudades();
+        }
+
+        async function cargarCiudades(){
+            let args = [];
+            args["endpoint"] = api_url+"/general/v1/ciudades?codigoPais="+getInput('pais')+"&codigoProvincia="+getInput('provincia');
+            args["method"] = "GET";
+            args["bodyType"] = "json";
+            args["showLoader"] = false;
+
+            const data = await call(args);
+            $('#ciudad').empty();
+            $.each(data.data, function(key, value){
+                var classSel = "";
+                if(value.esDefault){
+                    classSel = "selected";
+                }
+                $('#ciudad').append(`<option value="${value.codigoCiudad}" ${classSel}>${value.nombreCiudad}</option>`);
+            })
         }
 
         async function obtenerGirosNegocio(){
@@ -244,6 +403,42 @@
             $.each(data.data, function(key, value){
                 $('#grupoEmpresa').append(`<option value="${value.idGrupoEmpresa}">${value.nombreGrupo}</option>`);
             })
+        }
+
+        /*HEPERS*/
+        function getInput(idElem, type = 'input'){
+            let valor;
+            switch(type){
+                case 'input':
+                case 'select':
+                    valor = document.getElementById(idElem).value
+                break;
+                case 'radio':
+                    valor = $("input[name='"+idElem+"']:checked").val();
+                break;
+                case 'fecha':
+                    valor = document.getElementById(idElem)._flatpickr.getDate();
+                break;
+                case 'hora':
+                    valor = document.getElementById(idElem)._flatpickr.getDate();
+                break;
+                case 'select2':
+                    //console.log(value);
+                    valor = $('#'+idElem).val();
+                break;
+                case 'button':
+                    // console.log("."+idElem+".active");
+                    $("."+idElem+".active").attr("id-rel");
+                break;
+                case 'checkbox':
+                    // console.log('#'+idElem)
+                    valor = "I";
+                    if($('#'+idElem).is(":checked")){
+                        valor = "A";
+                    }
+                break;
+            }
+            return valor;
         }
 
         

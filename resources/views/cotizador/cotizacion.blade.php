@@ -284,14 +284,12 @@
         args["showLoader"] = false;
 
         const data = await call(args);
-        console.log(data);
         let elem = "";
 
         $.each(data.data, function(key, value){
             $.each(value.servicios, function(k, v){
                 $.each(v.servicios, function(k1, v1){
                     elem = "";
-                    console.log("-----"+v1.nombreServicio);
                     elem += `<div class="col-12 col-sm-6 col-md-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
@@ -303,13 +301,12 @@
                                 <div class="card-body">
                                     <ul class="p-0 m-0">`
                     $.each(v1.prestaciones, function(k2, v2){
-                        console.log(v2.nombrePrestacion);
                         elem += `       <li class="mb-1 d-flex align-items-center">
                                             <input type="checkbox" id="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="me-2">
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
                                             <div class="align-self-start input-group input-price ms-2">
-                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fs-10 fw-bold">$</span>
-                                                <input type="text" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="0.00">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
+                                                <input type="text" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="">
                                             </div>
                                         </li>`;
                     })

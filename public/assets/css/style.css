@@ -89,6 +89,10 @@ a.menu-link{
     color: #3962e6 !important;
 }
 
+.select2-selection span {
+    font-size: 12px;
+}
+
 /*Acordion*/
 .accordion-button{
     color: #3860e2 !important;
@@ -109,4 +113,22 @@ a.menu-link{
 .form-label {
     color: #171d49;
     font-weight: 700;
+}
+
+/*Cotizador*/
+
+.input-price i {
+    font-size: 10px !important;
+}
+
+.prestaciones-item > .card > .card-header {
+    background: rgb(57 98 230 / 10%);
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.prestaciones-item > .card > .card-header h6 {
+    color: #171d49;
+    font-size: 12px !important;
+    line-height: 18px;
 }
