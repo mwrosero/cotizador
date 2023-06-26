@@ -75,3 +75,7 @@ function showLoader(){
 function hideLoader(){
 	$.unblockUI();
 }
+
+function sonNumeros(str) {
+  return /^\d+$/.test(str);
+}

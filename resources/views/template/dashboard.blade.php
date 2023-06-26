@@ -162,6 +162,7 @@
     <!-- Page JS -->
     <script src="../../../assets/js/dashboards-analytics.js"></script>
     <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script>
+    <script src="../../assets/js/typeahead.bundle.js"></script>
 
     <!-- ISM -->
     <script src="../../../assets/js/ism-helper.js"></script>
