@@ -332,10 +332,10 @@
                     classSel = "selected";
                 }
                 $('#pais').append(`<option value="${value.codigoPais}" ${classSel}>${value.nombrePais}</option>`);
-                $('#telefonoMovilOficinaCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
-                $('#telefonoFijoOficinaCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
-                $('#telefonoMovilContactoCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
-                $('#telefonoFijoContactoCode').append(`<option value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoMovilOficinaCode').append(`<option title='${value.nombrePais}' value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoFijoOficinaCode').append(`<option title='${value.nombrePais}' value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoMovilContactoCode').append(`<option title='${value.nombrePais}' value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
+                $('#telefonoFijoContactoCode').append(`<option title='${value.nombrePais}' value="${value.codigoPais}" ${classSel}>${value.codigoISO}</option>`);
             })
         }
 

@@ -34,6 +34,7 @@ class CotizadorController extends Controller
             'method'   => 'GET'
         ]);
 
+        // echo Ism::BASE_URL.$method.$param;
         // dd($response);
 
         $totalRegistros = $response->data->totalRows; // Número total de registros
