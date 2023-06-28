@@ -179,8 +179,8 @@
                                             <a class="dropdown-item" href="javascript:void(0);">
                                                 <i class="ti ti-pencil me-2"></i> Editar
                                             </a>
-                                            <a class="dropdown-item" href="javascript:void(0);">
-                                                <i class="ti ti-trash me-2"></i> Eliminar
+                                            <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
+                                                <i class="ti ti-trash me-2"></i> Cotizar
                                             </a>
                                         </div>
                                     </div>
