@@ -14,6 +14,11 @@
             {{ session('mensaje') }}
         </div>
     @endif
+    @if($errors->has('csrf_token'))
+    <div class="alert alert-warning">
+        {{ $errors->first('csrf_token') }}
+    </div>
+    @endif
     <div class="mb-3">
         <label for="user" class="form-label bg-colortext fw-bold">Usuario</label>
         <input type="text"

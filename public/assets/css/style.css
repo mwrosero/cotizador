@@ -16,6 +16,23 @@ input[type="number"]::-webkit-outer-spin-button {
 .fs-18{font-size: 18px;}
 .fs-45{font-size: 45px;}
 
+/* Estilo de la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 5px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Estilo del thumb (agarre) de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background-color: #3962e6; /* Color de fondo del thumb */
+  border-radius: 4px; /* Borde redondeado del thumb */
+}
+
+/* Estilo del thumb al pasar el mouse sobre él */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #171d49; /* Color de fondo del thumb al pasar el mouse */
+}
+
+
 /*Sidebar*/
 .bg-menu-theme{
     background: #171D49 !important;

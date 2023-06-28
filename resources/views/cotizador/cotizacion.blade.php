@@ -11,8 +11,13 @@
     <div class="col-12">
         <div class="card mb-4">
             <div class="card-body">
+                @if(!isset($numeroIdentificacion))
                 <h6 class="txt-veris">Seleccionar Cliente</h6>
+                @else
+                <h6 class="txt-veris">Cliente</h6>
+                @endif
                 <div class="row g-3">
+                    @if(!isset($numeroIdentificacion))
                     <div class="col-11 col-md-6">
                         <div class="input-group input-group-merge">
                             <input type="text"
@@ -36,6 +41,9 @@
                             <div class="sk-chase-dot"></div>
                         </div>
                     </div>
+                    @else
+                    <input type="hidden" id="searchInput" value="{{ $numeroIdentificacion }}" />
+                    @endif
                     <div class="col-12 d-none" id="box-info-cliente">
                         <div class="row align-items-center">
                             <div class="col-12 col-md-6">
@@ -147,8 +155,8 @@
 
 <!-- MODAL PRESTACIONES -->
 <div class="modal fade" id="modalPrestaciones" aria-labelledby="modalPrestacionesLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        {{-- <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down"> --}}
+    {{-- <div class="modal-dialog modal-xl"> --}}
+    <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down">
         <div class="modal-content p-2">
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             <div class="modal-header">
@@ -170,6 +178,20 @@
                         </div>
                     </div>
                 </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-lg-6 offset-lg-3">
+                        <div class="input-group input-group-merge">
+                            <input type="text"
+                                id="searchInputPrestacion"
+                                class="form-control fs-12"
+                                placeholder="Buscar prestación"
+                                aria-label="Buscar prestación"/>
+                            <span title="BUSCAR" class="input-group-text">
+                                <i class="ti ti-search"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
                 <div class="row mt-3" id="box-prestaciones"></div>
             </div>
             <div class="modal-footer">
@@ -183,7 +205,7 @@
 </div>
 
 <!-- MODAL CLIENTES -->
-<div class="modal fade" id="modalCliente" aria-labelledby="modalClienteLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalCliente" aria-labelledby="modalClienteLabel" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         {{-- <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down"> --}}
         <div class="modal-content p-2">
@@ -220,6 +242,9 @@
     let modalCliente;
 
     window.onload = async () => {
+        @if(isset($numeroIdentificacion))
+        buscarCliente();
+        @endif
         modalCliente = new bootstrap.Modal('#modalCliente');
         obtenerTiposContrato();
         obtenerCentralesMedicas();
@@ -237,10 +262,18 @@
         /*$('body').on('change', '#searchInput', function(){
             buscarCliente();
         })*/
-
-        $('.box-row-modal-clientes').each(function() {
-            new PerfectScrollbar(this);
+        $('#searchInput').keypress(function(event) {
+            if (event.which === 13) {
+                event.preventDefault();
+                if($('#searchInput').val().length > 0){
+                    buscarCliente();
+                }
+            }
         });
+
+        /*$('.box-row-modal-clientes').each(function() {
+            new PerfectScrollbar(this);
+        });*/
 
         $('body').on('click touch', '.btn-seleccionar-cliente', function(){
             let detalle = $.parseJSON($(this).attr("data-rel"));
@@ -263,7 +296,7 @@
             args["endpoint"] = api_url+"/comercial/v1/clientes?page=1&perPage=100&estado=TODOS&infoEmpresarial=true&tipoFiltro="+tipoFiltro+"&valorFiltro="+$('#searchInput').val();
             args["method"] = "GET";
             args["bodyType"] = "json";
-            args["showLoader"] = false;
+            args["showLoader"] = true;
             
             $('#box-clientes-list').empty();
             $('#box-info-cliente').addClass('d-none');
@@ -390,7 +423,7 @@
             $.each(value.servicios, function(k, v){
                 $.each(v.servicios, function(k1, v1){
                     elem = "";
-                    elem += `<div class="col-12 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
+                    elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
                                 <div class="card-header d-flex justify-content-between">
@@ -406,7 +439,7 @@
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
                                             <div class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="text" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="">
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="">
                                             </div>
                                         </li>`;
                     })
@@ -418,9 +451,9 @@
                 $('#box-prestaciones').append(elem);
                 })
             });
-            $('.prestaciones-item').each(function() {
+            /*$('.prestaciones-item').each(function() {
                 new PerfectScrollbar(this);
-            });
+            });*/
         })
     }
 
@@ -507,6 +540,8 @@
     }
     .prestaciones-item{
         max-height: 400px;
+        overflow: hidden;
+        overflow-y: auto;
     }
 
     ul.typeahead {
@@ -529,8 +564,14 @@
         cursor: pointer;
     }
 
-    .box-row-modal-clientes{
+    /*.box-row-modal-clientes{
         max-height: 400px;
+        overflow: hidden;
+        overflow-y: auto;
+    }*/
+
+    .modal-fullscreen .modal-body{
+        overflow-x: hidden;
     }
 
     .sticky-top {

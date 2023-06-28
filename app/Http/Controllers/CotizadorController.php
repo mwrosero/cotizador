@@ -13,8 +13,9 @@ class CotizadorController extends Controller
         return view('cotizador.registroCliente');
     }
 
-    public function cotizador(){
-        return view('cotizador.cotizacion');
+    public function cotizador($numeroIdentificacion = null){
+        return view('cotizador.cotizacion')
+            ->with('numeroIdentificacion', $numeroIdentificacion);
     }
 
     public function clientes(Request $request){

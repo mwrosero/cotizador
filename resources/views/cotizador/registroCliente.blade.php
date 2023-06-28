@@ -14,7 +14,7 @@
                     {{-- <i class="fa-regular fa-building f-12"></i> --}}
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="ruc" class="form-label">Ruc</label>
+                            <label for="ruc" class="form-label">Ruc<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
@@ -26,7 +26,7 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="codigoCiiu" class="form-label">Código CIIU</label>
+                            <label for="codigoCiiu" class="form-label">Código CIIU<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
@@ -52,6 +52,24 @@
                                 <option value="N">Natural</option>
                                 <option value="J">Juridica</option>
                             </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="razonComercial" class="form-label">Razón Comercial</label>
+                            <input type="text"
+                                class="form-control"
+                                id="razonComercial"
+                                name="razonComercial"
+                                required 
+                                placeholder=""/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="representacionLegal" class="form-label">Representación Legal</label>
+                            <input type="text"
+                                class="form-control"
+                                id="representacionLegal"
+                                name="representacionLegal"
+                                required 
+                                placeholder=""/>
                         </div>
                         <div class="col-10 col-sm-5 col-md-3">
                             <label for="giroNegocio" class="form-label">Giro de Negocio</label>
@@ -79,24 +97,6 @@
                             </label>
                             <select id="grupoEmpresa" name="grupoEmpresa" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4">
-                            <label for="razonComercial" class="form-label">Razón Comercial</label>
-                            <input type="text"
-                                class="form-control"
-                                id="razonComercial"
-                                name="razonComercial"
-                                required 
-                                placeholder=""/>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4">
-                            <label for="representacionLegal" class="form-label">Representación Legal</label>
-                            <input type="text"
-                                class="form-control"
-                                id="representacionLegal"
-                                name="representacionLegal"
-                                required 
-                                placeholder=""/>
                         </div>
                     </div>
                     <hr class="my-4 mx-n4" />
@@ -385,6 +385,7 @@
 
             const data = await call(args);
             $('#giroNegocio').empty();
+            $('#giroNegocio').append(`<option value="---">No asociado</option>`);
             $.each(data.data, function(key, value){
                 $('#giroNegocio').append(`<option value="${value.idGiroNegocio}">${value.nombreGiro}</option>`);
             })
@@ -399,7 +400,7 @@
 
             const data = await call(args);
             $('#grupoEmpresa').empty();
-            // $('#grupoEmpresa').append(`<option value="">No asociado</option>`);
+            $('#grupoEmpresa').append(`<option value="---">No asociado</option>`);
             $.each(data.data, function(key, value){
                 $('#grupoEmpresa').append(`<option value="${value.idGrupoEmpresa}">${value.nombreGrupo}</option>`);
             })
