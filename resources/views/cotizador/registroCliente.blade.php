@@ -9,7 +9,8 @@
     <div class="row">
         <div class="col-12">
             <div class="card mb-4">
-                <form class="card-body" id="form-registro" action="/guardar-empresa" method="POST">
+                <form class="card-body" id="form-registro" action="/cotizador/crear-cliente" method="POST">
+                    @csrf
                     <h6 class="txt-veris">Datos de la Empresa</h6>
                     {{-- <i class="fa-regular fa-building f-12"></i> --}}
                     <div class="row g-3">
@@ -26,7 +27,7 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="codigoCiiu" class="form-label">Código CIIU<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="codigoCiiu" class="form-label">Código CIIU<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
@@ -38,7 +39,7 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="razonSocial" class="form-label">Razón Social</label>
+                            <label for="razonSocial" class="form-label">Razón Social<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="razonSocial"
@@ -47,32 +48,31 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="tipoPersona" class="form-label">Tipo de Persona</label>
+                            <label for="tipoPersona" class="form-label">Tipo de Persona<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <select id="tipoPersona" name="tipoPersona" required class="form-select select2 w-100" data-style="btn-default">
                                 <option value="N">Natural</option>
                                 <option value="J">Juridica</option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="razonComercial" class="form-label">Razón Comercial</label>
+                            <label for="razonComercial" class="form-label">Razón Comercial<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="razonComercial"
                                 name="razonComercial"
-                                required 
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="representacionLegal" class="form-label">Representación Legal</label>
+                            <label for="representanteLegal" class="form-label">Representante Legal<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="text"
                                 class="form-control"
-                                id="representacionLegal"
-                                name="representacionLegal"
+                                id="representanteLegal"
+                                name="representanteLegal"
                                 required 
                                 placeholder=""/>
                         </div>
                         <div class="col-10 col-sm-5 col-md-3">
-                            <label for="giroNegocio" class="form-label">Giro de Negocio</label>
+                            <label for="giroNegocio" class="form-label">Giro de Negocio<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <select id="giroNegocio" name="giroNegocio" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
@@ -94,8 +94,16 @@
                                     data-bs-placement="right"
                                     title="Si la empresa  no pertenece  a ningún grupo asociado por favor  dejelo vacio">
                                 </i>
+                                <span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span>
                             </label>
-                            <select id="grupoEmpresa" name="grupoEmpresa" required class="form-select select2 w-100" data-style="btn-default">
+                            <select id="grupoEmpresa" name="grupoEmpresa" class="form-select select2 w-100" data-style="btn-default">
+                            </select>
+                        </div>
+                        <div class="col-10 col-sm-5 col-md-3">
+                            <label for="esGrupoEmpresa" class="form-label">Es Grupo Empresa<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <div class="form-check form-switch mb-2 mt-2">
+                                <input class="form-check-input" type="checkbox" id="esGrupoEmpresa" name="esGrupoEmpresa" />
+                            </div>
                             </select>
                         </div>
                     </div>
@@ -103,22 +111,22 @@
                     <h6 class="txt-veris">Datos de Localidad</h6>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="pais" class="form-label">País</label>
+                            <label for="pais" class="form-label">País<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <select id="pais" name="pais" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="provincia" class="form-label">Provincia</label>
+                            <label for="provincia" class="form-label">Provincia<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <select id="provincia" name="provincia" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="ciudad" class="form-label">Ciudad</label>
+                            <label for="ciudad" class="form-label">Ciudad<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <select id="ciudad" name="ciudad" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="direccion" class="form-label">Dirección</label>
+                            <label for="direccion" class="form-label">Dirección<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="direccion"
@@ -127,7 +135,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoMovilOficina" class="form-label">Teléfono Celular Oficinas</label>
+                            <label for="telefonoMovilOficina" class="form-label">Teléfono Celular Oficinas<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoMovilOficinaCode" name="telefonoMovilOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -147,7 +155,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas</label>
+                            <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoFijoOficinaCode" name="telefonoFijoOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -161,13 +169,12 @@
                                         class="form-control"
                                         id="telefonoFijoOficina"
                                         name="telefonoFijoOficina"
-                                        required 
                                         placeholder=""/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="correoEmpresa" class="form-label">Correo Empresa</label>
+                            <label for="correoEmpresa" class="form-label">Correo Empresa<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="email"
                                 class="form-control"
                                 id="correoEmpresa"
@@ -181,7 +188,7 @@
                     {{-- <i class="fa-regular fa-id-badge"></i> --}}
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="personaContacto" class="form-label">Persona Contacto</label>
+                            <label for="personaContacto" class="form-label">Persona Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="personaContacto"
@@ -190,7 +197,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoMovilContacto" class="form-label">Teléfono Celular Contacto</label>
+                            <label for="telefonoMovilContacto" class="form-label">Teléfono Celular Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoMovilContactoCode" name="telefonoMovilContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -210,7 +217,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto</label>
+                            <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoFijoContactoCode" name="telefonoFijoContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -224,13 +231,12 @@
                                         class="form-control"
                                         id="telefonoFijoContacto"
                                         name="telefonoFijoContacto"
-                                        required 
                                         placeholder=""/>
                                 </div>
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="correoContacto" class="form-label">Correo Contacto</label>
+                            <label for="correoContacto" class="form-label">Correo Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="email"
                                 class="form-control"
                                 id="correoContacto"
@@ -239,12 +245,11 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto</label>
+                            <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="cargoPersonaContacto"
                                 name="cargoPersonaContacto"
-                                required 
                                 placeholder=""/>
                         </div>
                         <div class="col-12 text-end mt-4">
@@ -287,7 +292,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn bg-veris">Guardar</button>
+                    <button type="button" class="btn bg-veris" onclick="crearGiroNegocio();">Crear</button>
                     <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
                         Cerrar
                     </button>
@@ -296,7 +301,10 @@
         </div>
     </div>
     <script>
+        let modalGiroNegocio;
         window.onload = async () => {
+            modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
+
             obtenerGirosNegocio();
             obtenerGrupoEmpresa();
 
@@ -308,9 +316,29 @@
                 cargarProvincias();
             });
 
-            // $('body').on('change','#provincia',function(){
-            //     cargarCiudades();
-            // });
+            $('body').on('change','#provincia',function(){
+                 cargarCiudades();
+            });
+        }
+
+        async function crearGiroNegocio(){
+            if(getInput('giroNegocioNuevo').length > 0){
+                let args = [];
+                args["endpoint"] = api_url+"/empresarial/v1/util/giros_negocio";
+                args["method"] = "POST";
+                args["bodyType"] = "json";
+                args["showLoader"] = true;
+                args["data"] = JSON.stringify({
+                    "nombreGiro": getInput('giroNegocioNuevo'),
+                    "observacion": getInput('descripcionGiroNegocio')
+                });
+
+                const data = await call(args);
+                modalGiroNegocio.hide();
+                obtenerGirosNegocio();
+            }else{
+                showMessage('warning','Atención','El Nombre del Giro de Negocio es obligatorio')
+            }
         }
 
         async function cargarPaises(){

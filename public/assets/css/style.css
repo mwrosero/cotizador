@@ -139,13 +139,14 @@ a.menu-link{
 }
 
 .prestaciones-item > .card > .card-header {
-    background: rgb(57 98 230 / 10%);
+/*    background: rgb(57 98 230 / 10%);*/
+    background: #3962E6 !important;
     padding: 10px;
     margin-bottom: 15px;
 }
 
 .prestaciones-item > .card > .card-header h6 {
-    color: #171d49;
+/*    color: #171d49;*/
     font-size: 12px !important;
     line-height: 18px;
 }

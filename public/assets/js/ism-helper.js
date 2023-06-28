@@ -79,3 +79,38 @@ function hideLoader(){
 function sonNumeros(str) {
   return /^\d+$/.test(str);
 }
+
+function getInput(idElem, type = 'input'){
+    let valor;
+    switch(type){
+        case 'input':
+        case 'select':
+            valor = document.getElementById(idElem).value
+        break;
+        case 'radio':
+            valor = $("input[name='"+idElem+"']:checked").val();
+        break;
+        case 'fecha':
+            valor = document.getElementById(idElem)._flatpickr.getDate();
+        break;
+        case 'hora':
+            valor = document.getElementById(idElem)._flatpickr.getDate();
+        break;
+        case 'select2':
+            //console.log(value);
+            valor = $('#'+idElem).val();
+        break;
+        case 'button':
+            // console.log("."+idElem+".active");
+            $("."+idElem+".active").attr("id-rel");
+        break;
+        case 'checkbox':
+            // console.log('#'+idElem)
+            valor = "I";
+            if($('#'+idElem).is(":checked")){
+                valor = "A";
+            }
+        break;
+    }
+    return valor;
+}
