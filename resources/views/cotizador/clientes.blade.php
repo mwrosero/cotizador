@@ -164,7 +164,7 @@
                             </tr>
                         @endif
                         @foreach ($datosPaginados as $dato)
-                            <tr>
+                            <tr class="fs-12">
                                 <td>{{ $dato->codigoCliente }}</td>
                                 <td>{{ $dato->nombreCliente }}</td>
                                 <td>{{ $dato->nombreTipoPersona }}</td>
@@ -177,10 +177,10 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="javascript:void(0);">
-                                                <i class="ti ti-pencil me-2"></i> Editar
+                                                <i class="fa-regular fa-pen-to-square me-2"></i> Editar
                                             </a>
                                             <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
-                                                <i class="ti ti-trash me-2"></i> Cotizar
+                                                <i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotizar
                                             </a>
                                         </div>
                                     </div>

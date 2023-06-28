@@ -426,9 +426,9 @@
                     elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
-                                <div class="card-header d-flex justify-content-between">
+                                <div class="card-header d-flex sticky-top justify-content-between">
                                     <div class="card-title mb-0">
-                                <h6 class="mb-0">${ v1.nombreServicio }</h6>
+                                        <h6 class="mb-0 text-white">${ v1.nombreServicio }</h6>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -564,11 +564,11 @@
         cursor: pointer;
     }
 
-    /*.box-row-modal-clientes{
+    .box-row-modal-clientes{
         max-height: 400px;
         overflow: hidden;
         overflow-y: auto;
-    }*/
+    }
 
     .modal-fullscreen .modal-body{
         overflow-x: hidden;

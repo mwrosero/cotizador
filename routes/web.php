@@ -44,5 +44,8 @@ Route::group(['middleware' => ['loggedUser']], function () {
         Route::get('/consulta-clientes', [CotizadorController::class, 'clientes'])->name('consulta-clientes')->withoutMiddleware(['guest']);
         
         Route::get('/consulta-cotizaciones', [CotizadorController::class, 'cotizaciones'])->name('consulta-cotizaciones')->withoutMiddleware(['guest']);
+        
+        Route::post('/crear-cliente', [CotizadorController::class, 'crearCliente'])->name('crear_cliente')->withoutMiddleware(['guest']);
+
     });
 });

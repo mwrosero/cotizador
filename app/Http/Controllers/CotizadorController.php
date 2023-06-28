@@ -64,4 +64,9 @@ class CotizadorController extends Controller
     public function cotizaciones(){
         return view('cotizador.cotizaciones');
     }
+
+    public function crearCliente(Request $request){
+        $data = $request->all();
+        dd($data);
+    }
 }
