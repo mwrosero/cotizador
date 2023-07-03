@@ -91,6 +91,14 @@
 
         </div>
     </div>
+    @if (session()->has('success'))
+    <div class="col-12 mt-4">
+        <div class="alert alert-success alert-dismissible" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    @endif
     <div class="col-12 mt-2">
         <div class="card mb-4">
             <!--form class="card-header" action="" method="GET">
@@ -176,7 +184,7 @@
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="javascript:void(0);">
+                                            <a class="dropdown-item" href="/cotizador/cliente/edit/{{ $dato->codigoCliente }}">
                                                 <i class="fa-regular fa-pen-to-square me-2"></i> Editar
                                             </a>
                                             <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
