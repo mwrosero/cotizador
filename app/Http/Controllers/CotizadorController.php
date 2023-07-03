@@ -65,8 +65,101 @@ class CotizadorController extends Controller
         return view('cotizador.cotizaciones');
     }
 
+    public function obtenerInfoCliente($codigoCliente){
+        $method = '/comercial/v1/clientes/'.$codigoCliente.'?infoEmpresarial=true';
+        
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('userData')->idToken,
+            'method'   => 'GET'
+        ]);
+
+        // dd($response);
+        $cliente = $response->data;
+        return view('cotizador.registroCliente', compact('cliente'));
+    }
+
     public function crearCliente(Request $request){
         $data = $request->all();
-        dd($data);
+
+        $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
+
+        $cliente = [
+            "datosCliente" => [
+                "tipoPersona" => $data['tipoPersona'],
+                "codigoTipoIdentificacion" => (int)$data['codigoTipoIdentificacion'],
+                "numeroIdentificacion" => $data['numeroIdentificacion'],
+                "primerNombre" => null,
+                "segundoNombre" => null,
+                "primerApellido" => null,
+                "segundoApellido" => null,
+                "razonSocial" => $data['razonSocial'],
+                "nombreComercial" => $data['razonComercial'],
+                "aplicaPaperless" => false,
+                "aplicaSolicitudEnvioPaperlessLote" => false,
+                "bloquearCreditosPrestaciones" => false
+            ],
+            "datosContacto" => [
+                "codigoPaisCelular" => (int)$data['telefonoMovilOficinaCode'],
+                "telefonoCelular" => $data['telefonoMovilOficina'],
+                "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
+                "telefonoConvencional" => $data['telefonoFijoOficina'],
+                "contactoCliente" => null,
+                "correoElectronico" => $data['correoEmpresa']
+            ],
+            "datosResidencia" => [
+                "codigoPais" => (int)$data['pais'],
+                "codigoProvincia" => (int)$data['provincia'],
+                "codigoCiudad" => (int)$data['ciudad'],
+                "codigoSector" => null,
+                "direccion" => $data['direccion'],
+                "latitud" => null,
+                "longitud" => null,
+                "direccionGmaps" => null
+            ],
+            "infoEmpresarial" => [
+                "codigoCiiu" => strval($data['codigoCiiu']),
+                "representanteLegal" => $data['representanteLegal'],
+                "idGiroNegocio" => (int)$data['giroNegocio'],
+                "idGrupoEmpresa" => $idGrupoEmpresa,
+                "contactoEmpresarial" => [
+                    "codigoTipoIdentificacion" => null,
+                    "numeroIdentificacion" => null,
+                    "nombre" => $data['personaContacto'],
+                    "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
+                    "telefonoMovil" => $data['telefonoMovilContacto'],
+                    "codigoPaisFijo" => $data['telefonoFijoContactoCode'],
+                    "telefonoFijo" => $data['telefonoFijoContacto'],
+                    "mail" => $data['correoContacto'],
+                    "cargo" => $data['cargoPersonaContacto']
+                ]
+            ]
+        ];
+
+        $esGrupoEmpresa = "false";
+        if ($request->has('esGrupoEmpresa')) {
+            $esGrupoEmpresa = "true";
+        }
+        $method = '/comercial/v1/clientes';
+        $param = '?esGrupoEmpresa='.$esGrupoEmpresa;
+
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method.$param,
+            'token'    => Session::get('userData')->idToken,
+            'data'     => $cliente,
+            'method'   => 'POST'
+        ]);
+        
+        // echo Ism::BASE_URL.$method.$param;
+        // dump($cliente);
+        // dd($response);
+
+        if($response->code != 200){
+            return redirect()->back()->withErrors($request->all())->withInput();
+        }else{
+            session()->flash('success', "Cliente creado exitosamente");
+            return view('cotizador.clientes');
+        }
+        
     }
 }

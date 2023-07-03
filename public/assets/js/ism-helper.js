@@ -42,6 +42,14 @@ async function call(args){
         });
 }
 
+function removeLeadingZero(input, maxLength) {
+    input.value = input.value.replace(/^0/, '');
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+    }
+}
+
+
 function showMessage(type,title,message){
 	switch(type){
 		case 'warning':

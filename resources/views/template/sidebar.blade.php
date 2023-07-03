@@ -7,8 +7,8 @@
             </a>
         </div>
         <div class="col-12 mt-4 text-center">
-            <img class="logo-sidebar" src="../../assets/img/veris/icono-ism-bn.svg">
-            <img class="logo-sidebar-iso" src="../../assets/img/veris/isotipo.svg" alt="">
+            <img class="logo-sidebar" src="{{ asset('assets/img/veris/icono-ism-bn.svg') }}">
+            <img class="logo-sidebar-iso" src="{{ asset('assets/img/veris/isotipo.svg') }}" alt="">
         </div>
     </div>
     <!-- <div class="app-brand demo">

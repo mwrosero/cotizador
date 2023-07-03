@@ -7,22 +7,35 @@
 @endsection
 @section('content')
     <div class="row">
+        @if ($errors->any())
+        <div class="col-12">
+            <div class="alert alert-danger">
+                Error al crear Cliente, verifique los datos e intente nuevamente
+            </div>
+        </div>
+        @endif
         <div class="col-12">
             <div class="card mb-4">
                 <form class="card-body" id="form-registro" action="/cotizador/crear-cliente" method="POST">
-                    @csrf
                     <h6 class="txt-veris">Datos de la Empresa</h6>
+                    @csrf
+                    <input type="hidden" name="codigoTipoIdentificacion" value="1">
                     {{-- <i class="fa-regular fa-building f-12"></i> --}}
+                    <?php /*dd($cliente);*/ ?>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="ruc" class="form-label">Ruc<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="numeroIdentificacion" class="form-label">Ruc<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
                                 step="1"
+                                minlength="13"
+                                maxlength="13"
+                                size="13" 
                                 class="form-control"
-                                id="ruc"
-                                name="ruc" 
+                                id="numeroIdentificacion"
+                                name="numeroIdentificacion" 
+                                value="{{ old('numeroIdentificacion', isset($cliente) ? $cliente->datosCliente->numeroIdentificacion : '') }}"
                                 required 
                                 placeholder="" />
                         </div>
@@ -35,6 +48,7 @@
                                 class="form-control"
                                 id="codigoCiiu"
                                 name="codigoCiiu" 
+                                value="{{ old('codigoCiiu', '' ) }}"
                                 required 
                                 placeholder="" />
                         </div>
@@ -44,6 +58,7 @@
                                 class="form-control"
                                 id="razonSocial"
                                 name="razonSocial" 
+                                value="{{ old('razonSocial', isset($cliente) ? $cliente->datosCliente->razonSocial : '' ) }}"
                                 required 
                                 placeholder="" />
                         </div>
@@ -60,6 +75,7 @@
                                 class="form-control"
                                 id="razonComercial"
                                 name="razonComercial"
+                                value="{{ old('razonComercial', isset($cliente) ? $cliente->datosCliente->nombreComercial : '' ) }}"
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
@@ -68,6 +84,7 @@
                                 class="form-control"
                                 id="representanteLegal"
                                 name="representanteLegal"
+                                value="{{ old('representanteLegal', '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -81,8 +98,7 @@
                                 class="btn bg-veris w-100"
                                 data-bs-toggle="modal"
                                 data-bs-target="#modalGiroNegocio"
-                                title="Agregar"
-                                >
+                                title="Agregar">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
@@ -131,6 +147,17 @@
                                 class="form-control"
                                 id="direccion"
                                 name="direccion"
+                                value="{{ old('direccion', isset($cliente) ? $cliente->datosResidencia->direccion : '' ) }}"
+                                required 
+                                placeholder=""/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-md-4">
+                            <label for="correoEmpresa" class="form-label">Correo Empresa<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <input type="email"
+                                class="form-control"
+                                id="correoEmpresa"
+                                name="correoEmpresa"
+                                value="{{ old('correoEmpresa', isset($cliente) ? $cliente->datosContacto->correoElectronico : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -144,11 +171,13 @@
                                 <div class="col-8 col-sm-6 col-md-6 col-lg-8">
                                     <input type="number"
                                         inputmode="numeric" 
-                                        pattern="[0-9]*"
+                                        pattern="[1-9][0-9]{8}"
+                                        oninput="removeLeadingZero(this,9)"
                                         step="1"
                                         class="form-control"
                                         id="telefonoMovilOficina"
                                         name="telefonoMovilOficina"
+                                        value="{{ old('telefonoMovilOficina', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
                                         required 
                                         placeholder=""/>
                                 </div>
@@ -164,23 +193,16 @@
                                 <div class="col-8 col-sm-6 col-md-6 col-lg-8">
                                     <input type="number"
                                         inputmode="numeric" 
-                                        pattern="[0-9]*"
+                                        pattern="[1-9][0-9]{8}"
+                                        oninput="removeLeadingZero(this,8)"
                                         step="1"
                                         class="form-control"
                                         id="telefonoFijoOficina"
                                         name="telefonoFijoOficina"
+                                        value="{{ old('telefonoFijoOficina', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
                                         placeholder=""/>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-4">
-                            <label for="correoEmpresa" class="form-label">Correo Empresa<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
-                            <input type="email"
-                                class="form-control"
-                                id="correoEmpresa"
-                                name="correoEmpresa"
-                                required 
-                                placeholder=""/>
                         </div>
                     </div>
                     <hr class="my-4 mx-n4" />
@@ -188,11 +210,12 @@
                     {{-- <i class="fa-regular fa-id-badge"></i> --}}
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="personaContacto" class="form-label">Persona Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="personaContacto" class="form-label">Nombre Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="personaContacto"
                                 name="personaContacto"
+                                value="{{ old('personaContacto', isset($cliente) ? $cliente->datosContacto->contactoCliente : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -206,11 +229,13 @@
                                 <div class="col-8 col-sm-6 col-md-6 col-lg-8">
                                     <input type="number"
                                         inputmode="numeric" 
-                                        pattern="[0-9]*"
+                                        pattern="[1-9][0-9]{8}"
+                                        oninput="removeLeadingZero(this,9)"
                                         step="1"
                                         class="form-control"
                                         id="telefonoMovilContacto"
                                         name="telefonoMovilContacto"
+                                        value="{{ old('telefonoMovilContacto', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
                                         required 
                                         placeholder=""/>
                                 </div>
@@ -220,17 +245,19 @@
                             <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
-                                    <select id="telefonoFijoContactoCode" name="telefonoFijoContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
+                                    <select id="telefonoFijoContactoCode" name="telefonoFijoContactoCode" class="form-select select2 w-100 fs-12" data-style="btn-default">
                                     </select>
                                 </div>
                                 <div class="col-8 col-sm-6 col-md-6 col-lg-8">
                                     <input type="number"
                                         inputmode="numeric" 
-                                        pattern="[0-9]*"
+                                        pattern="[1-9][0-9]{8}"
+                                        oninput="removeLeadingZero(this,8)"
                                         step="1"
                                         class="form-control"
                                         id="telefonoFijoContacto"
                                         name="telefonoFijoContacto"
+                                        value="{{ old('telefonoFijoContacto', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
                                         placeholder=""/>
                                 </div>
                             </div>
@@ -241,15 +268,17 @@
                                 class="form-control"
                                 id="correoContacto"
                                 name="correoContacto"
+                                value="{{ old('correoContacto', isset($cliente) ? $cliente->datosContacto->correoElectronico : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="cargoPersonaContacto" class="form-label">Cargo Persona Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="cargoPersonaContacto" class="form-label">Cargo Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
                             <input type="text"
                                 class="form-control"
                                 id="cargoPersonaContacto"
                                 name="cargoPersonaContacto"
+                                value="{{ old('cargoPersonaContacto', '' ) }}"
                                 placeholder=""/>
                         </div>
                         <div class="col-12 text-end mt-4">
@@ -305,20 +334,45 @@
         window.onload = async () => {
             modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
 
-            obtenerGirosNegocio();
-            obtenerGrupoEmpresa();
+            await obtenerGirosNegocio();
+            await obtenerGrupoEmpresa();
 
             await cargarPaises();
             await cargarProvincias();
-            await cargarCiudades();
+            //await cargarCiudades();
 
             $('body').on('change','#pais',function(){
                 cargarProvincias();
             });
 
             $('body').on('change','#provincia',function(){
-                 cargarCiudades();
+                cargarCiudades();
             });
+
+            let tipoPersona = "{{ old('tipoPersona', isset($cliente) ? $cliente->datosCliente->tipoPersona : '' ) }}";
+            if(tipoPersona != ""){
+                $('#tipoPersona').val(tipoPersona).trigger('change');
+            }
+
+            let giroNegocio = "{{ old('giroNegocio', '' ) }}";
+            if(giroNegocio != ""){
+                $('#giroNegocio').val(giroNegocio).trigger('change');
+            }
+
+            let grupoEmpresa = "{{ old('grupoEmpresa', '' ) }}";
+            if(grupoEmpresa != ""){
+                $('#grupoEmpresa').val(grupoEmpresa).trigger('change');
+            }
+            
+            let pais = "{{ old('pais', isset($cliente) ? $cliente->datosResidencia->codigoPais : '' ) }}";
+            if(pais != ""){
+                $('#pais').val(pais).trigger('change');
+                let provincia = "{{ old('provincia', isset($cliente) ? $cliente->datosResidencia->codigoProvincia : '' ) }}";
+                if(provincia != ""){
+                    $('#provincia').val(provincia).trigger('change');
+                    let ciudad = "{{ old('ciudad', isset($cliente) ? $cliente->datosResidencia->codigoCiudad : '' ) }}";
+                }
+            }
         }
 
         async function crearGiroNegocio(){
