@@ -11,6 +11,7 @@ class DashboardController extends Controller
 {
     /*Dashboard Home*/
     public function home(){
+        //dd(Session::get('accessToken'));
         return view('cotizador.cotizacion');
     }
 }

@@ -31,22 +31,33 @@ class CotizadorController extends Controller
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
-            'token'    => Session::get('userData')->idToken,
+            'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
 
-        // echo Ism::BASE_URL.$method.$param;
-        // dd($response);
+        //echo Ism::BASE_URL.$method.$param;
+        //dd($response);
 
-        $totalRegistros = $response->data->totalRows; // Número total de registros
+        if($response->code == 200){
+            $totalRegistros = $response->data->totalRows; // Número total de registros
+            $registrosPorPagina = count($response->data->row); // Número de registros en la página actual
+            $datos = $response->data->row;
+        }else{
+            $datos = [];
+            $totalRegistros = 0; // Número total de registros
+            $registrosPorPagina = count($datos); // Número de registros en la página actual
+        }
+
+        /*$totalRegistros = $response->data->totalRows; // Número total de registros
         $registrosPorPagina = count($response->data->row); // Número de registros en la página actual
+        $datos = $response->data->row;*/
 
         $elementosPorPagina = Ism::PERPAGE; // Define el número de elementos por página según tus necesidades
         $totalPaginas = ceil($totalRegistros / $elementosPorPagina);
 
         $paginaActual = $request->query('page', '1'); // Define la página actual según tus necesidades
         $datosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
-            $response->data->row, // Datos de la página actual
+            $datos, // Datos de la página actual
             $totalRegistros, // Número total de registros
             $elementosPorPagina, // Número de elementos por página
             $paginaActual, // Página actual
@@ -70,7 +81,7 @@ class CotizadorController extends Controller
         
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method,
-            'token'    => Session::get('userData')->idToken,
+            'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
 
@@ -145,7 +156,7 @@ class CotizadorController extends Controller
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
-            'token'    => Session::get('userData')->idToken,
+            'token'    => Session::get('accessToken'),
             'data'     => $cliente,
             'method'   => 'POST'
         ]);
@@ -155,10 +166,12 @@ class CotizadorController extends Controller
         // dd($response);
 
         if($response->code != 200){
+            session()->flash('mensaje', $response->message);
             return redirect()->back()->withErrors($request->all())->withInput();
         }else{
             session()->flash('success', "Cliente creado exitosamente");
-            return view('cotizador.clientes');
+            return redirect()->route('consulta-clientes');
+            //return view('cotizador.clientes');
         }
         
     }

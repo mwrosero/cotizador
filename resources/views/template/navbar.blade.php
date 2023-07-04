@@ -67,7 +67,7 @@
                         <div class="dropdown-divider"></div>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="/logout">
+                        <a class="dropdown-item" href="#" onclick="logout();">
                             <i class="ti ti-logout me-2 ti-sm"></i>
                             <span class="align-middle">Cerrar Sesión</span>
                         </a>

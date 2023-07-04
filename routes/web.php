@@ -20,9 +20,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [SeguridadesController::class, 'login'])->name('login')->withoutMiddleware(['loggedUser']);
     Route::post('/autenticar', [SeguridadesController::class, 'autenticar'])->name('autenticar')->withoutMiddleware(['loggedUser']);
     
-    Route::get('/olvide-clave', [SeguridadesController::class, 'olvide_clave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
-    Route::post('/recuperar-clave', [SeguridadesController::class, 'recuperar_clave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
-    Route::get('/reestablecer-clave', [SeguridadesController::class, 'reestablecer_clave'])->name('reestablecer_clave')->withoutMiddleware(['loggedUser']);
+    Route::get('/olvide-clave', [SeguridadesController::class, 'olvideClave'])->name('olvide_clave')->withoutMiddleware(['loggedUser']);
+    Route::post('/recuperar-clave', [SeguridadesController::class, 'recuperarClave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
+    Route::get('/reestablecer-clave', [SeguridadesController::class, 'reestablecerClave'])->name('reestablecer_clave')->withoutMiddleware(['loggedUser']);
 
     Route::get('/cotizacion', function () {
         return view('cotizador.cotizacion');
@@ -50,4 +50,7 @@ Route::group(['middleware' => ['loggedUser']], function () {
         Route::post('/crear-cliente', [CotizadorController::class, 'crearCliente'])->name('crear_cliente')->withoutMiddleware(['guest']);
 
     });
+
+    Route::get('/refreshToken', [SeguridadesController::class, 'refreshToken'])->name('refreshToken')->withoutMiddleware(['guest']);
+    
 });

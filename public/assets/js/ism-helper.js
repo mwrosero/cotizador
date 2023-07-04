@@ -1,5 +1,51 @@
-async function call(args){
+$(document).ready(function() {
     
+    if (localStorage.getItem('sessionTime') === null) {
+        localStorage.setItem('sessionTime', new Date().getTime());
+    }
+
+    setInterval(checkAndUpdateToken, 25 * 60 * 1000);
+
+});
+
+function logout(){
+    localStorage.removeItem('sessionTime');
+    window.location.href = "/logout";
+}
+
+function checkAndUpdateToken() {
+    console.log("Verificar si existe una sesión y ha transcurrido al menos 25 minutos");
+    var sessionTime = localStorage.getItem('sessionTime');
+    
+    // Verificar si existe una sesión y ha transcurrido al menos 25 minutos
+    if (sessionTime && new Date().getTime() - sessionTime >= 25 * 60 * 1000) {
+        // Actualizar el token
+        updateToken();
+        // Reiniciar la hora de sesión
+        localStorage.setItem('sessionTime', new Date().getTime());
+    }
+}
+
+async function updateToken() {
+    // Realizar una solicitud para actualizar el token
+    console.log("Realizar una solicitud para actualizar el token");
+    let args = [];
+    args["endpoint"] = url_site+"/refreshToken";
+    args["method"] = "GET";
+    args["bodyType"] = "json";
+    args["showLoader"] = false;
+
+    const data = await call(args);
+    console.log(data);
+    if(data.code != 200){
+        showMessage("warning","Atención",data.message);
+        logout();
+    }else{
+        _token = data.idToken;
+    }
+}
+
+async function call(args){
     if(args.showLoader || args.showLoader == true){
         showLoader();
     }
