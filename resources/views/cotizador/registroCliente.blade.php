@@ -10,7 +10,10 @@
         @if ($errors->any())
         <div class="col-12">
             <div class="alert alert-danger">
-                Error al crear Cliente, verifique los datos e intente nuevamente
+                {{-- Error al crear Cliente, verifique los datos e intente nuevamente --}}
+                @if (session()->has('mensaje'))
+                    {{ session('mensaje') }}
+                @endif
             </div>
         </div>
         @endif

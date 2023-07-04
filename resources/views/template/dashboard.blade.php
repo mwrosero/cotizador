@@ -75,10 +75,11 @@
         <script src="../../../assets/vendor/js/helpers.js"></script>
         <script src="../../../assets/js/config.js"></script>
         <script>
-            const _token = "{{ session('userData')->idToken }}";
+            let _token = "{{ session('accessToken') }}";
             const _application = "{{ \App\Models\Ism::APPLICATION }}";
             const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
-            const api_url = "https://api-phantomx.veris.com.ec";
+            const api_url = "{{ \App\Models\Ism::BASE_URL }}";
+            const url_site = "{{ url('/') }}";
         </script>
     </head>
 

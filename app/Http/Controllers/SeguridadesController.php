@@ -80,12 +80,12 @@ class SeguridadesController extends Controller
     }
 
     /*Login*/
-    public function olvide_clave(){
+    public function olvideClave(){
         return view('login.olvide_clave');
     }
 
     /*Login*/
-    public function recuperar_clave(Request $request){
+    public function recuperarClave(Request $request){
         $data = $request->all();
         $user = $data['user'];
 
@@ -103,8 +103,32 @@ class SeguridadesController extends Controller
     }
 
     /*Reestablecer clave*/
-    public function reestablecer_clave(){
+    public function reestablecerClave(){
         return view('login.reestablecer_clave');
+    }
+
+    /*Refresh Token*/
+    public function refreshToken(){
+        $info = Session::get('userData');
+        $method = '/seguridad/v1/autenticacion/refresh_token';
+        $response = Ism::call([
+            'endpoint'  => Ism::BASE_URL.$method,
+            'data'      => ["refreshToken" => $info->refreshToken],
+            'method'    => 'POST'
+        ]);
+
+        Session::put('accessToken', $response->data->idToken);
+
+        $msg = [
+            "code" => $response->code,
+            "message" => $response->code
+        ];
+
+        if($response->code == 200){
+            $msg["idToken"] = $response->data->idToken;
+        }
+
+        return response()->json($msg);
     }
 
     /*Logout*/
