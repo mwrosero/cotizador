@@ -240,6 +240,7 @@
 </div>
 <script>
     let modalCliente;
+    let dataPrestaciones = [];
 
     window.onload = async () => {
         @if(isset($numeroIdentificacion))
@@ -284,6 +285,128 @@
             modalCliente.hide();
         })
 
+        /*$('body').on('change','.input-prestacion', function(){
+            let grupo = getInput('grupoPerfil');
+            let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
+            console.log(prestacion);
+            dataPrestaciones["grupo-"+grupo] = {
+                "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
+                "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
+                "cantidadPacientes": $(this).val(),
+                "costoUnitario": prestacion.valorCosto,
+                "precioUnitario": prestacion.valorCosto,
+                "iva": 0
+            };
+        })*/
+
+        $('body').on('change', '#grupoPerfil', function() {
+            let codigoGrupo = $(this).val();
+            cargarDataPrestaciones(codigoGrupo);
+
+            $('.swiper-wrapper li').removeClass('item-selected');
+            $('.swiper-wrapper li:first-child').addClass('item-selected');
+            showPrestaciones();
+        });
+
+        $('body').on('change', '.input-prestacion', function() {
+            let grupo = getInput('grupoPerfil');
+            let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
+
+            // Obtener el índice del grupo en el arreglo dataPrestaciones
+            let grupoIndex = dataPrestaciones.findIndex(function(item) {
+                return item.codigoGrupo === grupo;
+            });
+
+            // Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción
+            if (grupoIndex === -1 && $(this).val() === '') {
+                return;
+            }
+
+            // Crear el objeto de la prestación
+            let prestacionObj = {
+                "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
+                "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
+                "cantidadPacientes": $(this).val(),
+                "costoUnitario": prestacion.valorCosto,
+                "precioUnitario": prestacion.valorCosto,
+                "aplicaIva": prestacion.aplicaIva,
+                "id": $(this).attr("id")
+            };
+
+            // Si el valor del input es vacío, eliminar la prestación del grupo
+            if ($(this).val() === '') {
+                // Si el grupo existe en dataPrestaciones
+                if (grupoIndex !== -1) {
+                    let grupoExistente = dataPrestaciones[grupoIndex];
+                    let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
+                        return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                    });
+
+                    // Si la prestación existe en el grupo, se elimina
+                    if (prestacionExistenteIndex !== -1) {
+                        grupoExistente.prestaciones.splice(prestacionExistenteIndex, 1);
+                    }
+
+                    // Si no quedan más prestaciones en el grupo, eliminar el grupo
+                    if (grupoExistente.prestaciones.length === 0) {
+                        dataPrestaciones.splice(grupoIndex, 1);
+                    }
+                }
+            } else {
+                // Si el grupo existe en dataPrestaciones
+                if (grupoIndex !== -1) {
+                    let grupoExistente = dataPrestaciones[grupoIndex];
+                    let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
+                        return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                    });
+
+                    // Si la prestación existe en el grupo
+                    if (prestacionExistenteIndex !== -1) {
+                        // Actualizar los valores de la prestación
+                        grupoExistente.prestaciones[prestacionExistenteIndex] = prestacionObj;
+                    } else {
+                        // Agregar la prestación al grupo
+                        grupoExistente.prestaciones.push(prestacionObj);
+                    }
+                } else {
+                    // Crear un nuevo grupo y agregar la prestación
+                    let nuevoGrupo = {
+                        "codigoGrupo": grupo,
+                        "prestaciones": [prestacionObj]
+                    };
+                    dataPrestaciones.push(nuevoGrupo);
+                }
+            }
+        });
+    }
+
+    function cargarDataPrestaciones(codigoGrupo) {
+        // Obtener el grupo correspondiente desde dataPrestaciones
+        let grupoExistente = dataPrestaciones.find(function(grupo) {
+            return grupo.codigoGrupo === codigoGrupo;
+        });
+
+        console.log(grupoExistente)
+
+        let dataPrestacionesTmp = dataPrestaciones;
+        // Blanquear todos los inputs
+        $('.input-prestacion').val('');
+        dataPrestaciones = dataPrestacionesTmp;
+
+        // Si el grupo existe en dataPrestaciones
+        if (grupoExistente) {
+            // Cargar los datos en los inputs
+            grupoExistente.prestaciones.forEach(function(prestacion) {
+                $('#'+prestacion.id).val(prestacion.cantidadPacientes);
+            });
+        } else {
+            dataPrestacionesCopia = [];
+        }
+    }
+
+    // Función para escapar las comillas dobles en el valor del atributo
+    function escapeAttributeValue(value) {
+        return value.replace(/"/g, '\\"');
     }
 
     async function buscarCliente(){
@@ -426,7 +549,7 @@
                     elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
-                                <div class="card-header d-flex sticky-top justify-content-between">
+                                <div class="card-header d-flex justify-content-between">
                                     <div class="card-title mb-0">
                                         <h6 class="mb-0 text-white">${ v1.nombreServicio }</h6>
                                     </div>
@@ -439,7 +562,7 @@
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
                                             <div class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1" placeholder="">
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion" placeholder="" codigoServicio-rel="${v1.codigoServicio}"" prestacion-rel='${JSON.stringify(v2)}''>
                                             </div>
                                         </li>`;
                     })
@@ -538,7 +661,7 @@
     .servicio {
         display: none;
     }
-    .prestaciones-item{
+    .prestaciones-item .card-body{
         max-height: 400px;
         overflow: hidden;
         overflow-y: auto;
