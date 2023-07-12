@@ -152,7 +152,10 @@
                 <div class="row g-3 box-resumen d-none">
                     <h6 class="txt-veris box-resumen d-none col-12 col-md-9">Resumen de la Cotización</h6>
                     <div class="col-12 col-md-3 text-end">
-                        <button class="btn btn-sm bg-light">
+                        <button 
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalCostos"
+                            class="btn btn-sm bg-light">
                             <i class="fa-solid fa-hand-holding-dollar me-2"></i>
                             Agregar costos
                         </button>
@@ -163,7 +166,7 @@
                         <!-- Responsive Datatable -->
                         <div class="card shadow-none">
                             <div class="card-datatable table-responsive">
-                                <table class="dt-responsive-prestaciones table table-prestaciones border">
+                                <table class="dt-responsive-prestaciones table table-prestaciones table-borderless">
                                     <thead>
                                         <tr>
                                             <th>Grupo</th>
@@ -177,40 +180,6 @@
                                         </tr>
                                     </thead>
                                     <tbody id="prestaciones-seleccionadas">
-                                        {{-- <tr>
-                                            <td>1</td>
-                                            <td>2</td>
-                                            <td>3</td>
-                                            <td>Servicio</td>
-                                            <td>Presta</td>
-                                            <td>1</td>
-                                            <td>12</td>
-                                            <td>12</td>
-                                            <td>
-                                                <!--div class="d-inline-block">
-                                                    <a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        <i class="text-primary ti ti-dots-vertical"></i>
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end m-0" style="">
-                                                        <li>
-                                                            <a href="javascript:;" class="dropdown-item"><i class="text-primary ti ti-trash"></i>Editar</a>
-                                                        </li>
-                                                        <div class="dropdown-divider"></div>
-                                                        <li>
-                                                            <a href="javascript:;" class="dropdown-item text-danger delete-record">
-                                                                <i class="ti ti-pencil"></i>Delete
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div-->
-                                                <a title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-delete d-inline-block">
-                                                    <i class="text-primary ti ti-pencil"></i>
-                                                </a>
-                                                <a title="Eliminar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline-block">
-                                                    <i class="text-danger ti ti-trash"></i>
-                                                </a>
-                                            </td>
-                                        </tr>   --}}                                      
                                     </tbody>
                                 </table>
                             </div>
@@ -322,6 +291,49 @@
     </div>
 </div>
 
+<!-- MODAL COSTOS -->
+<div class="modal fade" id="modalCostos" aria-labelledby="modalCostosLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        {{-- <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down"> --}}
+        <div class="modal-content p-2">
+            {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+            <div class="modal-header">
+                <div class="col-12">
+                    <label class="form-label">Agregar Costos</label>
+                </div>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="servicioCosto" class="form-label">Servicio</label>
+                        <div class="select2-dark">
+                            <select id="servicioCosto" class="select2 form-select">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="costo" class="form-label">Costo</label>
+                        <input type="number"
+                            inputmode="numeric" 
+                            pattern="[0-9]*"
+                            class="form-control"
+                            id="costo"
+                            placeholder="" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+                <button type="button" class="btn bg-veris" onclick="agregarCosto()" data-bs-dismiss="modal">
+                    Agregar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Offcanvas to add new user -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPrestacion" aria-labelledby="offcanvasPrestacionLabel">
     <div class="offcanvas-header">
@@ -381,6 +393,7 @@
 <script>
     let modalCliente;
     let dataPrestaciones = [];
+    let dataCostos = [];
 
     window.onload = async () => {
         @if(isset($numeroIdentificacion))
@@ -390,6 +403,7 @@
         obtenerTiposContrato();
         obtenerCentralesMedicas();
         obtenerGruposPerfiles();
+        obtenerServiciosCostos();
         await obtenerNivel1();
         await obtenerPrestaciones();
         showPrestaciones();
@@ -538,6 +552,10 @@
 
         $('body').on('click', '.item-delete', function(){
             eliminarItem($(this).attr('idItem-rel'));
+            tabla.row($(this).parents('tr')).remove().draw();
+            if(dataPrestaciones.length == 0){
+                $('.box-resumen').addClass('d-none');
+            }
             /*let confirmText = document.querySelector('#confirm-text')
             confirmText.onclick = function () {
                 Swal.fire({
@@ -566,6 +584,11 @@
             };*/
         });
 
+        $('body').on('click', '.item-delete-alt', function(){
+            eliminarCosto($(this).attr('idItem-rel'));
+            tabla.row($(this).parents('tr')).remove().draw();
+        })
+
     }
 
     let tabla;
@@ -577,10 +600,32 @@
         if(dataPrestaciones.length > 0){
             $('.box-resumen').removeClass('d-none');
             let elem = ``;
+            $.each(dataCostos, function(key, value){
+                elem += `
+                <tr class="border-bottom">
+                    <td>COSTO ADICIONAL</td>
+                    <td>GASTO</td>
+                    <td>${ value.nombreCosto }</td>
+                    <td>${ value.idCosto }</td>
+                    <td id="cantidad_${ value.idItem }">1</td>
+                    <td id="precioUnitario_${ value.idItem }">$${ value.valorUnitario }</td>
+                    <td id="total_${ value.idItem }">$${ value.valorUnitario }</td>
+                    <td>
+                        <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                            <img class="d-inline align-top" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                        </a>
+                        <a idItem-rel="${ value.idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
+                            <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
+                        </a>
+                    </td>
+                </tr>       
+                `;
+            });
+
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
                     elem += `
-                    <tr>
+                    <tr class="border-bottom">
                         <td>${ value.nombreGrupo }</td>
                         <td>${ v.nombreServicio }</td>
                         <td>${ v.nombrePrestacion }</td>
@@ -589,11 +634,11 @@
                         <td id="precioUnitario_${ v.idItem }">$${ v.precioUnitario }</td>
                         <td id="total_${ v.idItem }">$${ v.precioUnitario*v.cantidadPacientes }</td>
                         <td>
-                            <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline-block" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                                <i class="text-primary ti ti-pencil"></i>
+                            <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                <img class="d-inline align-top" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                             </a>
-                            <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete d-inline-block">
-                                <i class="text-danger ti ti-trash"></i>
+                            <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete d-inline">
+                                <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
                             </a>
                         </td>
                     </tr>       
@@ -611,7 +656,7 @@
                 responsive: true,
                 columnDefs: [
                     {
-                        targets: [0, 3, 7], // Índices de las columnas que deseas mantener visibles
+                        targets: [2, 6, 7], // Índices de las columnas que deseas mantener visibles
                         responsivePriority: 1, // Establece una prioridad alta para mantener estas columnas visibles
                     },
                     {
@@ -706,10 +751,79 @@
                 dataPrestaciones = dataPrestaciones.filter(item => item.codigoGrupo !== elemento.codigoGrupo);
             }
         }
-
-        drawTable();
-
+        //drawTable();
         //return dataPrestaciones;
+    }
+
+    function eliminarCosto(idItem){
+        let idCostoEliminado = null;
+
+        // Buscar el índice del item en el array
+        var indice = -1;
+        for (var i = 0; i < dataCostos.length; i++) {
+            if (dataCostos[i].idItem === idItem) {
+                indice = i;
+                idCostoEliminado = dataCostos[i].idCosto;
+                break;
+            }
+        }
+
+        // Si se encontró el item, eliminarlo del array
+        if (indice !== -1) {
+            dataCostos.splice(indice, 1);
+            $('#servicioCosto option[value="'+idCostoEliminado+'"]').prop("disabled",false);
+        }
+    }
+
+    function agregarCosto(){
+        let idCosto = parseInt(getInput('servicioCosto'));
+        let nombreCosto = $('#servicioCosto option:selected').html();
+        let valorUnitario = getInput('costo');
+        let idItem = "costo_"+idCosto;
+
+
+        for (var i = 0; i < dataCostos.length; i++) {
+            if (dataCostos[i].idCosto === idCosto) {
+                return; // Salir de la función ya que el item fue encontrado
+            }
+        }
+
+        dataCostos.push(
+            {
+              "idCosto": idCosto,
+              "nombreCosto": nombreCosto,
+              "cantidad": 1,
+              "valorUnitario": valorUnitario,
+              "idItem":idItem
+            }
+        );
+
+        $('#servicioCosto option[value="'+idCosto+'"]').prop("disabled",true);
+        $("#servicioCosto").val(null).trigger("change");
+
+        let elem = ``;
+        elem += `
+            <tr class="border-bottom">
+                <td>COSTO ADICIONAL</td>
+                <td>GASTO</td>
+                <td>${ nombreCosto }</td>
+                <td>${ idCosto }</td>
+                <td id="cantidad_${ idItem }">1</td>
+                <td id="precioUnitario_${ idItem }">$${ valorUnitario }</td>
+                <td id="total_${ idItem }">$${ valorUnitario }</td>
+                <td>
+                    <a idItem-rel="${ idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                        <img class="d-inline align-top" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                    </a>
+                    <a idItem-rel="${ idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
+                        <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
+                    </a>
+                </td>
+            </tr>       
+            `;
+        //$('#prestaciones-seleccionadas').append(elem);
+        tabla.row.add($(elem)[0]).draw();
+        tabla.draw();
     }
 
     async function crearCotizacion(){
@@ -951,7 +1065,7 @@
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
                                             <div class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${v1.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}''>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}''>
                                             </div>
                                         </li>`;
                     })
@@ -966,6 +1080,23 @@
             /*$('.prestaciones-item').each(function() {
                 new PerfectScrollbar(this);
             });*/
+        })
+    }
+
+    async function obtenerServiciosCostos(){
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/util/costos_adicionales?estado=ACTIVO";
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+        let elem = "";
+        console.log(data)
+
+        $('#servicioCosto').append(`<option value=""></option>`);
+        $.each(data.data, function(key, value){
+            $('#servicioCosto').append(`<option value="${value.idCosto}" title="${value.descripcion}">${value.nombreCosto}</option>`);
         })
     }
 
@@ -1091,19 +1222,6 @@
         top: 0;
         background-color: #fff; /* Opcional: si deseas un fondo blanco para el encabezado */
         z-index: 999; /* Opcional: si deseas que el encabezado esté por encima de otros elementos */
-    }
-
-    .table-prestaciones thead{
-        background: #DBDADE;
-    }
-
-    .table-prestaciones th{
-        font-size: 12px !important;
-        color: #000 !important;
-    }
-
-    #prestaciones-seleccionadas td{
-        font-size: 12px !important;
     }
 
     div.card-datatable [class*=col-md-]{

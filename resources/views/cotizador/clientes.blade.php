@@ -70,18 +70,13 @@
                                     value="{{ old('valorFiltro', request()->get('valorFiltro')) }}"
                                     placeholder="" />
                             </div>
+                            <div class="col-10 col-sm-5 col-md-3">
+                                <button type="submit" class="btn bg-orange w-100 mt-0 mt-sm-4">Buscar</button>
+                            </div>
                             <div class="col-2 col-sm-1 col-md-1">
                                 <a href="{{ request()->url() }}" type="button" class="btn bg-alt w-100 mt-0 mt-sm-4" title="Limpiar Filtro">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter-x" width="17" height="17" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                       <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                       <path d="M13.785 19.405l-4.785 1.595v-8.5l-4.48 -4.928a2 2 0 0 1 -.52 -1.345v-2.227h16v2.172a2 2 0 0 1 -.586 1.414l-4.414 4.414"></path>
-                                       <path d="M22 22l-5 -5"></path>
-                                       <path d="M17 22l5 -5"></path>
-                                    </svg>
+                                    <img class="ico-button" src="{{ asset('assets/img/veris/reset-ico.svg') }}">
                                 </a>
-                            </div>
-                            <div class="col-10 col-sm-5 col-md-3">
-                                <button type="submit" class="btn bg-veris w-100 mt-0 mt-sm-4">Buscar</button>
                             </div>
                         </div>
                     </form>
@@ -101,55 +96,9 @@
     @endif
     <div class="col-12 mt-2">
         <div class="card mb-4">
-            <!--form class="card-header" action="" method="GET">
-                <div class="row g-3">
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <label for="codigoCliente" class="form-label">Código Cliente</label>
-                        <input type="text"
-                            class="form-control"
-                            id="codigoCliente"
-                            name="codigoCliente" 
-                            placeholder="" />
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <label for="tipoPersona" class="form-label">Tipo de Empresa</label>
-                        <select id="tipoPersona" name="tipoPersona" class="form-select select2 w-100" data-style="btn-default">
-                            <option value="N">Natural</option>
-                            <option value="J">Juridica</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <label for="estado" class="form-label">Estado</label>
-                        <select id="estado" name="estado" class="form-select select2 w-100" data-style="btn-default">
-                            <option value="numeroIdentificacion">Número de Identificación</option>
-                            <option value="nombreCliente">Nombre del Cliente</option>
-                            <option value="razonSocial">Razón Social</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <label for="tipoFiltro" class="form-label">Filtrar por</label>
-                        <select id="tipoFiltro" name="tipoFiltro" class="form-select select2 w-100" data-style="btn-default">
-                            <option value="ACTIVO">Activo</option>
-                            <option value="INACTIVO">Inactivo</option>
-                            <option value="TODOS">Todos</option>
-                        </select>
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <label for="valorFiltro" class="form-label">Valor</label>
-                        <input type="text"
-                            class="form-control"
-                            id="valorFiltro"
-                            name="valorFiltro" 
-                            placeholder="" />
-                    </div>
-                    <div class="col-12 col-sm-6 col-md-4">
-                        <button type="button" class="btn bg-veris w-100 mt-0 mt-sm-4">Buscar</button>
-                    </div>
-                </div>
-            </form-->
-            <div class="card-header">
+            {{-- <div class="card-header">
                 @include('partials.info')
-            </div>
+            </div> --}}
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table">
@@ -178,8 +127,14 @@
                                 <td>{{ $dato->nombreTipoPersona }}</td>
                                 <td>{{ $dato->numeroIdentificacion }}</td>
                                 <td>{{ $dato->descripcionEstado }}</td>
-                                <td class="text-center">
-                                    <div class="dropdown">
+                                <td>
+                                    <a class="d-inline-block me-2" href="/cotizador/cliente/edit/{{ $dato->codigoCliente }}">
+                                        <img src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                    </a>
+                                    <a class="d-inline-block" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
+                                        <img src="{{ asset('assets/img/veris/cotizar-ico.svg') }}" alt="" title="Cotizar">
+                                    </a>
+                                    {{-- <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                             <i class="ti ti-dots-vertical"></i>
                                         </button>
@@ -191,7 +146,7 @@
                                                 <i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotizar
                                             </a>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </td>
                             </tr>
                         @endforeach
