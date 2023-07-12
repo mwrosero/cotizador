@@ -149,7 +149,15 @@
                     </div>
                 </div>
                 <hr class="my-4 mx-n4 box-resumen d-none" />
-                <h6 class="txt-veris box-resumen d-none">Resumen de la Cotización</h6>
+                <div class="row g-3 box-resumen d-none">
+                    <h6 class="txt-veris box-resumen d-none col-12 col-md-9">Resumen de la Cotización</h6>
+                    <div class="col-12 col-md-3 text-end">
+                        <button class="btn btn-sm bg-light">
+                            <i class="fa-solid fa-hand-holding-dollar me-2"></i>
+                            Agregar costos
+                        </button>
+                    </div>
+                </div>
                 <div class="row g-3 box-resumen d-none">
                     <div class="col-12">
                         <!-- Responsive Datatable -->
@@ -159,10 +167,9 @@
                                     <thead>
                                         <tr>
                                             <th>Grupo</th>
-                                            <th>Cód. Prestación</th>
-                                            <th>Cód. Servicio</th>
                                             <th>Servicio</th>
                                             <th>Prestación</th>
+                                            <th>Cód. Prestación</th>
                                             <th>Cantidad</th>
                                             <th>Precio Unit.</th>
                                             <th>Precio Total</th>
@@ -575,10 +582,9 @@
                     elem += `
                     <tr>
                         <td>${ value.nombreGrupo }</td>
-                        <td>${ v.codigoPrestacion }</td>
-                        <td>${ v.codigoServicio }</td>
                         <td>${ v.nombreServicio }</td>
                         <td>${ v.nombrePrestacion }</td>
+                        <td>${ v.codigoPrestacion }</td>
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
                         <td id="precioUnitario_${ v.idItem }">$${ v.precioUnitario }</td>
                         <td id="total_${ v.idItem }">$${ v.precioUnitario*v.cantidadPacientes }</td>
@@ -605,7 +611,7 @@
                 responsive: true,
                 columnDefs: [
                     {
-                        targets: [0, 4, 8], // Índices de las columnas que deseas mantener visibles
+                        targets: [0, 3, 7], // Índices de las columnas que deseas mantener visibles
                         responsivePriority: 1, // Establece una prioridad alta para mantener estas columnas visibles
                     },
                     {
@@ -747,6 +753,12 @@
         if(msg != ""){
             showMessage('warning','Atención',msg);
         }else{
+            const fecha = new Date(inicioChequeo);
+            const dia = fecha.getDate();
+            const mes = fecha.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
+            const anio = fecha.getFullYear();
+            const fechaPrevista = `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${anio}`;
+
             let args = [];
             args["endpoint"] = api_url+"/empresarial/v1/cotizacion";
             args["method"] = "POST";
@@ -758,7 +770,7 @@
                 "codigoEmpresa":parseInt($('#centroMedico option:selected').attr('codigoEmpresa-rel')),
                 "codigoSucursal": parseInt(centroMedico),
                 "direccionServicio": detalleLugar,
-                "fechaInicio": inicioChequeo,
+                "fechaInicio": fechaPrevista,
                 "cantidadDias": parseInt(diasServicio),
                 "porcentajeRentabilidad": 20,
                 "detalle": dataPrestaciones,
@@ -1092,6 +1104,11 @@
 
     #prestaciones-seleccionadas td{
         font-size: 12px !important;
+    }
+
+    div.card-datatable [class*=col-md-]{
+        padding-left: 0px !important;
+        padding-right: 0px !important;
     }
 
 </style>
