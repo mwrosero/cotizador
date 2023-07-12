@@ -27,7 +27,7 @@
                     <?php /*dd($cliente);*/ ?>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="numeroIdentificacion" class="form-label">Ruc<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="numeroIdentificacion" class="form-label">Ruc<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
@@ -43,7 +43,7 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="codigoCiiu" class="form-label">Código CIIU<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="codigoCiiu" class="form-label">Código CIIU<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="number"
                                 inputmode="numeric" 
                                 pattern="[0-9]*"
@@ -56,7 +56,7 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="razonSocial" class="form-label">Razón Social<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="razonSocial" class="form-label">Razón Social<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="text"
                                 class="form-control"
                                 id="razonSocial"
@@ -66,14 +66,14 @@
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="tipoPersona" class="form-label">Tipo de Persona<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="tipoPersona" class="form-label">Tipo de Persona<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <select id="tipoPersona" name="tipoPersona" required class="form-select select2 w-100" data-style="btn-default">
                                 <option value="N">Natural</option>
                                 <option value="J">Juridica</option>
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="razonComercial" class="form-label">Razón Comercial<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="razonComercial" class="form-label">Razón Comercial</label>
                             <input type="text"
                                 class="form-control"
                                 id="razonComercial"
@@ -82,7 +82,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="representanteLegal" class="form-label">Representante Legal<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="representanteLegal" class="form-label">Representante Legal<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="text"
                                 class="form-control"
                                 id="representanteLegal"
@@ -92,7 +92,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-10 col-sm-5 col-md-3">
-                            <label for="giroNegocio" class="form-label">Giro de Negocio<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="giroNegocio" class="form-label">Giro de Negocio<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <select id="giroNegocio" name="giroNegocio" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
@@ -113,13 +113,13 @@
                                     data-bs-placement="right"
                                     title="Si la empresa  no pertenece  a ningún grupo asociado por favor  dejelo vacio">
                                 </i>
-                                <span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span>
+                                
                             </label>
                             <select id="grupoEmpresa" name="grupoEmpresa" class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-10 col-sm-5 col-md-3">
-                            <label for="esGrupoEmpresa" class="form-label">Es Grupo Empresa<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="esGrupoEmpresa" class="form-label">Es Grupo Empresa</label>
                             <div class="form-check form-switch mb-2 mt-2">
                                 <input class="form-check-input" type="checkbox" id="esGrupoEmpresa" name="esGrupoEmpresa" />
                             </div>
@@ -130,22 +130,22 @@
                     <h6 class="txt-veris">Datos de Localidad</h6>
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="pais" class="form-label">País<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="pais" class="form-label">País<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <select id="pais" name="pais" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="provincia" class="form-label">Provincia<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="provincia" class="form-label">Provincia<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <select id="provincia" name="provincia" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="ciudad" class="form-label">Ciudad<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="ciudad" class="form-label">Ciudad<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <select id="ciudad" name="ciudad" required class="form-select select2 w-100" data-style="btn-default">
                             </select>
                         </div>
                         <div class="col-12">
-                            <label for="direccion" class="form-label">Dirección<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="direccion" class="form-label">Dirección<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="text"
                                 class="form-control"
                                 id="direccion"
@@ -155,7 +155,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="correoEmpresa" class="form-label">Correo Empresa<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="correoEmpresa" class="form-label">Correo Empresa<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="email"
                                 class="form-control"
                                 id="correoEmpresa"
@@ -165,7 +165,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoMovilOficina" class="form-label">Teléfono Celular Oficinas<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="telefonoMovilOficina" class="form-label">Teléfono Celular Oficinas<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoMovilOficinaCode" name="telefonoMovilOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -187,7 +187,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas</label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoFijoOficinaCode" name="telefonoFijoOficinaCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -213,7 +213,7 @@
                     {{-- <i class="fa-regular fa-id-badge"></i> --}}
                     <div class="row g-3">
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="personaContacto" class="form-label">Nombre Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="personaContacto" class="form-label">Nombre Contacto<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="text"
                                 class="form-control"
                                 id="personaContacto"
@@ -223,7 +223,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoMovilContacto" class="form-label">Teléfono Celular Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="telefonoMovilContacto" class="form-label">Teléfono Celular Contacto<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoMovilContactoCode" name="telefonoMovilContactoCode" required class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -245,7 +245,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="telefonoFijoContacto" class="form-label">Teléfono Fijo Contacto</label>
                             <div class="row">
                                 <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                                     <select id="telefonoFijoContactoCode" name="telefonoFijoContactoCode" class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -266,7 +266,7 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="correoContacto" class="form-label">Correo Contacto<span class="badge badge-sm bg-warning fs-8 ms-1">Requerido</span></label>
+                            <label for="correoContacto" class="form-label">Correo Contacto<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="email"
                                 class="form-control"
                                 id="correoContacto"
@@ -276,7 +276,7 @@
                                 placeholder=""/>
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
-                            <label for="cargoPersonaContacto" class="form-label">Cargo Contacto<span class="badge badge-sm bg-info fs-8 ms-1">Opcional</span></label>
+                            <label for="cargoPersonaContacto" class="form-label">Cargo Contacto</label>
                             <input type="text"
                                 class="form-control"
                                 id="cargoPersonaContacto"
