@@ -186,8 +186,13 @@ label{
     color: #171D49
 }
 
+.action-ico{
+    height: 15px;
+    margin-top: 5px;
+}
+
 .item-delete i, .item-delete-alt i{
-    font-size: 18px;
+    font-size: 15px;
     margin-top: 2px;
 }
 

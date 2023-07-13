@@ -129,10 +129,10 @@
                                 <td>{{ $dato->descripcionEstado }}</td>
                                 <td>
                                     <a class="d-inline-block me-2" href="/cotizador/cliente/edit/{{ $dato->codigoCliente }}">
-                                        <img src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                        <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                     </a>
                                     <a class="d-inline-block" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
-                                        <img src="{{ asset('assets/img/veris/cotizar-ico.svg') }}" alt="" title="Cotizar">
+                                        <img class="action-ico" src="{{ asset('assets/img/veris/cotizar-ico.svg') }}" alt="" title="Cotizar">
                                     </a>
                                     {{-- <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
