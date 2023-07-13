@@ -326,7 +326,7 @@
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
                     Cerrar
                 </button>
-                <button type="button" class="btn bg-veris" onclick="agregarCosto()" data-bs-dismiss="modal">
+                <button type="button" class="btn bg-veris" onclick="agregarCosto()">
                     Agregar
                 </button>
             </div>
@@ -334,7 +334,7 @@
     </div>
 </div>
 
-<!-- Offcanvas to add new user -->
+<!-- Offcanvas Editar Prestaciones -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPrestacion" aria-labelledby="offcanvasPrestacionLabel">
     <div class="offcanvas-header">
         <h5 id="offcanvasPrestacionLabel">Editar Prestación</h5>
@@ -381,6 +381,43 @@
                     class="btn bg-veris w-100"
                     data-bs-dismiss="offcanvasPrestacion"
                     onclick="actualizarPrestacion()" 
+                    title="Actualizar Prestación">
+                    <i class="fa-regular fa-floppy-disk me-2"></i>
+                    Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Offcanvas Editar Gastos -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasGastos" aria-labelledby="offcanvasGastosLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasPrestacionLabel">Editar Gasto</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="row g-3">
+            <div class="col-12">
+                <span class="d-block">Gasto:</span>
+                <h6 class="txt-veris fs-14 mb-0" id="nombreServicioGastoEdit"></h6>
+            </div>
+            <input type="hidden" id="idItemGastoEdit">
+            <div class="col-12">
+                <label for="costoGastoEdit" class="form-label">Costo</label>
+                <input type="number"
+                    inputmode="numeric" 
+                    pattern="[0-9]*"
+                    class="form-control"
+                    id="costoGastoEdit"
+                    name="costoGastoEdit" 
+                    placeholder="" />
+            </div>
+            <div class="col-12">
+                <button type="button"
+                    class="btn bg-veris w-100"
+                    data-bs-dismiss="offcanvasGastos"
+                    onclick="actualizarGasto()" 
                     title="Actualizar Prestación">
                     <i class="fa-regular fa-floppy-disk me-2"></i>
                     Actualizar
@@ -550,6 +587,10 @@
             cargarItem($(this).attr('idItem-rel'));
         })
 
+        $('body').on('click', '.item-edit-gasto', function(){
+            cargarGasto($(this).attr('idItem-rel'));
+        })
+
         $('body').on('click', '.item-delete', function(){
             eliminarItem($(this).attr('idItem-rel'));
             tabla.row($(this).parents('tr')).remove().draw();
@@ -608,14 +649,14 @@
                     <td>${ value.nombreCosto }</td>
                     <td>${ value.idCosto }</td>
                     <td id="cantidad_${ value.idItem }">1</td>
-                    <td id="precioUnitario_${ value.idItem }">$${ value.valorUnitario }</td>
-                    <td id="total_${ value.idItem }">$${ value.valorUnitario }</td>
+                    <td id="precioUnitario_${ value.idItem }">$${ formatDollar(value.valorUnitario) }</td>
+                    <td id="total_${ value.idItem }">$${ formatDollar(value.valorUnitario) }</td>
                     <td>
                         <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                            <img class="d-inline align-top" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                            <img class="action-ico d-inline" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
                         </a>
                         <a idItem-rel="${ value.idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
-                            <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
+                            <i class="fa-solid fa-trash text-danger d-inline""></i>
                         </a>
                     </td>
                 </tr>       
@@ -631,14 +672,14 @@
                         <td>${ v.nombrePrestacion }</td>
                         <td>${ v.codigoPrestacion }</td>
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
-                        <td id="precioUnitario_${ v.idItem }">$${ v.precioUnitario }</td>
-                        <td id="total_${ v.idItem }">$${ v.precioUnitario*v.cantidadPacientes }</td>
+                        <td id="precioUnitario_${ v.idItem }">$${ formatDollar(v.precioUnitario) }</td>
+                        <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
                         <td>
                             <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                                <img class="d-inline align-top" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                <img class="d-inline action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                             </a>
                             <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete d-inline">
-                                <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
+                                <i class="fa-solid fa-trash text-danger d-inline""></i>
                             </a>
                         </td>
                     </tr>       
@@ -717,6 +758,19 @@
         return null;
     }
 
+    function cargarGasto(idItem){
+        for (const gasto of dataCostos) {
+            if (gasto.idItem === idItem) {
+                console.table(gasto)
+                $('#nombreServicioGastoEdit').html(gasto.nombreCosto+": "+gasto.idCosto);
+                $('#costoGastoEdit').val(gasto.valorUnitario);
+                $('#idItemGastoEdit').val(gasto.idItem);
+                return gasto;
+            }
+        }
+        return null;
+    }
+
     function actualizarPrestacion() {
         let idItem = $('#idItemEdit').val();
         for (const elemento of dataPrestaciones) {
@@ -726,10 +780,25 @@
                     prestacion.precioUnitario = getInput('precioUnitarioEdit');
                     $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
                     $('#precioUnitario_'+idItem).html("$"+getInput('precioUnitarioEdit'));
-                    $('#total_'+idItem).html("$"+(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                    $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
                     return true;
                 }
+            }
+        }
+
+        return false; // Si no se encuentra el elemento, retorna false
+    }
+
+    function actualizarGasto(){
+        let idItem = $('#idItemGastoEdit').val();
+        for (const gasto of dataCostos) {
+            if (gasto.idItem === idItem) {
+                gasto.valorUnitario = getInput('costoGastoEdit');
+                $('#precioUnitario_'+idItem).html("$"+getInput('costoGastoEdit'));
+                $('#total_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
+                $('#offcanvasGastos').offcanvas('hide');
+                return true;
             }
         }
 
@@ -780,7 +849,20 @@
         let nombreCosto = $('#servicioCosto option:selected').html();
         let valorUnitario = getInput('costo');
         let idItem = "costo_"+idCosto;
+        let msg = "";
+        
+        if(getInput('servicioCosto') == ""){
+            msg += "<span class='fs-12'>-Seleccionar un Servicio</span><br>";
+        }
 
+        if(valorUnitario == "" || valorUnitario < 1){
+            msg += "<span class='fs-12'>-El Costo debe ser un valor mayor a $0</span><br>";
+        }
+        
+        if(msg != ""){
+            showMessage('warning','Atención',msg);
+            return;
+        }
 
         for (var i = 0; i < dataCostos.length; i++) {
             if (dataCostos[i].idCosto === idCosto) {
@@ -800,6 +882,8 @@
 
         $('#servicioCosto option[value="'+idCosto+'"]').prop("disabled",true);
         $("#servicioCosto").val(null).trigger("change");
+        $('#costo').val("");
+        $('#modalCostos').modal('hide');
 
         let elem = ``;
         elem += `
@@ -809,14 +893,14 @@
                 <td>${ nombreCosto }</td>
                 <td>${ idCosto }</td>
                 <td id="cantidad_${ idItem }">1</td>
-                <td id="precioUnitario_${ idItem }">$${ valorUnitario }</td>
-                <td id="total_${ idItem }">$${ valorUnitario }</td>
+                <td id="precioUnitario_${ idItem }">$${ formatDollar(valorUnitario) }</td>
+                <td id="total_${ idItem }">$${ formatDollar(valorUnitario) }</td>
                 <td>
-                    <a idItem-rel="${ idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                        <img class="d-inline align-top" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                    <a idItem-rel="${ idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit-gasto d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasGastos" aria-controls="offcanvasGastos">
+                        <img class="d-inline action-ico" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
                     </a>
                     <a idItem-rel="${ idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
-                        <i class="fa-solid fa-trash text-danger d-inline align-top""></i>
+                        <i class="fa-solid fa-trash text-danger d-inline"></i>
                     </a>
                 </td>
             </tr>       
@@ -837,31 +921,31 @@
         let diasServicio  = getInput('diasServicio');
 
         if(cliente == ""){
-            msg += "<span class='fs-12'>Seleccionar un cliente</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar un cliente</span><br>";
         }
 
         if(tipoServicio == ""){
-            msg += "<span class='fs-12'>Seleccionar un Tipo de Servicio</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar un Tipo de Servicio</span><br>";
         }
 
         if(lugarServicio == ""){
-            msg += "<span class='fs-12'>Seleccionar un lugar</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar un lugar</span><br>";
         }
 
         if(centroMedico == ""){
-            msg += "<span class='fs-12'>Seleccionar un Centro Médico</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
         }
 
         if(detalleLugar == ""){
-            msg += "<span class='fs-12'>Seleccionar un detalle del lugar</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
         }
 
         if(inicioChequeo == ""){
-            msg += "<span class='fs-12'>Seleccionar una fecha de inicio del chequeo</span><br>";
+            msg += "<span class='fs-12'>-Seleccionar una fecha de inicio del chequeo</span><br>";
         }
 
         if(diasServicio == ""){
-            msg += "<span class='fs-12'>Indicar los días que tomará</span><br>";
+            msg += "<span class='fs-12'>-Indicar los días que tomará</span><br>";
         }
 
         if(msg != ""){
@@ -888,7 +972,7 @@
                 "cantidadDias": parseInt(diasServicio),
                 "porcentajeRentabilidad": 20,
                 "detalle": dataPrestaciones,
-                "costosAdicionales": []
+                "costosAdicionales": dataCostos
             });
 
             const data = await call(args);
@@ -898,6 +982,20 @@
                 showMessage('warning','Atención',data.message);
             }
         }
+    }
+    
+    function formatDollar(numero){
+        let numeroFormateado = numero.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+        console.log(numeroFormateado);
+        return numeroFormateado;
+    }
+
+    function calcularTH(totales, total_costos){
+        /*TH = ((Sumatoria Total del campo Precio Total - Sumatoria Total de todos los Costos) / Sumatoria Total del campo Precio Total ) *100*/
+        let th = ((totales - total_costos) / totales ) * 100
     }
 
     // Función para escapar las comillas dobles en el valor del atributo

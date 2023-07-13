@@ -72,8 +72,56 @@ class CotizadorController extends Controller
             ->with('data',$response);
     }
 
-    public function cotizaciones(){
-        return view('cotizador.cotizaciones');
+    public function cotizaciones(Request $request){
+        $method = '/empresarial/v1/cotizacion';
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estadoCotizacion', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
+
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method.$param,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+
+        // echo Ism::BASE_URL.$method.$param;
+        // dd($response);
+
+        if($response->code == 200){
+            $totalRegistros = $response->data->totalRows; // Número total de registros
+            $registrosPorPagina = count($response->data->row); // Número de registros en la página actual
+            $datos = $response->data->row;
+        }else{
+            $datos = [];
+            $totalRegistros = 0; // Número total de registros
+            $registrosPorPagina = count($datos); // Número de registros en la página actual
+        }
+
+        $elementosPorPagina = Ism::PERPAGE; // Define el número de elementos por página según tus necesidades
+        $totalPaginas = ceil($totalRegistros / $elementosPorPagina);
+
+        $paginaActual = $request->query('page', '1'); // Define la página actual según tus necesidades
+        $datosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
+            $datos, // Datos de la página actual
+            $totalRegistros, // Número total de registros
+            $elementosPorPagina, // Número de elementos por página
+            $paginaActual, // Página actual
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(), // Ruta actual
+                'pageName' => 'page', // Nombre del parámetro de la página en la URL
+            ]
+        );
+
+        $method = '/comercial/v1/tipos_contratos?codigoTipoProducto=2&estado=ACTIVO';
+        
+        $responseContratos = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+        
+        return view('cotizador.cotizaciones')
+            ->with('datosPaginados', $datosPaginados)
+            ->with('dataContratos',$responseContratos->data)
+            ->with('data',$response);
     }
 
     public function obtenerInfoCliente($codigoCliente){
