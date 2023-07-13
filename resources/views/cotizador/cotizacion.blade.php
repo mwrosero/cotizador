@@ -189,6 +189,9 @@
                 </div>
                 <div class="row g-3 box-resumen d-none">
                     <div class="col-12">
+                        <span class="badge bg-success" id="t_h"></span>
+                    </div>
+                    <div class="col-12">
                         <button type="button"
                             id="btn-crear-cotizacion"
                             class="btn bg-veris"
@@ -594,40 +597,16 @@
         $('body').on('click', '.item-delete', function(){
             eliminarItem($(this).attr('idItem-rel'));
             tabla.row($(this).parents('tr')).remove().draw();
+            calcularTH();
             if(dataPrestaciones.length == 0){
                 $('.box-resumen').addClass('d-none');
             }
-            /*let confirmText = document.querySelector('#confirm-text')
-            confirmText.onclick = function () {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!',
-                    customClass: {
-                        confirmButton: 'btn btn-primary me-3',
-                        cancelButton: 'btn btn-label-secondary'
-                    },
-                    buttonsStyling: false
-                }).then(function (result) {
-                    if (result.value) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Deleted!',
-                            text: 'Your file has been deleted.',
-                            customClass: {
-                                confirmButton: 'btn btn-success'
-                            }
-                        });
-                    }
-                });
-            };*/
         });
 
         $('body').on('click', '.item-delete-alt', function(){
             eliminarCosto($(this).attr('idItem-rel'));
             tabla.row($(this).parents('tr')).remove().draw();
+            calcularTH()
         })
 
     }
@@ -687,6 +666,8 @@
                 });
             });
 
+            calcularTH();
+
             $('#prestaciones-seleccionadas').empty();
             $('#prestaciones-seleccionadas').append(elem);
 
@@ -706,6 +687,7 @@
                     }
                 ]
             });
+            $(window).scrollTop($(document).height());
         }else{
             $('.box-resumen').addClass('d-none');
         }
@@ -720,7 +702,7 @@
             return grupo.codigoGrupo === codigoGrupo;
         });
 
-        console.log(grupoExistente)
+        // console.log(grupoExistente)
 
         let dataPrestacionesTmp = dataPrestaciones;
         // Blanquear todos los inputs
@@ -744,7 +726,7 @@
         for (const elemento of dataPrestaciones) {
             for (const prestacion of elemento.prestaciones) {
                 if (prestacion.idItem === idItem) {
-                    console.table(prestacion)
+                    //console.table(prestacion)
                     $('#nombrePrestacionEdit').html(prestacion.nombrePrestacion + ": "+ prestacion.codigoPrestacion );
                     $('#nombreServicioEdit').html(prestacion.nombreServicio );
                     $('#grupoPerfilEdit').html(elemento.nombreGrupo);
@@ -761,7 +743,7 @@
     function cargarGasto(idItem){
         for (const gasto of dataCostos) {
             if (gasto.idItem === idItem) {
-                console.table(gasto)
+                //console.table(gasto)
                 $('#nombreServicioGastoEdit').html(gasto.nombreCosto+": "+gasto.idCosto);
                 $('#costoGastoEdit').val(gasto.valorUnitario);
                 $('#idItemGastoEdit').val(gasto.idItem);
@@ -782,6 +764,7 @@
                     $('#precioUnitario_'+idItem).html("$"+getInput('precioUnitarioEdit'));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
+                    calcularTH();
                     return true;
                 }
             }
@@ -798,6 +781,7 @@
                 $('#precioUnitario_'+idItem).html("$"+getInput('costoGastoEdit'));
                 $('#total_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#offcanvasGastos').offcanvas('hide');
+                calcularTH();
                 return true;
             }
         }
@@ -989,13 +973,32 @@
           minimumFractionDigits: 2,
           maximumFractionDigits: 2
         });
-        console.log(numeroFormateado);
+        // console.log(numeroFormateado);
         return numeroFormateado;
     }
 
-    function calcularTH(totales, total_costos){
+    function calcularTH(){
         /*TH = ((Sumatoria Total del campo Precio Total - Sumatoria Total de todos los Costos) / Sumatoria Total del campo Precio Total ) *100*/
-        let th = ((totales - total_costos) / totales ) * 100
+        let totales = 0;
+        let total_costos = 0;
+        if(dataPrestaciones.length > 0){
+            $.each(dataCostos, function(key, value){
+                total_costos += value.costoUnitario;
+                totales += value.costoUnitario;
+            });
+
+            $.each(dataPrestaciones, function(key, value){
+                $.each(value.prestaciones, function(k, v){
+                    total_costos += v.costoUnitario;
+                    totales += (v.precioUnitario*v.cantidadPacientes);
+                });
+            });
+
+            console.log(totales, total_costos)
+
+            let t_h = (((totales - total_costos) / totales ) * 100);
+            $('#t_h').html("TH: "+t_h+"%");
+        }
     }
 
     // Función para escapar las comillas dobles en el valor del atributo
@@ -1026,7 +1029,7 @@
             $('#cliente').attr("cliente-rel",'');
 
             const data = await call(args);
-            console.log(data);
+            // console.log(data);
             if(data.data.totalRows == 0 ){
                 showMessage('warning','Atención','No se encontró información de Clientes con esos datos')
             }else if(data.data.totalRows == 1) {
@@ -1190,7 +1193,7 @@
 
         const data = await call(args);
         let elem = "";
-        console.log(data)
+        // console.log(data)
 
         $('#servicioCosto').append(`<option value=""></option>`);
         $.each(data.data, function(key, value){
