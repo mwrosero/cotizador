@@ -8,7 +8,7 @@
 @section('content')
 <div class="row">
     <div class="col-12">
-        <div class="accordion mt-3" id="accordionExample">
+        <div class="accordion" id="accordionExample">
             <div class="card accordion-item active">
                 <h2 class="accordion-header" id="headingOne">
                     <button type="button" class="accordion-button" data-bs-toggle="collapse" data-bs-target="#accordionOne" aria-expanded="true" aria-controls="accordionOne">
