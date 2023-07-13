@@ -37,9 +37,9 @@ Route::group(['middleware' => ['loggedUser']], function () {
     
     /*Cotizador*/
     Route::prefix('cotizador')->group(function () {
-        Route::get('/registro-clientes', [CotizadorController::class, 'registroCliente'])->name('registro_clientes')->withoutMiddleware(['guest']);
+        Route::get('/registro-clientes', [CotizadorController::class, 'registroCliente'])->name('registro-clientes')->withoutMiddleware(['guest']);
         
-        Route::get('/cotizador/{numeroIdentificacion?}', [CotizadorController::class, 'cotizador'])->name('cotizar')->withoutMiddleware(['guest']);
+        Route::get('/cotizador/{numeroIdentificacion?}', [CotizadorController::class, 'cotizador'])->name('cotizador')->withoutMiddleware(['guest']);
 
         Route::get('/consulta-clientes', [CotizadorController::class, 'clientes'])->name('consulta-clientes')->withoutMiddleware(['guest']);
         
@@ -47,7 +47,7 @@ Route::group(['middleware' => ['loggedUser']], function () {
         
         Route::get('/consulta-cotizaciones', [CotizadorController::class, 'cotizaciones'])->name('consulta-cotizaciones')->withoutMiddleware(['guest']);
         
-        Route::post('/crear-cliente', [CotizadorController::class, 'crearCliente'])->name('crear_cliente')->withoutMiddleware(['guest']);
+        Route::post('/crear-cliente', [CotizadorController::class, 'crearCliente'])->name('crear-cliente')->withoutMiddleware(['guest']);
 
     });
 
