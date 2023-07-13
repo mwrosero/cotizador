@@ -64,6 +64,10 @@ table td{
   background-color: #d8d9db; /* Color de fondo de la barra de desplazamiento */
 }
 
+/*Navbar*/
+.nav-item h5 {
+    color: #171D49;
+}
 
 /*Sidebar*/
 .menu-item-active .menu-link{
