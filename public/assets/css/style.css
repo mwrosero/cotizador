@@ -66,6 +66,10 @@ table td{
 
 
 /*Sidebar*/
+.menu-item-active .menu-link{
+    background: rgb(219 218 222 / 20%) !important;
+}
+
 .menu-item > a.menu-toggle {
     background: #0A1144 !important;
     margin: 0px !important;

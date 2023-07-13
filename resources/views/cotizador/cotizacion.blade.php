@@ -1069,6 +1069,24 @@
         }
     }
 
+    async function cargarCiudades(){
+        let args = [];
+        args["endpoint"] = api_url+"/general/v1/ciudades?codigoPais=1";
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+        $('#ciudad').empty();
+        $.each(data.data, function(key, value){
+            var classSel = "";
+            if(value.esDefault){
+                classSel = "selected";
+            }
+            $('#ciudad').append(`<option value="${value.codigoCiudad}" ${classSel}>${value.nombreCiudad}</option>`);
+        })
+    }
+
     async function obtenerCentralesMedicas(){
         let args = [];
         args["endpoint"] = api_url+"/general/v1/sucursales?codigoEmpresa=1&tipoSucursal=TODOS&grupoSucursal=CMV";

@@ -32,13 +32,13 @@
         <li class="menu-item @if($loop->first) active open @endif">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <!-- <i class="menu-icon tf-icons ti square-dot"></i> -->
-                <i class="fa-solid fa-angle-right me-2"></i>
+                {{-- <i class="fa-solid fa-angle-right me-2"></i> --}}
                 <div data-i18n="{{ $value->nombreModulo }}">{{ $value->nombreModulo }}</div>
                 <!-- <div class="badge bg-label-primary rounded-pill ms-auto">3</div> -->
             </a>
             @foreach ($value->opciones as $v)
             <ul class="menu-sub">
-                <li class="menu-item">
+                <li test-rel="{{request()->route()->getName()}} --- {{ $v->vista }}" class="menu-item {{ Str::startsWith(request()->route()->getName(), $v->vista) ? 'menu-item-active' : '' }}">
                     <a href="/{{ $value->vista }}/{{ $v->vista }}" class="menu-link">
                         <div class="fs-14" data-i18n="{{ $v->detalleOpcion }}">{{ $v->detalleOpcion }}</div>
                     </a>
