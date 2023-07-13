@@ -189,7 +189,7 @@
                 </div>
                 <div class="row g-3 box-resumen d-none">
                     <div class="col-12">
-                        <span class="badge bg-success" id="t_h"></span>
+                        <span class="badge" id="t_h"></span>
                     </div>
                     <div class="col-12">
                         <button type="button"
@@ -402,7 +402,7 @@
     <div class="offcanvas-body">
         <div class="row g-3">
             <div class="col-12">
-                <span class="d-block">Gasto:</span>
+                <span class="d-block">Servicio:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="nombreServicioGastoEdit"></h6>
             </div>
             <input type="hidden" id="idItemGastoEdit">
@@ -434,6 +434,7 @@
     let modalCliente;
     let dataPrestaciones = [];
     let dataCostos = [];
+    let th_cotizacion = 0;
 
     window.onload = async () => {
         @if(isset($numeroIdentificacion))
@@ -777,7 +778,7 @@
         let idItem = $('#idItemGastoEdit').val();
         for (const gasto of dataCostos) {
             if (gasto.idItem === idItem) {
-                gasto.valorUnitario = getInput('costoGastoEdit');
+                gasto.valorUnitario = parseFloat(getInput('costoGastoEdit'));
                 $('#precioUnitario_'+idItem).html("$"+getInput('costoGastoEdit'));
                 $('#total_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#offcanvasGastos').offcanvas('hide');
@@ -859,7 +860,7 @@
               "idCosto": idCosto,
               "nombreCosto": nombreCosto,
               "cantidad": 1,
-              "valorUnitario": valorUnitario,
+              "valorUnitario": parseFloat(valorUnitario),
               "idItem":idItem
             }
         );
@@ -868,6 +869,8 @@
         $("#servicioCosto").val(null).trigger("change");
         $('#costo').val("");
         $('#modalCostos').modal('hide');
+
+        calcularTH();
 
         let elem = ``;
         elem += `
@@ -954,7 +957,7 @@
                 "direccionServicio": detalleLugar,
                 "fechaInicio": fechaPrevista,
                 "cantidadDias": parseInt(diasServicio),
-                "porcentajeRentabilidad": 20,
+                "porcentajeRentabilidad": parseFloat(th_cotizacion),
                 "detalle": dataPrestaciones,
                 "costosAdicionales": dataCostos
             });
@@ -983,8 +986,8 @@
         let total_costos = 0;
         if(dataPrestaciones.length > 0){
             $.each(dataCostos, function(key, value){
-                total_costos += value.costoUnitario;
-                totales += value.costoUnitario;
+                total_costos += value.valorUnitario;
+                totales += value.valorUnitario;
             });
 
             $.each(dataPrestaciones, function(key, value){
@@ -997,7 +1000,14 @@
             console.log(totales, total_costos)
 
             let t_h = (((totales - total_costos) / totales ) * 100);
-            $('#t_h').html("TH: "+t_h+"%");
+            $('#t_h').html("TH: "+t_h.toFixed(2)+"%");
+            $('#t_h').removeClass('bg-danger').removeClass('bg-warning').removeClass('bg-success');
+            if(t_h >= 20){
+                $('#t_h').addClass('bg-success');
+            }else{
+                $('#t_h').addClass('bg-danger');
+            }
+            th_cotizacion = t_h.toFixed(2);
         }
     }
 
