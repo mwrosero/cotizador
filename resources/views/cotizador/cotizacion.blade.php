@@ -136,6 +136,7 @@
                 <div class="row g-3">
                     <div class="col-12">
                         <button type="button"
+                            disabled 
                             id="btn-prestaciones"
                             class="btn bg-veris"
                             data-bs-toggle="modal"
@@ -228,7 +229,7 @@
                     <div class="col-12">
                         <div class="swiper-container rounded" id="scroll-tags">
                             <div class="swiper-button-prev swiper-button-white custom-icon"></div>
-                            <ul class="swiper-wrapper" id="list-nivel-1"></ul>
+                            <ul class="swiper-wrapper justify-content-center" id="list-nivel-1"></ul>
                             <div class="swiper-button-next swiper-button-white custom-icon"></div>
                         </div>
                     </div>
@@ -247,7 +248,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mt-3" id="box-prestaciones"></div>
+                <div class="row mt-3">
+                    <div class="grid" id="box-prestaciones"></div>
+                </div>
             </div>
             <div class="modal-footer">
                 {{-- <button type="button" class="btn bg-veris">Guardar</button> --}}
@@ -432,6 +435,7 @@
 
 <script>
     let modalCliente;
+    let swiper;
     let dataPrestaciones = [];
     let dataCostos = [];
     let th_cotizacion = 0;
@@ -609,6 +613,10 @@
             tabla.row($(this).parents('tr')).remove().draw();
             calcularTH()
         })
+
+        $('#modalPrestaciones').on('shown.bs.modal', function() {
+            resizeAllGridItems();
+        });
 
     }
 
@@ -1146,11 +1154,16 @@
             if(key == 0){
                 _class = 'item-selected';
             }
-            elem += `<li codigoServicio-rel='${value.codigoServicio}' class="swiper-slide ${_class}">${value.nombreServicio}</li>`;
+            elem += `<li codigoServicio-rel='${value.codigoServicio}' class="swiper-slide ${_class}">
+                <i class="fa-solid fa-stethoscope me-2"></i>${value.nombreServicio}</li>`;
         })
         $('#list-nivel-1').append(elem);
-        var swiper = new Swiper(".swiper-container", {
+
+        swiper = new Swiper(".swiper-container", {
             slidesPerView: "auto",
+            // centeredSlides: true,
+            // centeredSlidesBounds: true,
+            // loop: verificarLoop(),
             freeMode: {
                 enabled: true,
                 sticky: true,
@@ -1160,8 +1173,32 @@
             navigation: {
                 prevEl: '.swiper-button-prev',
                 nextEl: '.swiper-button-next'
+            },
+            on: {
+                init: function() {
+                    swiperCenter(this);
+                },
+                resize: function() {
+                    swiperCenter(this);
+                }
             }
         });
+    }
+
+    function swiperCenter(swiperInstance) {
+        let contenedorItems = $('.swiper-container').width();
+        let itemsWidth = 0;
+        $('#list-nivel-1').removeClass('justify-content-center');
+        $('.swiper-button-white').show();
+        $('.swiper-wrapper li').each(function(key, value) {
+            itemsWidth += $(this).outerWidth(true);
+            // itemsWidth += 15;
+        })
+
+        if(contenedorItems > itemsWidth){
+            $('#list-nivel-1').addClass('justify-content-center');
+            $('.swiper-button-white').hide();
+        }
     }
 
     async function obtenerPrestaciones(){
@@ -1178,7 +1215,8 @@
             $.each(value.servicios, function(k, v){
                 $.each(v.servicios, function(k1, v1){
                     elem = "";
-                    elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
+                    // elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
+                    elem += `<div class="item mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
                                 <div class="card-header d-flex justify-content-between">
@@ -1186,7 +1224,7 @@
                                         <h6 class="mb-0 text-white">${ v1.nombreServicio }</h6>
                                     </div>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body content">
                                     <ul class="p-0 m-0">`
                     $.each(v1.prestaciones, function(k2, v2){
                         elem += `       <li class="mb-1 d-flex align-items-center">
@@ -1198,18 +1236,53 @@
                                             </div>
                                         </li>`;
                     })
-                elem += `           </ul>
+                    elem += `           </ul>
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
-                        </div>`;
-                $('#box-prestaciones').append(elem);
+                                </div>
+                            </div>`;
+                    $('#box-prestaciones').append(elem);
+
+                    // window.addEventListener("resize", resizeAllGridItems);
+                    var resizeTimer;
+
+                    window.addEventListener("resize", function() {
+                        clearTimeout(resizeTimer);
+                        resizeTimer = setTimeout(resizeAllGridItems, 1000); // Ajusta el tiempo de espera según tus necesidades (en milisegundos)
+                    });
+
+                    $('#btn-prestaciones').prop('disabled', false);
+                      
                 })
             });
             /*$('.prestaciones-item').each(function() {
                 new PerfectScrollbar(this);
             });*/
         })
+    }
+
+    function resizeGridItem(item){
+        let extendible = 1;
+        if($(window).width() <= 600){
+            extendible = 2
+        }
+        grid = document.getElementsByClassName("grid")[0];
+        rowHeight = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-auto-rows'));
+        rowGap = parseInt(window.getComputedStyle(grid).getPropertyValue('grid-row-gap'));
+        rowSpan = Math.ceil((item.querySelector('.content').getBoundingClientRect().height+rowGap)/(rowHeight+rowGap));
+        item.style.gridRowEnd = "span "+(rowSpan + extendible);
+    }
+
+    function resizeAllGridItems(){
+        allItems = document.getElementsByClassName("item");
+        for(x=0;x<allItems.length;x++){
+            resizeGridItem(allItems[x]);
+        }
+    }
+
+    function resizeInstance(instance){
+        item = instance.elements[0];
+        resizeGridItem(item);
     }
 
     async function obtenerServiciosCostos(){
@@ -1232,12 +1305,13 @@
     function showPrestaciones(){
         $('.servicio').hide();
         $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
+        resizeAllGridItems();
     }
 </script>
 <style>
     .item-selected {
-        background: #3962e6;
-        color: #fff;
+        background: rgb(97 145 234 / 20%) !important;
+        color: #3962e6 !important;
     }
 
     .scroll-btn:hover{
@@ -1252,13 +1326,19 @@
     
     .swiper-container {
         width: 100%;
-        border: 1px solid #dbdade;
+        /*border: 1px solid #dbdade;*/
     }
 
     .swiper-slide {
         cursor: pointer;
         padding: 0.9rem !important;
         width: auto !important;
+        background: rgb(219 224 228 / 50%);
+        border: 1px solid #DBE0E4;
+        color: #8B97A3;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: bold;
     }
 
     .swiper-slide-active2 {
@@ -1356,6 +1436,31 @@
     div.card-datatable [class*=col-md-]{
         padding-left: 0px !important;
         padding-right: 0px !important;
+    }
+
+    .grid {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(400px,1fr));
+        grid-auto-rows: 20px;
+    }
+
+    .prestaciones-item input[type="number"] {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+    .prestaciones-item label{
+        line-height: 14px;
+        color: #5E5E5D;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .grid {
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(100%,1fr));
+            grid-auto-rows: 20px;
+        }
     }
 
 </style>
