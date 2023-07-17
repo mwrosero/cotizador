@@ -106,6 +106,13 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
+                        <label for="ciudadChequeo" class="form-label">Ciudad</label>
+                        <div class="select2-dark">
+                            <select id="ciudadChequeo" class="select2 form-select" multiple>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-12">
                         <label for="detalleLugar" class="form-label">Por favor detallar el lugar</label>
                         <input type="text"
                             class="form-control"
@@ -151,12 +158,20 @@
                 </div>
                 <hr class="my-4 mx-n4 box-resumen d-none" />
                 <div class="row g-3 box-resumen d-none">
-                    <h6 class="txt-veris box-resumen d-none col-12 col-md-9">Resumen de la Cotización</h6>
-                    <div class="col-12 col-md-3 text-end">
+                    <h6 class="txt-veris box-resumen d-none col-12 col-md-6">Resumen de la Cotización</h6>
+                    <div class="col-12 col-md-6 text-end">
+                        <button 
+                            {{-- data-bs-toggle="modal"
+                            data-bs-target="#modalPrestadores" --}}
+                            onclick="showModalPrestadores()" 
+                            class="btn btn-sm btn-secondary me-2">
+                            <i class="fa-solid fa-house-medical me-2"></i>
+                            Seleccionar Prestador
+                        </button>
                         <button 
                             data-bs-toggle="modal"
                             data-bs-target="#modalCostos"
-                            class="btn btn-sm bg-light">
+                            class="btn btn-sm bg-orange">
                             <i class="fa-solid fa-hand-holding-dollar me-2"></i>
                             Agregar costos
                         </button>
@@ -210,7 +225,7 @@
 </div>
 
 <!-- MODAL PRESTACIONES -->
-<div class="modal fade" id="modalPrestaciones" aria-labelledby="modalPrestacionesLabel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="modalPrestaciones" aria-labelledby="modalPrestacionesLabel" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
     {{-- <div class="modal-dialog modal-xl"> --}}
     <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down">
         <div class="modal-content p-2">
@@ -255,7 +270,7 @@
             <div class="modal-footer">
                 {{-- <button type="button" class="btn bg-veris">Guardar</button> --}}
                 <button type="button" class="btn bg-veris" onclick="drawTable()" data-bs-dismiss="modal">
-                    Aceptar
+                    {{-- Aceptar --}}Cerrar
                 </button>
             </div>
         </div>
@@ -340,6 +355,40 @@
     </div>
 </div>
 
+<!-- MODAL PRESTADORES -->
+<div class="modal fade" id="modalPrestadores" aria-labelledby="modalPrestadoresLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        {{-- <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down"> --}}
+        <div class="modal-content p-2">
+            {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
+            <div class="modal-header">
+                <div class="col-12">
+                    <label class="form-label">Búsqueda: <span class="fw-bold txt-veris" id="clienteSearch"></span></label>
+                </div>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="row table-responsive box-row-modal-clientes">
+                    <table class="table">
+                        <thead class="sticky-top">
+                            <tr>
+                                <th class="fs-12">Ciudad</th>
+                                <th class="fs-12">Guayaquil</th>
+                                <th class="fs-12">Manta</th>
+                            </tr>
+                        </thead>
+                        <tbody id="box-clientes-list"></tbody>
+                    </table>                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Offcanvas Editar Prestaciones -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasPrestacion" aria-labelledby="offcanvasPrestacionLabel">
     <div class="offcanvas-header">
@@ -361,6 +410,7 @@
                 <h6 class="txt-veris fs-14 mb-0" id="grupoPerfilEdit"></h6>
             </div>
             <input type="hidden" id="idItemEdit">
+            <input type="hidden" id="codigoPrestacionEdit">
             <div class="col-12">
                 <label for="precioUnitarioEdit" class="form-label">Precio Unitario</label>
                 <input type="number"
@@ -382,6 +432,12 @@
                     name="cantidadEdit" 
                     placeholder="" />
             </div>
+            {{-- <div class="col-12">
+                <label for="aplicaTodoGrupo" class="form-label">Aplicar <b>precio</b> para todos los Grupo Perfiles</label>
+                <div class="form-check form-switch mb-2 mt-2">
+                    <input class="form-check-input" type="checkbox" id="aplicaTodoGrupo" name="aplicaTodoGrupo" />
+                </div>
+            </div> --}}
             <div class="col-12">
                 <button type="button"
                     class="btn bg-veris w-100"
@@ -447,6 +503,7 @@
         modalCliente = new bootstrap.Modal('#modalCliente');
         obtenerTiposContrato();
         obtenerCentralesMedicas();
+        obtenerCiudades();
         obtenerGruposPerfiles();
         obtenerServiciosCostos();
         await obtenerNivel1();
@@ -618,6 +675,42 @@
             resizeAllGridItems();
         });
 
+        let searchInput = $('#searchInputPrestacion');
+
+        searchInput.on('input', function(event) {
+            let cards = $('.servicio-'+$('.item-selected').attr('codigoServicio-rel'));
+            if(getInput('searchInputPrestacion').length > 0){
+                cards.each(function(index, item) {
+                    let cardId = item.id;
+                    let searchText = event.target.value.toLowerCase();
+                    let qty = 0;
+                    let labels = $('#'+cardId + ' label');
+                    labels.each(function(index, label) {
+                        let labelContent = label.textContent.toLowerCase();
+                        //console.log(labelContent, searchText);
+                        if (labelContent.includes(searchText) ) {
+                            qty++;
+                            $(label).parent().removeClass('d-none');
+                            $(label).parent().addClass('d-flex');
+                        } else {
+                            $(label).parent().removeClass('d-flex');
+                            $(label).parent().addClass('d-none');
+                        }
+                    });
+                    
+                    if(qty == 0){
+                        $('#'+cardId).hide();
+                    }else{
+                        $('#'+cardId).show();
+                    }
+                })
+            }else{
+                $('#box-prestaciones .item li').removeClass('d-none');
+                $('#box-prestaciones .item li').addClass('d-flex');
+                $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
+            }
+        });
+
     }
 
     let tabla;
@@ -742,6 +835,7 @@
                     $('#precioUnitarioEdit').val(prestacion.precioUnitario);
                     $('#cantidadEdit').val(prestacion.cantidadPacientes);
                     $('#idItemEdit').val(prestacion.idItem);
+                    $('#codigoPrestacionEdit').val(prestacion.codigoPrestacion);
                     return prestacion;
                 }
             }
@@ -781,6 +875,53 @@
 
         return false; // Si no se encuentra el elemento, retorna false
     }
+
+    /*function actualizarPrestacion() {
+        if(!$('#aplicaTodoGrupo').prop('checked')){
+            let idItem = $('#idItemEdit').val();
+            for (const elemento of dataPrestaciones) {
+                for (const prestacion of elemento.prestaciones) {
+                    if (prestacion.idItem === idItem) {
+                        prestacion.cantidadPacientes = getInput('cantidadEdit');
+                        prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                        $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
+                        $('#precioUnitario_'+idItem).html("$"+getInput('precioUnitarioEdit'));
+                        $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                        $('#offcanvasPrestacion').offcanvas('hide');
+                        calcularTH();
+                        return true;
+                    }
+                }
+            }
+        }else{
+            actualizarPrestacionesMasivas();
+        }
+
+        return false; // Si no se encuentra el elemento, retorna false
+    }
+
+    function actualizarPrestacionesMasivas() {
+        console.log("actualizarPrestacionesMasivas")
+        let codigoPrestacionEdit = $('#codigoPrestacionEdit').val();
+        let idItem = $('#idItemEdit').val();
+        for (const elemento of dataPrestaciones) {
+            for (const prestacion of elemento.prestaciones) {
+                console.log(prestacion);
+                if (prestacion.codigoPrestacion == codigoPrestacionEdit) {
+                    prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                    if (prestacion.idItem === idItem) {
+                        prestacion.cantidadPacientes = getInput('cantidadEdit');
+                    }
+                    $('#offcanvasPrestacion').offcanvas('hide');
+                    calcularTH();
+                    drawTable();
+                    return true;
+                }
+            }
+        }
+
+        return false; // Si no se encuentra el elemento, retorna false
+    }*/
 
     function actualizarGasto(){
         let idItem = $('#idItemGastoEdit').val();
@@ -1077,21 +1218,18 @@
         }
     }
 
-    async function cargarCiudades(){
+    async function obtenerCiudades(){
         let args = [];
         args["endpoint"] = api_url+"/general/v1/ciudades?codigoPais=1";
         args["method"] = "GET";
         args["bodyType"] = "json";
         args["showLoader"] = false;
 
+        $('#ciudadChequeo').empty();
+        $('#ciudadChequeo').append(`<option value=""></option>`);
         const data = await call(args);
-        $('#ciudad').empty();
         $.each(data.data, function(key, value){
-            var classSel = "";
-            if(value.esDefault){
-                classSel = "selected";
-            }
-            $('#ciudad').append(`<option value="${value.codigoCiudad}" ${classSel}>${value.nombreCiudad}</option>`);
+            $('#ciudadChequeo').append(`<option value="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}">${value.nombreCiudad}</option>`);
         })
     }
 
@@ -1216,7 +1354,7 @@
                 $.each(v.servicios, function(k1, v1){
                     elem = "";
                     // elem += `<div class="col-12 col-md-6 col-lg-6 col-xl-4 mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
-                    elem += `<div class="item mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }">
+                    elem += `<div class="item mb-2 pt-1 pb-1 servicio servicio-${ value.codigoServicio }" id="box-servicio-${ v1.codigoServicio }">
                             <div class="shadow bg-white prestaciones-item">
                             <div class="card shadow-none">
                                 <div class="card-header d-flex justify-content-between">
@@ -1262,7 +1400,7 @@
     }
 
     function resizeGridItem(item){
-        let extendible = 1;
+        let extendible = 2;
         if($(window).width() <= 600){
             extendible = 2
         }
@@ -1285,6 +1423,49 @@
         resizeGridItem(item);
     }
 
+    async function showModalPrestadores(){
+        let ciudades = getInput('ciudadChequeo','select2');
+        if(ciudades != ""){
+            await obtenerPrestadores();
+            $('#modalPrestadores').modal('show');
+        }else{
+            showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
+        }
+    }
+
+    async function obtenerPrestadores(id = null){
+        let ciudades = getInput('ciudadChequeo','select2');
+        let prestaciones = [];
+        if(id == null){
+            $.each(dataPrestaciones, function(key, value){
+                $.each(value.prestaciones, function(k, v){
+                    let id = v.codigoPrestacion;
+                    if ($.inArray(id, prestaciones) !== -1) {
+                        var indice = $.inArray(id, prestaciones);
+                        prestaciones[indice] = id;
+                    } else {
+                        prestaciones.push(id);
+                    }
+                })
+            })
+        }else{
+            prestaciones.push(id);
+        }
+
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/util/costos_prestadores?codigoEmpresa=1";
+        args["method"] = "POST";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+        args["data"] = JSON.stringify({
+            "ciudades": ciudades,
+            "prestaciones": prestaciones
+        })
+
+        const data = await call(args);
+        console.log(data)
+    }
+
     async function obtenerServiciosCostos(){
         let args = [];
         args["endpoint"] = api_url+"/empresarial/v1/util/costos_adicionales?estado=ACTIVO";
@@ -1300,6 +1481,44 @@
         $.each(data.data, function(key, value){
             $('#servicioCosto').append(`<option value="${value.idCosto}" title="${value.descripcion}">${value.nombreCosto}</option>`);
         })
+    }
+
+    function search(){
+        let searchInput = document.getElementById('searchInputPrestacion');
+
+        searchInput.addEventListener('input', function(event) {
+            let cards = $('#box-prestaciones .item').filter(':visible');
+            if(getInput('searchInputPrestacion').length > 0){
+                cards.each(function(index, item) {
+                    let cardId = item.id;
+                    let searchText = event.target.value.toLowerCase();
+                    let qty = 0;
+                    console.log(cardId)
+                    let labels = $('#'+cardId + ' label');
+                    console.log(labels)
+                    labels.each(function(index, label) {
+                        let labelContent = label.textContent.toLowerCase();
+                        //let codRel = label.getAttribute('cod-rel');
+                        if (labelContent.includes(searchText) ) {
+                            qty++;
+                            $(label).parent().show();
+                        } else {
+                            $(label).parent().hide();
+                        }
+                    });
+                    
+                    if(qty == 0){
+                        $('#'+cardId).hide();
+                    }else{
+                        $('#'+cardId).show();
+                    }
+                })
+            }else{
+                console.log(99)
+                $('#box-prestaciones .item li').show();
+                $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
+            }
+        });
     }
 
     function showPrestaciones(){

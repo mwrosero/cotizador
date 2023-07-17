@@ -35,6 +35,11 @@ table td{
     font-size: 12px !important;
 }
 
+.btn:active, .btn:focus {
+    background: #171d49 !important;
+    color: #fff !important;
+}
+
 /* Estilo de la barra de desplazamiento */
 ::-webkit-scrollbar {
   width: 5px; /* Ancho de la barra de desplazamiento */
