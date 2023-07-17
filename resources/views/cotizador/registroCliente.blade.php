@@ -123,7 +123,6 @@
                             <div class="form-check form-switch mb-2 mt-2">
                                 <input class="form-check-input" type="checkbox" id="esGrupoEmpresa" name="esGrupoEmpresa" />
                             </div>
-                            </select>
                         </div>
                     </div>
                     <hr class="my-4 mx-n4" />
