@@ -77,10 +77,12 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Código Cliente</th>
+                                <th>ID</th>
                                 <th>Nombre Cliente</th>
-                                <th>Tipo Persona</th>
-                                <th>Cédula/RUC</th>
+                                <th>Tipo Contrato</th>
+                                <th>Fecha Inicio</th>
+                                <th>Total</th>
+                                <th>Rentabilidad</th>
                                 <th>Estado</th>
                                 <th>Acción</th>
                             </tr>
@@ -97,16 +99,24 @@
                             <tr class="fs-12">
                                 <td>{{ $dato->codigoCliente }}</td>
                                 <td>{{ $dato->nombreCliente }}</td>
-                                <td>{{ $dato->nombreTipoPersona }}</td>
-                                <td>{{ $dato->numeroIdentificacion }}</td>
-                                <td>{{ $dato->descripcionEstado }}</td>
+                                <td>{{ $dato->nombreTipoContrato }}</td>
+                                <td>{{ $dato->fechaInicio }}</td>
+                                <td>${{ number_format($dato->total, 2, '.', ',') }}</td>
                                 <td>
-                                    <a class="d-inline-block me-2" href="/cotizador/cliente/edit/{{ $dato->codigoCliente }}">
+                                    @if($dato->porcentajeRentabilidad >= 20)
+                                    <span class="badge bg-success t_h">{{ $dato->porcentajeRentabilidad }}%</span>
+                                    @else
+                                    <span class="badge bg-danger t_h">{{ $dato->porcentajeRentabilidad }}%</span>
+                                    @endif
+                                </td>
+                                <td>{{ $dato->estado }}</td>
+                                <td>
+                                    <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
                                         <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                     </a>
-                                    <a class="d-inline-block" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
+                                    {{-- <a class="d-inline-block" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
                                         <img class="action-ico" src="{{ asset('assets/img/veris/cotizar-ico.svg') }}" alt="" title="Cotizar">
-                                    </a>
+                                    </a> --}}
                                     {{-- <div class="dropdown">
                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                             <i class="ti ti-dots-vertical"></i>
@@ -133,4 +143,9 @@
         </div>
     </div>
 </div>
+<style>
+    .t_h{
+        width: 80px;
+    }
+</style>
 @endsection

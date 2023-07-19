@@ -23,7 +23,8 @@
                             <input type="text"
                                 id="searchInput"
                                 class="form-control"
-                                placeholder="Buscar"
+                                placeholder="Buscar Cliente por Nombre o RUC"
+                                autofocus
                                 aria-label="Search..."
                                 aria-describedby="infoCliente"/>
                             <span title="BUSCAR" class="input-group-text" id="busquedaCliente" onclick="buscarCliente();">
@@ -82,14 +83,14 @@
                 <h6 class="txt-veris">Tipos de Servicios</h6>
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
-                        <label for="tipoServicio" class="form-label">¿Qué servico deseas cotizar?</label>
+                        <label for="tipoServicio" class="form-label">¿Qué servicio deseas cotizar?</label>
                         <div class="select2-dark">
                             <select id="tipoServicio" class="select2 form-select">
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="lugarServicio" class="form-label">¿Dónde deseas el servico?</label>
+                        <label for="lugarServicio" class="form-label">¿Dónde deseas el servicio?</label>
                         <div class="select2-dark">
                             <select id="lugarServicio" class="select2 form-select" multiple>
                                 <option value="1" >En el lugar de la empresa</option>
@@ -192,7 +193,7 @@
                                             <th>Cantidad</th>
                                             <th>Precio Unit.</th>
                                             <th>Precio Total</th>
-                                            <th>Acción</th>
+                                            <th width="100px">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody id="prestaciones-seleccionadas">
@@ -270,7 +271,7 @@
             <div class="modal-footer">
                 {{-- <button type="button" class="btn bg-veris">Guardar</button> --}}
                 <button type="button" class="btn bg-veris" onclick="drawTable()" data-bs-dismiss="modal">
-                    {{-- Aceptar --}}Cerrar
+                    Aceptar
                 </button>
             </div>
         </div>
@@ -363,20 +364,39 @@
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             <div class="modal-header">
                 <div class="col-12">
-                    <label class="form-label">Búsqueda: <span class="fw-bold txt-veris" id="clienteSearch"></span></label>
+                    <label class="form-label">Costos Prestadores</label>
                 </div>
             </div>
             <div class="modal-body pt-2">
-                <div class="row table-responsive box-row-modal-clientes">
+                <div class="row" id="box-prestadores">
+                </div>
+                <div class="row table-responsive d-none">
                     <table class="table">
-                        <thead class="sticky-top">
+                        <thead class="sticky-top" id="box-prestadores-list-th">
                             <tr>
-                                <th class="fs-12">Ciudad</th>
-                                <th class="fs-12">Guayaquil</th>
-                                <th class="fs-12">Manta</th>
+                                <th class="fs-12">Ciudades</th>
+                                <th class="fs-12" colspan="3">Guayaquil</th>
+                                <th class="fs-12" colspan="2">Manta</th>
+                            </tr>
+                            <tr class="tr_second">
+                                <th>Prestadores</th>
+                                <th>Servident</th>
+                                <th>Clínica los Esteros</th>
+                                <th>Mediar</th>
+                                <th>Clínica Metropolitana</th>
+                                <th>Interhospital</th>
                             </tr>
                         </thead>
-                        <tbody id="box-clientes-list"></tbody>
+                        <tbody id="box-prestadores-list">
+                            <tr>
+                                <td>Biometría Hemática</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                     </table>                    
                 </div>
             </div>
@@ -494,6 +514,7 @@
     let swiper;
     let dataPrestaciones = [];
     let dataCostos = [];
+    let costosPrestadores = [];
     let th_cotizacion = 0;
 
     window.onload = async () => {
@@ -596,6 +617,7 @@
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
                 "cantidadPacientes": $(this).val(),
                 "costoUnitario": prestacion.valorCosto,
+                "costoUnitarioAlterno": '',
                 "precioUnitario": prestacion.valorCosto,
                 "aplicaIva": prestacion.aplicaIva,
                 "id": $(this).attr("id")
@@ -647,6 +669,10 @@
                 }
             }
         });
+
+        $('body').on('click', '.item-prestadores', function(){
+            obtenerPrestadores($(this).attr('idPrestacion-rel'));
+        })
 
         $('body').on('click', '.item-edit', function(){
             cargarItem($(this).attr('idItem-rel'));
@@ -711,6 +737,27 @@
             }
         });
 
+        $('body').on('change', '.ck-input-prestacion-costo', function() {
+            // Obtener el idPrestacion del grupo al que pertenece el checkbox actual
+            var idPrestacion = parseInt($(this).attr("data-idPrestacion"));
+            var costo = parseFloat($(this).val());
+
+            // Deseleccionar todos los checkboxes del grupo actual, excepto el checkbox actual
+            $("[data-idPrestacion='" + idPrestacion + "']").not(this).prop("checked", false);
+            
+            if ($(this).prop("checked")) {
+                // Agregar el idPrestacion y costo al array costosPrestadores si el checkbox está seleccionado
+                costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo });
+            } else {
+                // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
+                costosPrestadores = costosPrestadores.filter(function(item) {
+                    return item.idPrestacion !== idPrestacion;
+                });
+            }
+
+            calcularTH();
+        });
+
     }
 
     let tabla;
@@ -755,7 +802,10 @@
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
                         <td id="precioUnitario_${ v.idItem }">$${ formatDollar(v.precioUnitario) }</td>
                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
-                        <td>
+                        <td width="100px" class="text-end">
+                            <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon item-prestadores d-inline">
+                                <i class="fa-solid fa-eye text-info d-inline"></i>
+                            </a>
                             <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
                                 <img class="d-inline action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                             </a>
@@ -777,7 +827,7 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
                 },
-                responsive: true,
+                responsive: false,
                 columnDefs: [
                     {
                         targets: [2, 6, 7], // Índices de las columnas que deseas mantener visibles
@@ -1107,6 +1157,7 @@
                 "fechaInicio": fechaPrevista,
                 "cantidadDias": parseInt(diasServicio),
                 "porcentajeRentabilidad": parseFloat(th_cotizacion),
+                "ciudades":getInput('ciudadChequeo','select2'),
                 "detalle": dataPrestaciones,
                 "costosAdicionales": dataCostos
             });
@@ -1122,8 +1173,8 @@
     
     function formatDollar(numero){
         let numeroFormateado = numero.toLocaleString('en-US', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
         });
         // console.log(numeroFormateado);
         return numeroFormateado;
@@ -1141,12 +1192,18 @@
 
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
-                    total_costos += v.costoUnitario;
+                    let costo_alterno = obtenerCostoPorId(v.codigoPrestacion);
+                    if( costo_alterno == null){
+                        total_costos += v.costoUnitario;
+                    }else{
+                        console.log("Costo alterno")
+                        total_costos += costo_alterno;
+                    }
                     totales += (v.precioUnitario*v.cantidadPacientes);
                 });
             });
 
-            console.log(totales, total_costos)
+            // console.log(totales, total_costos)
 
             let t_h = (((totales - total_costos) / totales ) * 100);
             $('#t_h').html("TH: "+t_h.toFixed(2)+"%");
@@ -1399,6 +1456,103 @@
         })
     }
 
+    function drawTablePrestadores(data){
+        let dataGrouped = agruparDatos(data)
+        console.log(dataGrouped);
+        $('#box-prestadores').empty();
+        $.each(dataGrouped, function(key, value){
+            let elem = ``;
+            let tr_second = ``;
+            let colspan = getMaxDepth(value);
+            elem += `<div class="table-responsive mb-3"><table class="table">`
+            elem += `<thead>
+                        <tr>
+                            <th colspan="${colspan}" class="text-center">${value.nombrePrestacion}</th>
+                        </tr>
+                        <tr class="tr_second text-center tr_ciudad_${value.codigoPrestacion}">
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            $.each(value.listadoCiudades, function(k, v){
+                tr_second += `<th colspan=${v.listadoPrestadores.length}>${v.nombreCiudad}</th>`;
+                elem += `<tr">`;
+                $.each(v.listadoPrestadores, function(k1, v1){
+                    elem += `<td>
+                        <label class="fs-12 fw-bold label-prestador mb-2">${v1.nombreInstitucion}</label>
+                        <div class="w-100 d-flex align-items-center">
+                            <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}">
+                            <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
+                        </div>
+                    </td>`;
+                })
+                elem += `</tr">`;
+            })
+            elem += `<tbody>
+                </table></div>`;
+            
+            $('#box-prestadores').append(elem);
+            $('.tr_ciudad_'+value.codigoPrestacion).append(tr_second);
+        })        
+    }
+
+    function getMaxDepth(data){
+        let max = 0;
+        $.each(data.listadoCiudades, function(key,value) {
+            max += value.listadoPrestadores.length;
+        })
+        return max;
+    }
+
+    function agruparDatos(data) {
+        let dataPrestadores = []
+        $.each(data.data, function(key,value) {
+            $.each(value.prestaciones, function(k,v){
+                $.each(v.prestadores, function(k1,v1){
+                    dataPrestadores.push({
+                        "nombreInstitucion":v1.nombreInstitucion,
+                        "idInstitucion":v1.idInstitucion,
+                        "valorCosto":v1.valorCosto,
+                        "aplicaIva":v1.aplicaIva,
+                        "nombrePrestacion":v.nombrePrestacion,
+                        "codigoPrestacion":v.codigoPrestacion,
+                        "nombreCiudad":value.nombreCiudad,
+                        "codigoCiudad":value.codigoCiudad
+                    })
+                })
+            })
+        })
+
+        const resultado = [];
+        const auxData = {};
+
+        dataPrestadores.forEach((item) => {
+            const { codigoPrestacion, nombrePrestacion, nombreCiudad, codigoCiudad, nombreInstitucion, idInstitucion, valorCosto, aplicaIva } = item;
+
+            if (!auxData[codigoPrestacion]) {
+                auxData[codigoPrestacion] = {
+                    codigoPrestacion,
+                    nombrePrestacion,
+                    listadoCiudades: [],
+                };
+                resultado.push(auxData[codigoPrestacion]);
+            }
+
+            const indexCiudad = auxData[codigoPrestacion].listadoCiudades.findIndex((ciudad) => ciudad.codigoCiudad === codigoCiudad);
+
+            if (indexCiudad === -1) {
+                auxData[codigoPrestacion].listadoCiudades.push({
+                    nombreCiudad,
+                    codigoCiudad,
+                    listadoPrestadores: [{ nombreInstitucion, idInstitucion, valorCosto, aplicaIva }],
+                });
+            } else {
+                auxData[codigoPrestacion].listadoCiudades[indexCiudad].listadoPrestadores.push({ nombreInstitucion, idInstitucion, valorCosto, aplicaIva });
+            }
+        });
+
+        return resultado;
+    }
+
     function resizeGridItem(item){
         let extendible = 2;
         if($(window).width() <= 600){
@@ -1426,8 +1580,7 @@
     async function showModalPrestadores(){
         let ciudades = getInput('ciudadChequeo','select2');
         if(ciudades != ""){
-            await obtenerPrestadores();
-            $('#modalPrestadores').modal('show');
+            obtenerPrestadores();
         }else{
             showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
         }
@@ -1463,7 +1616,9 @@
         })
 
         const data = await call(args);
-        console.log(data)
+        console.log(data);
+        drawTablePrestadores(data);
+        $('#modalPrestadores').modal('show');
     }
 
     async function obtenerServiciosCostos(){
@@ -1481,6 +1636,16 @@
         $.each(data.data, function(key, value){
             $('#servicioCosto').append(`<option value="${value.idCosto}" title="${value.descripcion}">${value.nombreCosto}</option>`);
         })
+    }
+
+    function obtenerCostoPorId(idPrestacion) {
+        // Utilizamos el método find() para buscar el objeto que tenga el idPrestacion específico
+        let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
+            return prestacion.idPrestacion === idPrestacion;
+        });
+
+        // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
+        return prestacionEncontrada ? prestacionEncontrada.costo : null;
     }
 
     function search(){
@@ -1671,6 +1836,29 @@
     .prestaciones-item label{
         line-height: 14px;
         color: #5E5E5D;
+    }
+
+    .tr_second th {
+        background: #3962E61A !important;
+        color: #171D49 !important;
+        border-radius: 0px !important;
+    }
+
+    #box-prestadores th, #box-prestadores td {
+        border-left: 1px solid silver;
+        border-right: 1px solid silver;
+    }
+
+    #box-prestadores th:first-child, #box-prestadores td:first-child {
+        border-left: 0;
+    }
+
+    #box-prestadores th:last-child, #box-prestadores td:last-child {
+        border-right: 0;
+    }
+
+    .label-prestador{
+        min-height: 30px;
     }
 
     @media only screen and (max-width: 600px) {
