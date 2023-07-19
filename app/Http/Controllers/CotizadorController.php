@@ -74,7 +74,7 @@ class CotizadorController extends Controller
 
     public function cotizaciones(Request $request){
         $method = '/empresarial/v1/cotizacion';
-        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estadoCotizacion', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
@@ -87,8 +87,8 @@ class CotizadorController extends Controller
 
         if($response->code == 200){
             $totalRegistros = $response->data->totalRows; // Número total de registros
-            $registrosPorPagina = count($response->data->row); // Número de registros en la página actual
-            $datos = $response->data->row;
+            $registrosPorPagina = count($response->data->rows); // Número de registros en la página actual
+            $datos = $response->data->rows;
         }else{
             $datos = [];
             $totalRegistros = 0; // Número total de registros

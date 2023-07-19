@@ -35,9 +35,10 @@ table td{
     font-size: 12px !important;
 }
 
-.btn:active, .btn:focus {
-    background: #171d49 !important;
-    color: #fff !important;
+.btn:active, .btn:active {
+    background: initial !important;
+    color: initial !important;
+    opacity: 0.8;
 }
 
 /* Estilo de la barra de desplazamiento */
