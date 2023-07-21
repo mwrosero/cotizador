@@ -401,7 +401,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal" onclick="calcularTH()">
                     Cerrar
                 </button>
             </div>
@@ -433,24 +433,34 @@
             <input type="hidden" id="codigoPrestacionEdit">
             <div class="col-12">
                 <label for="precioUnitarioEdit" class="form-label">Precio Unitario</label>
-                <input type="number"
-                    inputmode="numeric" 
-                    pattern="[0-9]*"
-                    class="form-control"
-                    id="precioUnitarioEdit"
-                    name="precioUnitarioEdit" 
-                    placeholder="" />
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text cursor-pointer">
+                        <i class="fa-solid fa-dollar-sign me-2"></i>
+                    </span>
+                    <input type="number"
+                        inputmode="numeric" 
+                        pattern="[0-9]*"
+                        class="form-control"
+                        id="precioUnitarioEdit"
+                        name="precioUnitarioEdit" 
+                        placeholder="" />
+                </div>
             </div>
             <div class="col-12">
                 <label for="cantidadEdit" class="form-label">Cantidad Pacientes</label>
-                <input type="number"
-                    inputmode="numeric" 
-                    pattern="[0-9]*"
-                    step="1" 
-                    class="form-control"
-                    id="cantidadEdit"
-                    name="cantidadEdit" 
-                    placeholder="" />
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text cursor-pointer">
+                        <i class="fa-solid fa-hashtag me-2"></i>
+                    </span>
+                    <input type="number"
+                        inputmode="numeric" 
+                        pattern="[0-9]*"
+                        step="1" 
+                        class="form-control"
+                        id="cantidadEdit"
+                        name="cantidadEdit" 
+                        placeholder="" />
+                </div>
             </div>
             {{-- <div class="col-12">
                 <label for="aplicaTodoGrupo" class="form-label">Aplicar <b>precio</b> para todos los Grupo Perfiles</label>
@@ -618,7 +628,7 @@
                 "cantidadPacientes": $(this).val(),
                 "costoUnitario": prestacion.valorCosto,
                 "costoUnitarioAlterno": '',
-                "precioUnitario": prestacion.valorCosto,
+                "precioUnitario": prestacion.valorPvp,
                 "aplicaIva": prestacion.aplicaIva,
                 "id": $(this).attr("id")
             };
@@ -688,6 +698,8 @@
             calcularTH();
             if(dataPrestaciones.length == 0){
                 $('.box-resumen').addClass('d-none');
+                dataCostos = [];
+                costosPrestadores = [];
             }
         });
 
@@ -700,6 +712,10 @@
         $('#modalPrestaciones').on('shown.bs.modal', function() {
             resizeAllGridItems();
         });
+
+        $('#modalPrestaciones').on('hidden.bs.modal', function() {
+            drawTable();
+        })
 
         let searchInput = $('#searchInputPrestacion');
 
@@ -802,15 +818,15 @@
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
                         <td id="precioUnitario_${ v.idItem }">$${ formatDollar(v.precioUnitario) }</td>
                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
-                        <td width="100px" class="text-end">
-                            <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon item-prestadores d-inline">
-                                <i class="fa-solid fa-eye text-info d-inline"></i>
+                        <td width="100px" class="text-end d-flex">
+                            <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon item-prestadores">
+                                <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
                             </a>
-                            <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                                <img class="d-inline action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                            <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                             </a>
-                            <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete d-inline">
-                                <i class="fa-solid fa-trash text-danger d-inline""></i>
+                            <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center justify-content-center">
+                                <i class="fa-solid fa-trash text-danger"></i>
                             </a>
                         </td>
                     </tr>       
@@ -1459,40 +1475,45 @@
     function drawTablePrestadores(data){
         let dataGrouped = agruparDatos(data)
         console.log(dataGrouped);
-        $('#box-prestadores').empty();
-        $.each(dataGrouped, function(key, value){
-            let elem = ``;
-            let tr_second = ``;
-            let colspan = getMaxDepth(value);
-            elem += `<div class="table-responsive mb-3"><table class="table">`
-            elem += `<thead>
-                        <tr>
-                            <th colspan="${colspan}" class="text-center">${value.nombrePrestacion}</th>
-                        </tr>
-                        <tr class="tr_second text-center tr_ciudad_${value.codigoPrestacion}">
-                        </tr>
-                    </thead>
-                    <tbody>`;
-            $.each(value.listadoCiudades, function(k, v){
-                tr_second += `<th colspan=${v.listadoPrestadores.length}>${v.nombreCiudad}</th>`;
-                elem += `<tr">`;
-                $.each(v.listadoPrestadores, function(k1, v1){
-                    elem += `<td>
-                        <label class="fs-12 fw-bold label-prestador mb-2">${v1.nombreInstitucion}</label>
-                        <div class="w-100 d-flex align-items-center">
-                            <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}">
-                            <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
-                        </div>
-                    </td>`;
+        if(dataGrouped.length > 0){
+            $('#box-prestadores').empty();
+            $.each(dataGrouped, function(key, value){
+                let elem = ``;
+                let tr_second = ``;
+                let colspan = getMaxDepth(value);
+                elem += `<div class="table-responsive mb-3"><table class="table">`
+                elem += `<thead>
+                            <tr>
+                                <th colspan="${colspan}" class="text-center">${value.nombrePrestacion}</th>
+                            </tr>
+                            <tr class="tr_second text-center tr_ciudad_${value.codigoPrestacion}">
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                $.each(value.listadoCiudades, function(k, v){
+                    tr_second += `<th colspan=${v.listadoPrestadores.length}>${v.nombreCiudad}</th>`;
+                    elem += `<tr">`;
+                    $.each(v.listadoPrestadores, function(k1, v1){
+                        elem += `<td>
+                            <label class="fs-12 fw-bold label-prestador mb-2">${v1.nombreInstitucion}</label>
+                            <div class="w-100 d-flex align-items-center">
+                                <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}">
+                                <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
+                            </div>
+                        </td>`;
+                    })
+                    elem += `</tr">`;
                 })
-                elem += `</tr">`;
+                elem += `<tbody>
+                    </table></div>`;
+                
+                $('#box-prestadores').append(elem);
+                $('.tr_ciudad_'+value.codigoPrestacion).append(tr_second);
             })
-            elem += `<tbody>
-                </table></div>`;
-            
-            $('#box-prestadores').append(elem);
-            $('.tr_ciudad_'+value.codigoPrestacion).append(tr_second);
-        })        
+            $('#modalPrestadores').modal('show');
+        }else{
+            showMessage('warning','Atención',"La prestación seleccionada no tiene prestadores externos asociados.");
+        }
     }
 
     function getMaxDepth(data){
@@ -1578,16 +1599,15 @@
     }
 
     async function showModalPrestadores(){
-        let ciudades = getInput('ciudadChequeo','select2');
-        if(ciudades != ""){
-            obtenerPrestadores();
-        }else{
-            showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
-        }
+        obtenerPrestadores();
     }
 
     async function obtenerPrestadores(id = null){
         let ciudades = getInput('ciudadChequeo','select2');
+        if(ciudades == ""){
+            showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
+            return;
+        }
         let prestaciones = [];
         if(id == null){
             $.each(dataPrestaciones, function(key, value){
@@ -1618,7 +1638,6 @@
         const data = await call(args);
         console.log(data);
         drawTablePrestadores(data);
-        $('#modalPrestadores').modal('show');
     }
 
     async function obtenerServiciosCostos(){
@@ -1859,6 +1878,10 @@
 
     .label-prestador{
         min-height: 30px;
+    }
+
+    .input-group i{
+        font-size: 10px !important;
     }
 
     @media only screen and (max-width: 600px) {
