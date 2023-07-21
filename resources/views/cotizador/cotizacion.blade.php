@@ -627,7 +627,6 @@
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
                 "cantidadPacientes": $(this).val(),
                 "costoUnitario": prestacion.valorCosto,
-                "costoUnitarioAlterno": '',
                 "precioUnitario": prestacion.valorPvp,
                 "aplicaIva": prestacion.aplicaIva,
                 "id": $(this).attr("id")
@@ -763,7 +762,15 @@
             
             if ($(this).prop("checked")) {
                 // Agregar el idPrestacion y costo al array costosPrestadores si el checkbox está seleccionado
-                costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo });
+                const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion);
+                if (index !== -1) {
+                    // Si idPrestacion ya existe, reemplazar el elemento en el array
+                    costosPrestadores[index] = { idPrestacion: idPrestacion, costo: costo };
+                } else {
+                    // Si no existe, hacer el push al array
+                    costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo });
+                }
+
             } else {
                 // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
                 costosPrestadores = costosPrestadores.filter(function(item) {
@@ -1072,11 +1079,11 @@
 
         dataCostos.push(
             {
-              "idCosto": idCosto,
-              "nombreCosto": nombreCosto,
-              "cantidad": 1,
-              "valorUnitario": parseFloat(valorUnitario),
-              "idItem":idItem
+                "idCosto": idCosto,
+                "nombreCosto": nombreCosto,
+                "cantidad": 1,
+                "valorUnitario": parseFloat(valorUnitario),
+                "idItem":idItem
             }
         );
 
@@ -1158,6 +1165,17 @@
             const mes = fecha.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
             const anio = fecha.getFullYear();
             const fechaPrevista = `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${anio}`;
+            let dataPrestacionesTmp = [...dataPrestaciones];
+
+            for (const elemento of dataPrestacionesTmp) {
+                for (const prestacion of elemento.prestaciones) {
+                    //Reemplazar costos de provincias
+                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+                    if( costo_alterno != null){
+                        prestacion.costoUnitario = costo_alterno;
+                    }
+                }
+            }
 
             let args = [];
             args["endpoint"] = api_url+"/empresarial/v1/cotizacion";
@@ -1174,7 +1192,7 @@
                 "cantidadDias": parseInt(diasServicio),
                 "porcentajeRentabilidad": parseFloat(th_cotizacion),
                 "ciudades":getInput('ciudadChequeo','select2'),
-                "detalle": dataPrestaciones,
+                "detalle": dataPrestacionesTmp,
                 "costosAdicionales": dataCostos
             });
 
@@ -1210,10 +1228,10 @@
                 $.each(value.prestaciones, function(k, v){
                     let costo_alterno = obtenerCostoPorId(v.codigoPrestacion);
                     if( costo_alterno == null){
-                        total_costos += v.costoUnitario;
+                        total_costos += (v.costoUnitario*v.cantidadPacientes);
                     }else{
                         console.log("Costo alterno")
-                        total_costos += costo_alterno;
+                        total_costos += (costo_alterno*v.cantidadPacientes);
                     }
                     totales += (v.precioUnitario*v.cantidadPacientes);
                 });
