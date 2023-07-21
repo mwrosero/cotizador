@@ -1220,8 +1220,8 @@
         let total_costos = 0;
         if(dataPrestaciones.length > 0){
             $.each(dataCostos, function(key, value){
+                //totales += value.valorUnitario;
                 total_costos += value.valorUnitario;
-                totales += value.valorUnitario;
             });
 
             $.each(dataPrestaciones, function(key, value){
