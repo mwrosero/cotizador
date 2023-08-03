@@ -54,7 +54,7 @@ class SeguridadesController extends Controller
                         ]);
 
                         Session::put('menu', $response->data);
-                        return redirect('/');
+                        return redirect('/cotizador/consulta-cotizaciones');
                     break;
                     case 'FORCE_CHANGE_PASSWORD':
                         $message = "Usuario nuevo que ingresa una clave temporal";

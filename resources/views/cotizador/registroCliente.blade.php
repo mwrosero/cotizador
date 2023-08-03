@@ -391,7 +391,11 @@
 
                 const data = await call(args);
                 modalGiroNegocio.hide();
-                obtenerGirosNegocio();
+                if(data.code == 200){
+                    obtenerGirosNegocio(data.data.idGiroNegocio);
+                }else{
+                    showMessage('warning','Atención',data.message);
+                }
             }else{
                 showMessage('warning','Atención','El Nombre del Giro de Negocio es obligatorio')
             }
@@ -460,7 +464,7 @@
             })
         }
 
-        async function obtenerGirosNegocio(){
+        async function obtenerGirosNegocio(idGiroNegocio = null){
             let args = [];
             args["endpoint"] = api_url+"/empresarial/v1/util/giros_negocio?estado=ACTIVO";
             args["method"] = "GET";
@@ -472,7 +476,10 @@
             $('#giroNegocio').append(`<option value="---">No asociado</option>`);
             $.each(data.data, function(key, value){
                 $('#giroNegocio').append(`<option value="${value.idGiroNegocio}">${value.nombreGiro}</option>`);
-            })
+            });
+            if(idGiroNegocio != null){
+                $('#giroNegocio').val(idGiroNegocio);
+            }
         }
 
         async function obtenerGrupoEmpresa(){
