@@ -164,7 +164,7 @@ class CotizadorController extends Controller
                 "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
                 "telefonoConvencional" => $data['telefonoFijoOficina'],
                 "contactoCliente" => null,
-                "correoElectronico" => $data['correoEmpresa']
+                "correoElectronico" => strtolower($data['correoEmpresa'])
             ],
             "datosResidencia" => [
                 "codigoPais" => (int)$data['pais'],
@@ -189,7 +189,7 @@ class CotizadorController extends Controller
                     "telefonoMovil" => $data['telefonoMovilContacto'],
                     "codigoPaisFijo" => $data['telefonoFijoContactoCode'],
                     "telefonoFijo" => $data['telefonoFijoContacto'],
-                    "mail" => $data['correoContacto'],
+                    "mail" => strtolower($data['correoContacto']),
                     "cargo" => $data['cargoPersonaContacto']
                 ]
             ]
