@@ -127,13 +127,17 @@
                     <div class="col-12 col-md-6">
                         <label for="inicioChequeo" class="form-label">¿Cuándo deseas que inicie el chequeo?</label>
                         <input type="date"
-                            {{-- min="{{ date('Y-m-d') }}" --}}
+                            min="{{ date('Y-m-d') }}"
                             class="form-control" 
                             id="inicioChequeo"/>
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?</label>
-                        <input type="text"
+                        <input type="number"
+                            inputmode="numeric" 
+                            pattern="[0-9]*"
+                            oninput="removeLeadingZero(this,6)"
+                            step="1"
                             class="form-control"
                             id="diasServicio"
                             placeholder=""/>
@@ -205,7 +209,7 @@
                     </div>
                 </div>
                 <div class="row g-3 box-resumen d-none">
-                    <div class="col-12">
+                    <div class="col-12 mt-4">
                         <span class="badge" id="t_h"></span>
                     </div>
                     <div class="col-12">
@@ -270,7 +274,8 @@
             </div>
             <div class="modal-footer">
                 {{-- <button type="button" class="btn bg-veris">Guardar</button> --}}
-                <button type="button" class="btn bg-veris" onclick="drawTable()" data-bs-dismiss="modal">
+                {{-- onclick="drawTable()" --}}
+                <button type="button" class="btn bg-veris" data-bs-dismiss="modal">
                     Aceptar
                 </button>
             </div>
@@ -713,7 +718,9 @@
         });
 
         $('#modalPrestaciones').on('hidden.bs.modal', function() {
-            drawTable();
+            setTimeout(function(){
+                drawTable();
+            },300)
         })
 
         let searchInput = $('#searchInputPrestacion');
@@ -802,13 +809,15 @@
                     <td id="cantidad_${ value.idItem }">1</td>
                     <td id="precioUnitario_${ value.idItem }">$${ formatDollar(value.valorUnitario) }</td>
                     <td id="total_${ value.idItem }">$${ formatDollar(value.valorUnitario) }</td>
-                    <td>
-                        <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                            <img class="action-ico d-inline" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
-                        </a>
-                        <a idItem-rel="${ value.idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
-                            <i class="fa-solid fa-trash text-danger d-inline""></i>
-                        </a>
+                    <td width="100px" class="text-start align-middle">
+                        <div class="d-flex">
+                            <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                <img class="action-ico d-inline" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                            </a>
+                            <a idItem-rel="${ value.idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
+                                <i class="fa-solid fa-trash text-danger d-inline""></i>
+                            </a>
+                        </div>
                     </td>
                 </tr>       
                 `;
@@ -825,16 +834,18 @@
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
                         <td id="precioUnitario_${ v.idItem }">$${ formatDollar(v.precioUnitario) }</td>
                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
-                        <td width="100px" class="text-end d-flex">
-                            <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon item-prestadores">
-                                <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
-                            </a>
-                            <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                                <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
-                            </a>
-                            <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center justify-content-center">
-                                <i class="fa-solid fa-trash text-danger"></i>
-                            </a>
+                        <td width="100px" class="text-end align-middle">
+                            <div class="d-flex">
+                                <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
+                                    <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
+                                </a>
+                                <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                    <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                </a>
+                                <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
+                                    <i class="fa-solid fa-trash text-danger"></i>
+                                </a>
+                            </div>
                         </td>
                     </tr>       
                     `;
@@ -937,7 +948,7 @@
                     prestacion.cantidadPacientes = getInput('cantidadEdit');
                     prestacion.precioUnitario = getInput('precioUnitarioEdit');
                     $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
-                    $('#precioUnitario_'+idItem).html("$"+getInput('precioUnitarioEdit'));
+                    $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
                     calcularTH();
@@ -1001,7 +1012,7 @@
         for (const gasto of dataCostos) {
             if (gasto.idItem === idItem) {
                 gasto.valorUnitario = parseFloat(getInput('costoGastoEdit'));
-                $('#precioUnitario_'+idItem).html("$"+getInput('costoGastoEdit'));
+                $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#total_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#offcanvasGastos').offcanvas('hide');
                 calcularTH();
@@ -1104,7 +1115,7 @@
                 <td id="cantidad_${ idItem }">1</td>
                 <td id="precioUnitario_${ idItem }">$${ formatDollar(valorUnitario) }</td>
                 <td id="total_${ idItem }">$${ formatDollar(valorUnitario) }</td>
-                <td>
+                <td width="100px" class="text-start align-middle">
                     <a idItem-rel="${ idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit-gasto d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasGastos" aria-controls="offcanvasGastos">
                         <img class="d-inline action-ico" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
                     </a>
@@ -1120,6 +1131,7 @@
     }
 
     async function crearCotizacion(){
+        $('#btn-crear-cotizacion').prop('disabled',true);
         let msg = "";
         let cliente = getInput('cliente');
         let tipoServicio = getInput('tipoServicio');
@@ -1199,14 +1211,18 @@
             const data = await call(args);
             if(data.code == 200){
                 showMessage('success','Atención',"Cotización creada");
+                location.href = '/cotizador/consulta-cotizaciones';
             }else{
                 showMessage('warning','Atención',data.message);
+                $('#btn-crear-cotizacion').prop('disabled',false);
             }
         }
     }
     
     function formatDollar(numero){
-        let numeroFormateado = numero.toLocaleString('en-US', {
+        let numStr = numero.toString().replace(/^0+/, '');
+        let numeroRedondeado = parseFloat(numStr).toFixed(2);
+        let numeroFormateado = numeroRedondeado.toLocaleString('en-US', {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         });
