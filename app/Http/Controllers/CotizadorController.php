@@ -135,14 +135,19 @@ class CotizadorController extends Controller
 
         // dd($response);
         $cliente = $response->data;
-        return view('cotizador.registroCliente', compact('cliente'));
+        return view('cotizador.registroCliente', compact('cliente'))
+                ->with('edit', true)
+                ->with('codigoCliente',$codigoCliente);
+
     }
 
     public function crearCliente(Request $request){
         $data = $request->all();
-
-        $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
-
+        $idGrupoEmpresa = null;
+        if(isset($data['grupoEmpresa'])){
+            $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
+        }
+        
         $cliente = [
             "datosCliente" => [
                 "tipoPersona" => $data['tipoPersona'],
@@ -212,12 +217,102 @@ class CotizadorController extends Controller
         // echo Ism::BASE_URL.$method.$param;
         // dump($cliente);
         // dd($response);
+        // die();
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);
             return redirect()->back()->withErrors($request->all())->withInput();
         }else{
             session()->flash('success', "Cliente creado exitosamente");
+            return redirect()->route('consulta-clientes');
+            //return view('cotizador.clientes');
+        }
+        
+    }
+
+    public function actualizarCliente(Request $request){
+        $data = $request->all();
+        $idGrupoEmpresa = null;
+        if(isset($data['grupoEmpresa'])){
+            $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
+        }
+
+        $cliente = [
+            "datosCliente" => [
+                "tipoPersona" => $data['tipoPersona'],
+                "codigoTipoIdentificacion" => (int)$data['codigoTipoIdentificacion'],
+                "numeroIdentificacion" => $data['numeroIdentificacion'],
+                "primerNombre" => null,
+                "segundoNombre" => null,
+                "primerApellido" => null,
+                "segundoApellido" => null,
+                "razonSocial" => $data['razonSocial'],
+                "nombreComercial" => $data['razonComercial'],
+                "aplicaPaperless" => false,
+                "aplicaSolicitudEnvioPaperlessLote" => false,
+                "bloquearCreditosPrestaciones" => false
+            ],
+            "datosContacto" => [
+                "codigoPaisCelular" => (int)$data['telefonoMovilOficinaCode'],
+                "telefonoCelular" => $data['telefonoMovilOficina'],
+                "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
+                "telefonoConvencional" => $data['telefonoFijoOficina'],
+                "contactoCliente" => null,
+                "correoElectronico" => strtolower($data['correoEmpresa'])
+            ],
+            "datosResidencia" => [
+                "codigoPais" => (int)$data['pais'],
+                "codigoProvincia" => (int)$data['provincia'],
+                "codigoCiudad" => (int)$data['ciudad'],
+                "codigoSector" => null,
+                "direccion" => $data['direccion'],
+                "latitud" => null,
+                "longitud" => null,
+                "direccionGmaps" => null
+            ],
+            "infoEmpresarial" => [
+                "codigoCiiu" => strval($data['codigoCiiu']),
+                "representanteLegal" => $data['representanteLegal'],
+                "idGiroNegocio" => (int)$data['giroNegocio'],
+                "idGrupoEmpresa" => $idGrupoEmpresa,
+                "contactoEmpresarial" => [
+                    "idContacto" => (int)$data['idContacto'],
+                    "codigoTipoIdentificacion" => null,
+                    "numeroIdentificacion" => null,
+                    "nombre" => $data['personaContacto'],
+                    "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
+                    "telefonoMovil" => $data['telefonoMovilContacto'],
+                    "codigoPaisFijo" => $data['telefonoFijoContactoCode'],
+                    "telefonoFijo" => $data['telefonoFijoContacto'],
+                    "mail" => strtolower($data['correoContacto']),
+                    "cargo" => $data['cargoPersonaContacto']
+                ]
+            ]
+        ];
+
+        $esGrupoEmpresa = "false";
+        if ($request->has('esGrupoEmpresa')) {
+            $esGrupoEmpresa = "true";
+        }
+        $method = '/comercial/v1/clientes/'.$data['codigoCliente'];
+        $param = '';
+
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method.$param,
+            'token'    => Session::get('accessToken'),
+            'data'     => $cliente,
+            'method'   => 'PUT'
+        ]);
+        // print_r(json_encode($cliente));
+        // echo Ism::BASE_URL.$method.$param;
+        // dump($cliente);
+        // dd($response);
+
+        if($response->code != 200){
+            session()->flash('mensaje', $response->message);
+            return redirect()->back()->withErrors($request->all())->withInput();
+        }else{
+            session()->flash('success', "Cliente modificado exitosamente");
             return redirect()->route('consulta-clientes');
             //return view('cotizador.clientes');
         }

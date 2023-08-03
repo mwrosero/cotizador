@@ -19,7 +19,13 @@
         @endif
         <div class="col-12">
             <div class="card mb-4">
+                @if(isset($edit) && $edit === true)
+                <form class="card-body" id="form-registro" action="/cotizador/actualizar-cliente" method="POST">
+                    <input type="hidden" name="codigoCliente" id="codigoCliente" value="{{ $codigoCliente }}">
+                    <input type="hidden" name="idContacto" id="idContacto" value="{{ $cliente->infoEmpresarial->contactoEmpresarial->idContacto }}">
+                @else
                 <form class="card-body" id="form-registro" action="/cotizador/crear-cliente" method="POST">
+                @endif
                     <h6 class="txt-veris">Datos de la Empresa</h6>
                     @csrf
                     <input type="hidden" name="codigoTipoIdentificacion" value="1">
@@ -30,7 +36,8 @@
                             <label for="numeroIdentificacion" class="form-label">Ruc<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                             <input type="number"
                                 inputmode="numeric" 
-                                pattern="[0-9]*"
+                                pattern="[1-9][0-9]{13}"
+                                oninput="maxLengthNumber(this,13)"
                                 step="1"
                                 minlength="13"
                                 maxlength="13"
@@ -39,7 +46,11 @@
                                 id="numeroIdentificacion"
                                 name="numeroIdentificacion" 
                                 value="{{ old('numeroIdentificacion', isset($cliente) ? $cliente->datosCliente->numeroIdentificacion : '') }}"
-                                required 
+                                @if(isset($edit) && $edit === true)
+                                disabled
+                                @else
+                                required
+                                @endif
                                 placeholder="" />
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
@@ -48,7 +59,7 @@
                                 class="form-control"
                                 id="codigoCiiu"
                                 name="codigoCiiu" 
-                                value="{{ old('codigoCiiu', '' ) }}"
+                                value="{{ old('codigoCiiu', isset($cliente) ? $cliente->infoEmpresarial->codigoCiiu : '') }}"
                                 required 
                                 placeholder="" />
                         </div>
@@ -84,7 +95,7 @@
                                 class="form-control"
                                 id="representanteLegal"
                                 name="representanteLegal"
-                                value="{{ old('representanteLegal', '' ) }}"
+                                value="{{ old('representanteLegal', isset($cliente) ? $cliente->infoEmpresarial->representanteLegal : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -118,7 +129,15 @@
                         <div class="col-10 col-sm-5 col-md-3">
                             <label for="esGrupoEmpresa" class="form-label">Es Grupo Empresa</label>
                             <div class="form-check form-switch mb-2 mt-2">
-                                <input class="form-check-input" type="checkbox" id="esGrupoEmpresa" name="esGrupoEmpresa" />
+                                <input 
+                                    class="form-check-input" 
+                                    type="checkbox" 
+                                    id="esGrupoEmpresa" 
+                                    name="esGrupoEmpresa" 
+                                    @if(isset($esGrupoEmpresa) === true)
+                                        disabled checked
+                                    @endif
+                                />
                             </div>
                         </div>
                     </div>
@@ -176,7 +195,7 @@
                                         class="form-control"
                                         id="telefonoMovilOficina"
                                         name="telefonoMovilOficina"
-                                        value="{{ old('telefonoMovilOficina', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoMovilOficina', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '')) }}"
                                         required 
                                         placeholder="999999999"/>
                                 </div>
@@ -198,7 +217,7 @@
                                         class="form-control"
                                         id="telefonoFijoOficina"
                                         name="telefonoFijoOficina"
-                                        value="{{ old('telefonoFijoOficina', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoFijoOficina', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '')) }}"
                                         placeholder="99999999"/>
                                 </div>
                             </div>
@@ -214,7 +233,7 @@
                                 class="form-control"
                                 id="personaContacto"
                                 name="personaContacto"
-                                value="{{ old('personaContacto', isset($cliente) ? $cliente->datosContacto->contactoCliente : '' ) }}"
+                                value="{{ old('personaContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->nombre : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -234,7 +253,7 @@
                                         class="form-control"
                                         id="telefonoMovilContacto"
                                         name="telefonoMovilContacto"
-                                        value="{{ old('telefonoMovilContacto', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoMovilContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoMovil : '')) }}"
                                         required 
                                         placeholder="999999999"/>
                                 </div>
@@ -256,7 +275,7 @@
                                         class="form-control"
                                         id="telefonoFijoContacto"
                                         name="telefonoFijoContacto"
-                                        value="{{ old('telefonoFijoContacto', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoFijoContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoFijo : '')) }}"
                                         placeholder="99999999"/>
                                 </div>
                             </div>
@@ -277,11 +296,17 @@
                                 class="form-control"
                                 id="cargoPersonaContacto"
                                 name="cargoPersonaContacto"
-                                value="{{ old('cargoPersonaContacto', '' ) }}"
+                                value="{{ old('cargoPersonaContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->cargo : '' ) }}"
                                 placeholder=""/>
                         </div>
                         <div class="col-12 text-end mt-4">
-                            <button type="submit" class="btn bg-veris">Crear Empresa</button>
+                            <button type="submit" class="btn bg-veris">
+                                @if(isset($edit) && $edit === true)
+                                Actualizar Empresa
+                                @else
+                                Crear Empresa
+                                @endif
+                            </button>
                         </div>
                     </div>
                 </form>
@@ -330,6 +355,7 @@
     </div>
     <script>
         let modalGiroNegocio;
+        let allowCall = true;
         window.onload = async () => {
             modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
 
@@ -345,37 +371,50 @@
             });
 
             $('body').on('change','#pais',function(){
-                cargarProvincias();
+                if(allowCall){
+                    cargarProvincias();
+                }
             });
 
             $('body').on('change','#provincia',function(){
-                cargarCiudades();
+                if(allowCall){
+                    cargarCiudades();
+                }
             });
+
+            allowCall = false;
 
             let tipoPersona = "{{ old('tipoPersona', isset($cliente) ? $cliente->datosCliente->tipoPersona : '' ) }}";
             if(tipoPersona != ""){
                 $('#tipoPersona').val(tipoPersona).trigger('change');
             }
-
-            let giroNegocio = "{{ old('giroNegocio', '' ) }}";
-            if(giroNegocio != ""){
-                $('#giroNegocio').val(giroNegocio).trigger('change');
-            }
-
-            let grupoEmpresa = "{{ old('grupoEmpresa', '' ) }}";
-            if(grupoEmpresa != ""){
-                $('#grupoEmpresa').val(grupoEmpresa).trigger('change');
-            }
             
             let pais = "{{ old('pais', isset($cliente) ? $cliente->datosResidencia->codigoPais : '' ) }}";
             if(pais != ""){
                 $('#pais').val(pais).trigger('change');
+                await cargarProvincias();
                 let provincia = "{{ old('provincia', isset($cliente) ? $cliente->datosResidencia->codigoProvincia : '' ) }}";
                 if(provincia != ""){
                     $('#provincia').val(provincia).trigger('change');
+                    await cargarCiudades();
                     let ciudad = "{{ old('ciudad', isset($cliente) ? $cliente->datosResidencia->codigoCiudad : '' ) }}";
+                    if(ciudad != ""){
+                        $('#ciudad').val(ciudad).trigger('change');
+                    }
                 }
             }
+
+            let idGiroNegocio = "{{ old('giroNegocio', isset($cliente) ? $cliente->infoEmpresarial->idGiroNegocio : '' ) }}";
+            if(idGiroNegocio != null){
+                $('#giroNegocio').val(idGiroNegocio).trigger('change');;
+            }
+
+            let idGrupoEmpresa = "{{ old('grupoEmpresa', isset($cliente) ? $cliente->infoEmpresarial->idGrupoEmpresa : '' ) }}";
+            if(idGrupoEmpresa != null){
+                $('#grupoEmpresa').val(idGrupoEmpresa).trigger('change');;
+            }
+
+            allowCall = true;
         }
 
         async function buscarCliente(){

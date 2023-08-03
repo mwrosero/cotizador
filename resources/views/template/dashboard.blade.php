@@ -15,24 +15,24 @@
         <meta name="description" content="" />
 
         <!-- Favicon -->
-        <link rel="icon" type="image/x-icon" href="../../../assets/img/favicon/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
 
-        <link rel="apple-touch-icon" sizes="57x57" href="../../../assets/img/favicon/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="../../../assets/img/favicon/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="../../../assets/img/favicon/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="../../../assets/img/favicon/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="../../../assets/img/favicon/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="../../../assets/img/favicon/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="../../../assets/img/favicon/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="../../../assets/img/favicon/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="../../../assets/img/favicon/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="../../../assets/img/favicon/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="../../../assets/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="../../../assets/img/favicon/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="../../../assets/img/favicon/favicon-16x16.png">
-        <!-- <link rel="manifest" href="../../../assets/img/favicon/manifest.json"> -->
-        <meta name="msapplication-TileColor" content="#171D49">
-        <meta name="msapplication-TileImage" content="../../../assets/img/favicon/ms-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('assets/img/favicon/apple-icon-57x57.png') }}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('assets/img/favicon/apple-icon-60x60.png') }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('assets/img/favicon/apple-icon-72x72.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('assets/img/favicon/apple-icon-76x76.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('assets/img/favicon/apple-icon-114x114.png') }}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('assets/img/favicon/apple-icon-120x120.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('assets/img/favicon/apple-icon-144x144.png') }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('assets/img/favicon/apple-icon-152x152.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/img/favicon/apple-icon-180x180.png') }}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('assets/img/favicon/android-icon-192x192.png') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/img/favicon/favicon-32x32.png') }}">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('assets/img/favicon/favicon-96x96.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/favicon/favicon-16x16.png') }}">
+        <!-- <link rel="manifest" href="{{ asset('assets/img/favicon/manifest.json') }}"> -->
+        <meta name="msapplication-TileColor" content="#171D49" >
+        <meta name="msapplication-TileImage" content="{{ asset('assets/img/favicon/ms-icon-144x144.png') }}">
         <meta name="theme-color" content="#171D49">
 
         <!-- Fonts -->
@@ -55,7 +55,7 @@
         <link rel="stylesheet" href="../../../assets/css/style.css" />
 
         <!-- Vendors CSS -->
-        <link rel="stylesheet" href="../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+        {{-- <link rel="stylesheet" href="../../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
         <link rel="stylesheet" href="../../../assets/vendor/libs/node-waves/node-waves.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/typeahead-js/typeahead.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/apex-charts/apex-charts.css" />
@@ -66,7 +66,7 @@
         <link rel="stylesheet" href="../../../assets/vendor/libs/select2/select2.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/toastr/toastr.css" />
         <link rel="stylesheet" href="../../../assets/vendor/libs/animate-css/animate.css" />
-        <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+        {{-- <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
 
         <!-- Page CSS -->
         <link rel="stylesheet" href="../../../assets/vendor/css/pages/cards-advance.css" />
@@ -138,7 +138,7 @@
     <script src="../../../assets/vendor/libs/i18n/i18n.js"></script>
     <script src="../../../assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
-    <script src="../../assets/vendor/libs/block-ui/block-ui.js"></script>
+    <script src="{{ asset('assets/vendor/libs/block-ui/block-ui.js') }}"></script>
 
     <script src="../../../assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
@@ -154,16 +154,16 @@
     <script src="../../../assets/vendor/libs/select2/select2.js"></script>
     <script src="../../../assets/js/forms-selects.js"></script>
     <script src="../../../assets/vendor/libs/toastr/toastr.js"></script>
-    <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" />
-    <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    {{-- <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" /> --}}
+    {{-- <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script> --}}
 
     <!-- Main JS -->
     <script src="../../../assets/js/main.js"></script>
 
     <!-- Page JS -->
     <script src="../../../assets/js/dashboards-analytics.js"></script>
-    <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script>
-    <script src="../../assets/js/typeahead.bundle.js"></script>
+    {{-- <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script> --}}
+    {{-- <script src="../../assets/js/typeahead.bundle.js"></script> --}}
 
     <!-- ISM -->
     <script src="../../../assets/js/ism-helper.js"></script>
