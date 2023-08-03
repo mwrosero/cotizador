@@ -44,10 +44,7 @@
                         </div>
                         <div class="col-12 col-sm-6 col-md-4">
                             <label for="codigoCiiu" class="form-label">Código CIIU<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
-                            <input type="number"
-                                inputmode="numeric" 
-                                pattern="[0-9]*"
-                                step="1"
+                            <input type="text"
                                 class="form-control"
                                 id="codigoCiiu"
                                 name="codigoCiiu" 
@@ -181,7 +178,7 @@
                                         name="telefonoMovilOficina"
                                         value="{{ old('telefonoMovilOficina', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
                                         required 
-                                        placeholder=""/>
+                                        placeholder="999999999"/>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +199,7 @@
                                         id="telefonoFijoOficina"
                                         name="telefonoFijoOficina"
                                         value="{{ old('telefonoFijoOficina', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
-                                        placeholder=""/>
+                                        placeholder="99999999"/>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +236,7 @@
                                         name="telefonoMovilContacto"
                                         value="{{ old('telefonoMovilContacto', isset($cliente) ? $cliente->datosContacto->telefonoCelular : '' ) }}"
                                         required 
-                                        placeholder=""/>
+                                        placeholder="999999999"/>
                                 </div>
                             </div>
                         </div>
@@ -260,7 +257,7 @@
                                         id="telefonoFijoContacto"
                                         name="telefonoFijoContacto"
                                         value="{{ old('telefonoFijoContacto', isset($cliente) ? $cliente->datosContacto->telefonoConvencional : '' ) }}"
-                                        placeholder=""/>
+                                        placeholder="99999999"/>
                                 </div>
                             </div>
                         </div>
@@ -343,6 +340,10 @@
             await cargarProvincias();
             //await cargarCiudades();
 
+            $('body').on('change','#numeroIdentificacion',function(){
+                buscarCliente();
+            });
+
             $('body').on('change','#pais',function(){
                 cargarProvincias();
             });
@@ -374,6 +375,28 @@
                     $('#provincia').val(provincia).trigger('change');
                     let ciudad = "{{ old('ciudad', isset($cliente) ? $cliente->datosResidencia->codigoCiudad : '' ) }}";
                 }
+            }
+        }
+
+        async function buscarCliente(){
+            if($('#numeroIdentificacion').val().length > 0){
+                let args = [];
+                let tipoFiltro = "numeroIdentificacion";
+                args["endpoint"] = api_url+"/comercial/v1/clientes?page=1&perPage=100&estado=TODOS&infoEmpresarial=true&tipoFiltro="+tipoFiltro+"&valorFiltro="+$('#numeroIdentificacion').val();
+                args["method"] = "GET";
+                args["bodyType"] = "json";
+                args["showLoader"] = true;
+
+                const data = await call(args);
+                console.log(data);
+                if(data.data.totalRows == 1){
+                    console.log(0)
+                    if($('#numeroIdentificacion').val() == data.data.row[0].numeroIdentificacion){
+                        console.log(1)
+                        showMessage('warning','Atención','El RUC: '+$('#numeroIdentificacion').val()+" ya se encuentra registrado.")
+                    }
+                }
+
             }
         }
 
