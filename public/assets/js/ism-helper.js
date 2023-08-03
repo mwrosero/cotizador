@@ -14,7 +14,7 @@ function logout(){
 }
 
 function checkAndUpdateToken() {
-    console.log("Verificar si existe una sesión y ha transcurrido al menos 25 minutos");
+    console.log("Verificar si existe una sesión y ha transcurrido al menos 15 minutos");
     var sessionTime = localStorage.getItem('sessionTime');
     
     // Verificar si existe una sesión y ha transcurrido al menos 25 minutos
@@ -90,6 +90,12 @@ async function call(args){
 
 function removeLeadingZero(input, maxLength) {
     input.value = input.value.replace(/^0/, '');
+    if (input.value.length > maxLength) {
+        input.value = input.value.slice(0, maxLength);
+    }
+}
+
+function maxLengthNumber(input, maxLength) {
     if (input.value.length > maxLength) {
         input.value = input.value.slice(0, maxLength);
     }
