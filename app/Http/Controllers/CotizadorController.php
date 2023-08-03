@@ -209,9 +209,9 @@ class CotizadorController extends Controller
             'method'   => 'POST'
         ]);
         
-        echo Ism::BASE_URL.$method.$param;
-        dump($cliente);
-        dd($response);
+        // echo Ism::BASE_URL.$method.$param;
+        // dump($cliente);
+        // dd($response);
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);
