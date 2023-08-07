@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Http;
 
 use App\Models\Ism;
 
@@ -33,11 +34,21 @@ class SeguridadesController extends Controller
         if($response->code == 200){
             $method = '/seguridad/v1/autenticacion/login';
 
-            $response = Ism::call([
+            /*$response = Ism::call([
                 'endpoint'  => Ism::BASE_URL.$method,
                 'basic'     => base64_encode(strtoupper($user) .":". $password),
                 'method'    => 'POST'
-            ]);
+            ]);*/
+
+            $res =  Http::withOptions([
+                        'verify' => false, // Desactivar verificación de certificados
+                    ])->withHeaders([
+                        'Application' => Ism::APPLICATION,
+                        'Authorization' => 'Basic '.base64_encode(strtoupper($user) .":". $password),
+                    ])->post(Ism::BASE_URL.$method);
+            $response = json_decode($res->body());
+
+            // dump($response);
             if($response->code == 200){
                 switch($response->data->estadoUsuario) {
                     case 'CONFIRMED':
@@ -52,6 +63,9 @@ class SeguridadesController extends Controller
                             'token'    => $response->data->idToken,
                             'method'   => 'GET'
                         ]);
+                        // echo Ism::BASE_URL.$method.$param;
+                        // dump($response);
+                        // dd(0);
 
                         Session::put('menu', $response->data);
                         return redirect('/cotizador/consulta-cotizaciones');

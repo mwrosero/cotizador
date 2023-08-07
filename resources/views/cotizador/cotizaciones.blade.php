@@ -90,7 +90,7 @@
                         <tbody class="table-border-bottom-0">
                         @if ($datosPaginados->isEmpty())
                             <tr>
-                                <td class="text-center p-5" colspan="6">
+                                <td class="text-center p-5" colspan="8">
                                     <h5>No existen resultados para mostrar</h5>
                                 </td>
                             </tr>
