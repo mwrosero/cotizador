@@ -79,7 +79,7 @@
             const _application = "{{ \App\Models\Ism::APPLICATION }}";
             const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
             const api_url = "{{ \App\Models\Ism::BASE_URL }}";
-            const url_site = "{{ url('/') }}";
+            const url_site = "{{ secure_url('/') }}";
         </script>
     </head>
 
