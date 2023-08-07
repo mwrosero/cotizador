@@ -805,6 +805,7 @@
                 $('#box-prestaciones .item li').removeClass('d-none');
                 $('#box-prestaciones .item li').addClass('d-flex');
                 $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
+                resizeAllGridItems();
             }
         });
 
@@ -1857,6 +1858,7 @@
                 console.log(99)
                 $('#box-prestaciones .item li').show();
                 $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
+                resizeAllGridItems();
             }
         });
     }
