@@ -1499,7 +1499,7 @@
         args["method"] = "GET";
         args["bodyType"] = "json";
         args["showLoader"] = false;
-        caempty();
+        $('#grupoPerfil').empty();
         const data = await call(args);
         $.each(data.data.rows, function(key, value){
             if(value.activo){
