@@ -751,6 +751,7 @@
             calcularTH();
             if(dataPrestaciones.length == 0){
                 $('.box-resumen').addClass('d-none');
+                $('#servicioCosto option').prop('disabled', false);
                 dataCostos = [];
                 costosPrestadores = [];
             }
