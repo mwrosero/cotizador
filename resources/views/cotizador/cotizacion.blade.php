@@ -652,7 +652,7 @@
         });
 
         $('body').on('change', '.input-prestacion', function() {
-            let grupo = getInput('grupoPerfil');
+            let grupo = parseInt(getInput('grupoPerfil'));
             let nombreGrupo = $('#grupoPerfil option:selected').html();
             let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
 
@@ -679,7 +679,7 @@
                 "nombrePrestacion": prestacion.nombrePrestacion,
                 "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
-                "cantidadPacientes": $(this).val(),
+                "cantidadPacientes": parseInt($(this).val()),
                 "costoUnitario": prestacion.valorCosto,
                 "precioUnitario": prestacion.valorPvp,
                 "aplicaIva": prestacion.aplicaIva,
@@ -931,7 +931,7 @@
 
     function cargarDataPrestaciones(codigoGrupo = null) {
         if(codigoGrupo == null){
-            codigoGrupo = $('#grupoPerfil option:selected').val();
+            codigoGrupo = parseInt($('#grupoPerfil option:selected').val());
         }
         // Obtener el grupo correspondiente desde dataPrestaciones
         let grupoExistente = dataPrestaciones.find(function(grupo) {
@@ -1499,7 +1499,7 @@
         args["method"] = "GET";
         args["bodyType"] = "json";
         args["showLoader"] = false;
-        $('#grupoPerfil').empty();
+        caempty();
         const data = await call(args);
         $.each(data.data.rows, function(key, value){
             if(value.activo){
