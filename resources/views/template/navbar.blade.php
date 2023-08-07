@@ -37,7 +37,7 @@
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
                         @if (session('userData')->fotoPerfil === null)
-                        <img src="{{ asset('assets/img/avatars/user_profile.png') }}" alt class="h-auto rounded-circle" />
+                        <img src="{{ url('/') }}/assets/img/avatars/user_profile.png" alt class="h-auto rounded-circle" />
                         @else
                         <img src="{{ session('userData')->fotoPerfil }}" alt class="h-auto rounded-circle" />
                         @endif
@@ -50,7 +50,7 @@
                                 <div class="flex-shrink-0 me-3">
                                     <div class="avatar avatar-online">
                                         @if (session('userData')->fotoPerfil === null)
-                                        <img src="{{ asset('assets/img/avatars/user_profile.png') }}" alt class="h-auto rounded-circle" />
+                                        <img src="{{ url('/') }}/assets/img/avatars/user_profile.png" alt class="h-auto rounded-circle" />
                                         @else
                                         <img src="{{ session('userData')->fotoPerfil }}" alt class="h-auto rounded-circle" />
                                         @endif
