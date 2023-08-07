@@ -12,7 +12,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 @if(!isset($numeroIdentificacion))
-                <h6 class="txt-veris">Seleccionar Cliente</h6>
+                <h6 class="txt-veris">Seleccionar Cliente<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></h6>
                 @else
                 <h6 class="txt-veris">Cliente</h6>
                 @endif
@@ -83,14 +83,14 @@
                 <h6 class="txt-veris">Tipos de Servicios</h6>
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
-                        <label for="tipoServicio" class="form-label">¿Qué servicio deseas cotizar?</label>
+                        <label for="tipoServicio" class="form-label">¿Qué servicio deseas cotizar?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                         <div class="select2-dark">
                             <select id="tipoServicio" class="select2 form-select">
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="lugarServicio" class="form-label">¿Dónde deseas el servicio?</label>
+                        <label for="lugarServicio" class="form-label">¿Dónde deseas el servicio?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                         <div class="select2-dark">
                             <select id="lugarServicio" class="select2 form-select" multiple>
                                 <option value="1" >En el lugar de la empresa</option>
@@ -100,21 +100,21 @@
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="centroMedico" class="form-label">Centrales Médicas</label>
+                        <label for="centroMedico" class="form-label">Centrales Médicas<i class="fa-solid fa-asterisk fs-10 text-danger ms-2 d-none req-centroMedico"></i></label>
                         <div class="select2-dark">
                             <select id="centroMedico" class="select2 form-select">
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="ciudadChequeo" class="form-label">Ciudad</label>
+                        <label for="ciudadChequeo" class="form-label">Ciudad<i class="fa-solid fa-asterisk fs-10 text-danger ms-2 d-none req-ciudadChequeo"></i></label>
                         <div class="select2-dark">
                             <select id="ciudadChequeo" class="select2 form-select" multiple>
                             </select>
                         </div>
                     </div>
                     <div class="col-12 col-md-12">
-                        <label for="detalleLugar" class="form-label">Por favor detallar el lugar</label>
+                        <label for="detalleLugar" class="form-label">Por favor detallar el lugar<i class="fa-solid fa-asterisk fs-10 text-danger ms-2 d-none req-detalleLugar"></i></label>
                         <input type="text"
                             class="form-control"
                             id="detalleLugar"
@@ -125,14 +125,14 @@
                 <h6 class="txt-veris">Planificación del Chequeo</h6>
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
-                        <label for="inicioChequeo" class="form-label">¿Cuándo deseas que inicie el chequeo?</label>
+                        <label for="inicioChequeo" class="form-label">¿Cuándo deseas que inicie el chequeo?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                         <input type="date"
                             min="{{ date('Y-m-d') }}"
                             class="form-control" 
                             id="inicioChequeo"/>
                     </div>
                     <div class="col-12 col-md-6">
-                        <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?</label>
+                        <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                         <input type="number"
                             inputmode="numeric" 
                             pattern="[0-9]*"
@@ -563,6 +563,55 @@
                 }
             }
         });
+
+        $('body').on('change', '#lugarServicio', function(){
+            $('.req-centroMedico').addClass('d-none');
+            $('.req-ciudadChequeo').addClass('d-none');
+            $('.req-detalleLugar').addClass('d-none');
+
+            /*
+                lugarServicio: 1.Empresa 2.Veris 3.Otros
+            */
+            let filtroLugar = getInput('lugarServicio','select2');
+            //Solo en Veris
+            if(filtroLugar.length == 1 && $.inArray("2", filtroLugar) !== -1) {
+                $('.req-centroMedico').removeClass('d-none');
+            }
+
+            //En la Empresa o en Otro lugar
+            if(filtroLugar.length == 1 && ($.inArray("1", filtroLugar) !== -1 || $.inArray("3", filtroLugar) !== -1)){
+                $('.req-ciudadChequeo').removeClass('d-none');
+                $('.req-detalleLugar').removeClass('d-none');
+            }
+
+            //En la Empresa y en Veris
+            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1) {
+                $('.req-centroMedico').removeClass('d-none');
+                $('.req-ciudadChequeo').removeClass('d-none');
+                $('.req-detalleLugar').removeClass('d-none');                
+            }
+
+            //En Veris y Otros
+            if(filtroLugar.length > 1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+                $('.req-centroMedico').removeClass('d-none');
+                $('.req-ciudadChequeo').removeClass('d-none');
+                $('.req-detalleLugar').removeClass('d-none');
+            }
+
+            //En la Empresa y Otros
+            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1){
+                $('.req-ciudadChequeo').removeClass('d-none');
+                $('.req-detalleLugar').removeClass('d-none');
+            }
+
+            //En los 3
+            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+                $('.req-centroMedico').removeClass('d-none');
+                $('.req-ciudadChequeo').removeClass('d-none');
+                $('.req-detalleLugar').removeClass('d-none');
+            }
+
+        })
 
         /*$('.box-row-modal-clientes').each(function() {
             new PerfectScrollbar(this);
@@ -1140,6 +1189,7 @@
         let detalleLugar = getInput('detalleLugar');
         let inicioChequeo  = getInput('inicioChequeo');
         let diasServicio  = getInput('diasServicio');
+        let ciudadChequeo = getInput('ciudadChequeo','select2');
 
         if(cliente == ""){
             msg += "<span class='fs-12'>-Seleccionar un cliente</span><br>";
@@ -1153,12 +1203,82 @@
             msg += "<span class='fs-12'>-Seleccionar un lugar</span><br>";
         }
 
-        if(centroMedico == ""){
-            msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
+        /*
+            lugarServicio: 1.Empresa 2.Veris 3.Otros
+        */
+        let filtroLugar = getInput('lugarServicio','select2');
+        //Solo en Veris
+        if(filtroLugar.length == 1 && $.inArray("2", filtroLugar) !== -1) {
+            if(centroMedico == ""){
+                msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
+            }
         }
 
-        if(detalleLugar == ""){
-            msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+        //En la Empresa o en Otro lugar
+        if(filtroLugar.length == 1 && ($.inArray("1", filtroLugar) !== -1 || $.inArray("3", filtroLugar) !== -1)){
+            if(ciudadChequeo.length == 0){
+                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+            }
+
+            if(detalleLugar == ""){
+                msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+            }
+        }
+
+        //En la Empresa y en Veris
+        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1) {
+            if(centroMedico == ""){
+                msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
+            }
+            
+            if(ciudadChequeo.length == 0){
+                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+            }
+
+            if(detalleLugar == ""){
+                msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+            }
+        }
+
+        //En Veris y Otros
+        if(filtroLugar.length > 1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+            if(centroMedico == ""){
+                msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
+            }
+            
+            if(ciudadChequeo.length == 0){
+                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+            }
+
+            if(detalleLugar == ""){
+                msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+            }
+        }
+
+        //En la Empresa y Otros
+        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+            if(ciudadChequeo.length == 0){
+                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+            }
+
+            if(detalleLugar == ""){
+                msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+            }
+        }
+
+        //En los 3
+        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+            if(centroMedico == ""){
+                msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
+            }
+            
+            if(ciudadChequeo.length == 0){
+                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+            }
+
+            if(detalleLugar == ""){
+                msg += "<span class='fs-12'>-Seleccionar un detalle del lugar</span><br>";
+            }
         }
 
         if(inicioChequeo == ""){
@@ -1171,6 +1291,7 @@
 
         if(msg != ""){
             showMessage('warning','Atención',msg);
+            $('#btn-crear-cotizacion').prop('disabled',false);
         }else{
             const fecha = new Date(inicioChequeo);
             const dia = fecha.getDate();
@@ -1309,13 +1430,14 @@
                 let elem;
                 $('#clienteSearch').html($('#searchInput').val() +" ("+data.data.totalRows+" clientes encontrados)");
                 $.each(data.data.row, function(key, value){
-                    let data_attr = JSON.stringify(value)
+                    let data_attr = JSON.stringify(value);
+                    data_attr = data_attr.replace(/'/g, "");
                     elem += `<tr>
                                 <td class="fs-12">${value.numeroIdentificacion}</td>
                                 <td class="fs-12">${value.nombreCliente}</td>
                                 <td class="fs-12">${value.nombreTipoPersona}</td>
                                 <td class="fs-12">
-                                    <button type="button" data-rel='${data_attr}' class="btn btn-sm bg-veris btn-seleccionar-cliente">Seleccionar</button>
+                                    <button type="button" data-rel='${data_attr}'s class="btn btn-sm bg-veris btn-seleccionar-cliente">Seleccionar</button>
                                 </td>
                             </tr>`;
                 })

@@ -47,7 +47,7 @@
                                 name="numeroIdentificacion" 
                                 value="{{ old('numeroIdentificacion', isset($cliente) ? $cliente->datosCliente->numeroIdentificacion : '') }}"
                                 @if(isset($edit) && $edit === true)
-                                disabled
+                                readonly
                                 @else
                                 required
                                 @endif
