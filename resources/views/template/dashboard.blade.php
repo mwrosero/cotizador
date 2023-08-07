@@ -138,7 +138,7 @@
     <script src="{{ secure_url('/') }}/assets/vendor/libs/i18n/i18n.js"></script>
     <script src="{{ secure_url('/') }}/assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
-    {{-- <script src="../../assets/vendor/libs/block-ui/block-ui.js"></script> --}}
+    <script src="{{ secure_url('/') }}/assets/vendor/libs/block-ui/block-ui.js"></script>
 
     <script src="{{ secure_url('/') }}/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
