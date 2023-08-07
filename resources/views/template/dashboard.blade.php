@@ -78,8 +78,8 @@
             let _token = "{{ session('accessToken') }}";
             const _application = "{{ \App\Models\Ism::APPLICATION }}";
             const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
-            const api_secure_url = "{{ \App\Models\Ism::BASE_secure_url }}";
-            const secure_url_site = "{{ secure_url('/') }}";
+            const api_url = "{{ \App\Models\Ism::BASE_URL }}";
+            const url_site = "{{ url('/') }}";
         </script>
     </head>
 
