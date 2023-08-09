@@ -40,6 +40,8 @@ Route::group(['middleware' => ['loggedUser']], function () {
         Route::get('/registro-clientes', [CotizadorController::class, 'registroCliente'])->name('registro-clientes')->withoutMiddleware(['guest']);
         
         Route::get('/cotizador/{numeroIdentificacion?}', [CotizadorController::class, 'cotizador'])->name('cotizador')->withoutMiddleware(['guest']);
+        
+        Route::get('/cotizacion/edit/{idCotizacion}', [CotizadorController::class, 'obtenerCotizacion'])->name('obtener-cotizacion')->withoutMiddleware(['guest']);
 
         Route::get('/consulta-clientes', [CotizadorController::class, 'clientes'])->name('consulta-clientes')->withoutMiddleware(['guest']);
         
