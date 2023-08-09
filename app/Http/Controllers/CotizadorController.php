@@ -18,6 +18,25 @@ class CotizadorController extends Controller
             ->with('numeroIdentificacion', $numeroIdentificacion);
     }
 
+    public function obtenerCotizacion($idCotizacion){
+        $method = '/empresarial/v1/cotizacion/'.$idCotizacion;
+        
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+
+        if($response->code != 200){
+            session()->flash('success', $response->message);
+            return redirect()->route('consulta-cotizaciones');
+        }
+        // dd($response);
+        return view('cotizador.cotizacion')
+            ->with('edit', true)
+            ->with('data',$response->data);
+    }
+
     public function clientes(Request $request){
         $tipoFiltro = $request->query('tipoFiltro', '');
         $valorFiltro = $request->query('valorFiltro', '');
