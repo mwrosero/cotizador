@@ -1416,6 +1416,59 @@
         }
     }
     
+    async function actualizarCotizacion(){
+        $('#btn-crear-cotizacion').prop('disabled',true);
+        let ciudadesArr = [];
+        let ciudades = getInput('ciudadChequeo','select2')
+        $.each(ciudades, function(value){
+            ciudadesArr.push({
+                "idCiudad": value,
+                "activo": true,
+                "status": "edit"
+            })
+        })
+
+        let dataPrestacionesTmp = [...dataPrestaciones];
+
+        for (const elemento of dataPrestacionesTmp) {
+            for (const prestacion of elemento.prestaciones) {
+                //Reemplazar costos de provincias
+                let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+                if( costo_alterno != null){
+                    prestacion.costoUnitario = costo_alterno;
+                }
+            }
+        }
+
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+getInput('idCotizacion')+"/detalle";
+        args["method"] = "PUT";
+        args["bodyType"] = "json";
+        args["showLoader"] = true;
+        args["data"] = JSON.stringify({
+            // "codigoCliente": parseInt(cliente),
+            // "codigoTipoContrato": parseInt(tipoServicio),
+            // "codigoEmpresa":parseInt($('#centroMedico option:selected').attr('codigoEmpresa-rel')),
+            // "codigoSucursal": parseInt(centroMedico),
+            // "direccionServicio": detalleLugar,
+            // "fechaInicio": fechaPrevista,
+            // "cantidadDias": parseInt(diasServicio),
+            "porcentajeRentabilidad": parseFloat(th_cotizacion),
+            "ciudades":ciudadesArr,
+            "detalle": dataPrestacionesTmp,
+            "costosAdicionales": dataCostos
+        });
+
+        const data = await call(args);
+        if(data.code == 200){
+            showMessage('success','Atención',"Cotización actualizada");
+            //location.href = '/cotizador/consulta-cotizaciones';
+        }else{
+            showMessage('warning','Atención',data.message);
+            $('#btn-crear-cotizacion').prop('disabled',false);
+        }
+    }
+
     function formatDollar(numero){
         let numStr = numero.toString().replace(/^0+/, '');
         let numeroRedondeado = parseFloat(numStr).toFixed(2);
