@@ -117,6 +117,8 @@ class CotizadorController extends Controller
             'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
+
+//echo Ism::BASE_URL.$method;dd($responseContratos);
         
         return view('cotizador.cotizaciones')
             ->with('datosPaginados', $datosPaginados)
