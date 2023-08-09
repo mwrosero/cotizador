@@ -110,26 +110,32 @@
                                     @endif
                                 </td>
                                 <td>{{ $dato->estado }}</td>
-                                <td>
-                                    <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
-                                        <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
-                                    </a>
-                                    {{-- <a class="d-inline-block" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
-                                        <img class="action-ico" src="{{ asset('assets/img/veris/cotizar-ico.svg') }}" alt="" title="Cotizar">
-                                    </a> --}}
-                                    {{-- <div class="dropdown">
-                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="ti ti-dots-vertical"></i>
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="/cotizador/cliente/edit/{{ $dato->codigoCliente }}">
-                                                <i class="fa-regular fa-pen-to-square me-2"></i> Editar
-                                            </a>
-                                            <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->numeroIdentificacion }}">
-                                                <i class="fa-solid fa-file-invoice-dollar me-2"></i> Cotizar
-                                            </a>
-                                        </div>
-                                    </div> --}}
+                                <td width="100px" class="text-start align-middle">
+                                    <div class="d-flex">
+                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
+                                            <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                        </a>
+                                        <a class="dropdown-item cambiarEstado" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" title="Cambiar Estado">
+                                            <i class="fa-solid fa-rotate me-2"></i>
+                                        </a>
+                                        {{-- <div class="dropdown">
+                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                <i class="fa-solid fa-rotate me-2"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="/cotizador/cliente/edit/{{ $dato->idCotizacion }}">
+                                                    <i class="fa-regular fa-pen-to-square me-2"></i> Cambiar Estado
+                                                </a>
+                                                <hr class="dropdown-divider">
+                                                <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->idCotizacion }}">
+                                                    <i class="fa-solid fa-trash text-danger d-inline"></i> Eliminar
+                                                </a>
+                                            </div>
+                                        </div> --}}
+                                        <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->idCotizacion }}" title="Eliminar">
+                                            <i class="fa-solid fa-trash text-danger d-inline"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -143,9 +149,74 @@
         </div>
     </div>
 </div>
+<!-- MODAL ESTADO -->
+<div class="modal fade" id="modalEstado" aria-labelledby="modalEstadoLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content p-2">
+            <div class="modal-header">
+                <div class="col-12">
+                    <label class="form-label">Cambiar estado de la Cotización</label>
+                </div>
+            </div>
+            <div class="modal-body pt-2">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <input type="hidden" id="idCotizacionEstado">
+                        <label for="estadoCotizacion" class="form-label">Estado</label>
+                        <div class="select2-dark">
+                            <select id="estadoCotizacion" class="select2 form-select">
+                                <option value="INGRESADO">INGRESADO</option>
+                                <option value="MODIFICADO">MODIFICADO</option>
+                                <option value="CONFIRMADO">CONFIRMADO</option>
+                                <option value="APROBADO">APROBADO</option>
+                                <option value="RECHAZADO">RECHAZADO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    Cancelar
+                </button>
+                <button type="button" class="btn bg-veris" onclick="cambiarEstadoCotizacion()">
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     .t_h{
         width: 80px;
     }
 </style>
+<script>
+    window.onload = async () => {
+        $('body').on('click touch', '.cambiarEstado', function(){
+            let idCotizacion = $(this).attr("idCotizacion-rel");
+            $('#idCotizacionEstado').val(idCotizacion);
+            $('#modalEstado').modal('show');
+        })
+    };
+
+    async function cambiarEstadoCotizacion(){
+        let idCotizacion = getInput('idCotizacionEstado');
+        let estadoCotizacion = getInput('estadoCotizacion','select2');
+
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+idCotizacion+"/estado?estadoCotizacion="+estadoCotizacion;
+        args["method"] = "PUT";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+
+        if(data.code != 200){
+            showMessage('warning','Atención',data.message);
+        }else{
+            location.reload();
+        }
+    }
+</script>
 @endsection

@@ -66,6 +66,7 @@
         <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/select2/select2.css" />
         <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/toastr/toastr.css" />
         <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/animate-css/animate.css" />
+        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.css" />
         {{-- <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
 
         <!-- Page CSS -->
@@ -154,6 +155,7 @@
     <script src="{{ secure_url('/') }}/assets/vendor/libs/select2/select2.js"></script>
     <script src="{{ secure_url('/') }}/assets/js/forms-selects.js"></script>
     <script src="{{ secure_url('/') }}/assets/vendor/libs/toastr/toastr.js"></script>
+    <script src="{{ secure_url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
     {{-- <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" /> --}}
     {{-- <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script> --}}
 

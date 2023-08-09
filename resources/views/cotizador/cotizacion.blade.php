@@ -11,13 +11,17 @@
     <div class="col-12">
         <div class="card mb-4">
             <div class="card-body">
-                @if(!isset($numeroIdentificacion))
-                <h6 class="txt-veris">Seleccionar Cliente<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></h6>
-                @else
+                @if(isset($numeroIdentificacion) || isset($edit) )
                 <h6 class="txt-veris">Cliente</h6>
+                @else
+                <h6 class="txt-veris">Seleccionar Cliente<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></h6>
                 @endif
                 <div class="row g-3">
-                    @if(!isset($numeroIdentificacion))
+                    @if(isset($numeroIdentificacion))
+                    <input type="hidden" id="searchInput" value="{{ $numeroIdentificacion }}" />
+                    @elseif(isset($edit))
+                    <input type="hidden" id="idCotizacion" name="idCotizacion" value="{{ $data->idCotizacion }}">
+                    @else
                     <div class="col-11 col-md-6">
                         <div class="input-group input-group-merge">
                             <input type="text"
@@ -42,16 +46,19 @@
                             <div class="sk-chase-dot"></div>
                         </div>
                     </div>
-                    @else
-                    <input type="hidden" id="searchInput" value="{{ $numeroIdentificacion }}" />
                     @endif
                     <div class="col-12 d-none" id="box-info-cliente">
                         <input type="hidden" id="cliente">
                         <div class="row align-items-center">
                             <div class="col-12 col-md-6">
-                                <label class="form-label fs-12">Cliente</label>
-                                <p id="nombreCliente"></p>
+                                <label class="form-label fs-12">Nombre Cliente</label>
+                                <p id="nombreCliente">
+                                    @if(isset($edit))
+                                    {{ $data->nombreCliente }}
+                                    @endif
+                                </p>
                             </div>
+                            @if(!isset($edit))
                             <div class="col-12 col-md-3">
                                 <label class="form-label fs-12">Cédula/RUC</label>
                                 <p id="numeroIdentificacion"></p>
@@ -60,6 +67,7 @@
                                 <label class="form-label fs-12">Tipo de persona</label>
                                 <p id="tipoPersona"></p>
                             </div>
+                            @endif
                             {{-- <div class="col-12 col-sm-6 col-md-4">
                                 <label class="form-label fs-12">Giro de Negocio</label>
                                 <p>Empresa de Informática</p>
@@ -118,7 +126,11 @@
                         <input type="text"
                             class="form-control"
                             id="detalleLugar"
-                            placeholder="" />
+                            placeholder="" 
+                            @if(isset($edit))
+                            value="{{ $data->direccionServicio }}"
+                            @endif
+                            />
                     </div>
                 </div>
                 <hr class="my-4 mx-n4" />
@@ -129,7 +141,15 @@
                         <input type="date"
                             min="{{ date('Y-m-d') }}"
                             class="form-control" 
-                            id="inicioChequeo"/>
+                            id="inicioChequeo"
+                            @if(isset($edit))
+                            @php
+                                $fechaPartes = explode('/', $data->fechaInicio);
+                                $fechaFormateada = $fechaPartes[2] . '-' . $fechaPartes[1] . '-' . $fechaPartes[0];
+                            @endphp
+                            value="{{ $fechaFormateada }}"
+                            @endif
+                            />
                     </div>
                     <div class="col-12 col-md-6">
                         <label for="diasServicio" class="form-label">¿En cuántos días quieres que finalice el servicio?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
@@ -140,7 +160,11 @@
                             step="1"
                             class="form-control"
                             id="diasServicio"
-                            placeholder=""/>
+                            placeholder=""
+                            @if(isset($edit))
+                            value="{{ $data->cantidadDias }}"
+                            @endif
+                            />
                     </div>
                 </div>
                 <hr class="my-4 mx-n4" />
@@ -212,6 +236,19 @@
                     <div class="col-12 mt-4">
                         <span class="badge" id="t_h"></span>
                     </div>
+                    @if(isset($edit))
+                    <div class="col-12">
+                        <button type="button"
+                            id="btn-crear-cotizacion"
+                            class="btn bg-veris"
+                            onclick="actualizarCotizacion()" 
+                            title="Seleccionar Prestaciones"
+                            >
+                            <i class="fa-regular fa-floppy-disk me-2"></i>
+                            Actualizar Cotización
+                        </button>
+                    </div>
+                    @else
                     <div class="col-12">
                         <button type="button"
                             id="btn-crear-cotizacion"
@@ -223,6 +260,7 @@
                             Crear Cotización
                         </button>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -838,6 +876,42 @@
 
             calcularTH();
         });
+
+        @if(isset($edit))
+            $('#box-info-cliente').removeClass('d-none');
+            $('#tipoServicio').val({{ $data->codigoTipoContrato }}).trigger("change");
+            $('#centroMedico').val({{ $data->codigoSucursal }}).trigger("change");
+            let ciudades = @json($data->ciudades);
+            $('#ciudadChequeo').val(ciudades).trigger("change");
+            let detalle = @json($data->detalle);
+            //Lleno arrays
+            $.each(detalle, function(key, value){
+                $('#grupoPerfil').val(value.codigoGrupo).trigger('change')
+                $.each(value.prestaciones, function(k,v){
+                    $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
+                })
+            })
+            
+            let costosAdicionales = @json($data->costosAdicionales);
+            $.each(costosAdicionales, function(key, value){
+                /*$('#servicioCosto').val(value.idCosto).trigger('change');
+                $('#costo').val(value.valorUnitario);
+                agregarCosto();*/
+                let idItem = "costo_"+value.idCosto;
+                let msg = "";
+                dataCostos.push(
+                    {
+                        "idCosto": value.idCosto,
+                        "nombreCosto": value.nombreCosto,
+                        "cantidad": 1,
+                        "valorUnitario": parseFloat(value.valorUnitario),
+                        "idItem":idItem
+                    }
+                );
+            })
+            drawTable();
+            //Sobre-escribo valores
+        @endif
 
     }
 
@@ -1601,7 +1675,7 @@
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
                                             <div class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}''>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}''>
                                             </div>
                                         </li>`;
                     })
