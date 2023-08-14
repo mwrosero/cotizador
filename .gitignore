@@ -17,4 +17,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
-/resources/views/template
+# /resources/views/template/dashobard.blade.php
