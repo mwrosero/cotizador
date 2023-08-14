@@ -193,14 +193,14 @@
                             {{-- data-bs-toggle="modal"
                             data-bs-target="#modalPrestadores" --}}
                             onclick="showModalPrestadores()" 
-                            class="btn btn-sm btn-secondary me-2">
+                            class="btn btn-sm btn-secondary mb-2">
                             <i class="fa-solid fa-house-medical me-2"></i>
                             Seleccionar Prestador
                         </button>
                         <button 
                             data-bs-toggle="modal"
                             data-bs-target="#modalCostos"
-                            class="btn btn-sm bg-orange">
+                            class="btn btn-sm bg-orange ms-2 mb-2">
                             <i class="fa-solid fa-hand-holding-dollar me-2"></i>
                             Agregar costos
                         </button>
@@ -693,6 +693,7 @@
             let grupo = parseInt(getInput('grupoPerfil'));
             let nombreGrupo = $('#grupoPerfil option:selected').html();
             let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
+            let idDetalle = null;
 
             // Obtener el índice del grupo en el arreglo dataPrestaciones
             let grupoIndex = dataPrestaciones.findIndex(function(item) {
@@ -701,6 +702,10 @@
 
             if($(this).val() != ''){
                 $('#ck_'+$(this).attr("id")).prop('checked',true);
+                if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){
+                    console.log("Agregar idDetalle, activo:true y status:edit");
+                    idDetalle = $(this).attr("idDetalle-rel");
+                }
             }else{
                 $('#ck_'+$(this).attr("id")).prop('checked',false);
             }
@@ -721,7 +726,12 @@
                 "costoUnitario": prestacion.valorCosto,
                 "precioUnitario": prestacion.valorPvp,
                 "aplicaIva": prestacion.aplicaIva,
-                "id": $(this).attr("id")
+                "id": $(this).attr("id"),
+                "activo":true,
+                @if(isset($edit))
+                "status":"edit",
+                @endif
+                "idDetalle": idDetalle
             };
 
             // Si el valor del input es vacío, eliminar la prestación del grupo
@@ -888,11 +898,16 @@
             $.each(detalle, function(key, value){
                 $('#grupoPerfil').val(value.codigoGrupo).trigger('change')
                 $.each(value.prestaciones, function(k,v){
-                    $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
+                    if(v.activo){
+                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
+                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
+                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
+                    }
                 })
             })
             
             let costosAdicionales = @json($data->costosAdicionales);
+            console.log(costosAdicionales);
             $.each(costosAdicionales, function(key, value){
                 /*$('#servicioCosto').val(value.idCosto).trigger('change');
                 $('#costo').val(value.valorUnitario);
@@ -1149,9 +1164,11 @@
     }
 
     // Eliminar item desde tabla
+    let prestacionesEliminadas = [];
     function eliminarItem(idItem) {
         // Buscar el elemento con el idItem dado
         const elemento = dataPrestaciones.find(item => item.prestaciones.some(prestacion => prestacion.idItem === idItem));
+        console.log(elemento);
 
         if (elemento) {
             // Filtrar las prestaciones y eliminar la que tiene el idItem
@@ -1461,6 +1478,7 @@
 
         const data = await call(args);
         if(data.code == 200){
+            $('#btn-crear-cotizacion').prop('disabled',false);
             showMessage('success','Atención',"Cotización actualizada");
             //location.href = '/cotizador/consulta-cotizaciones';
         }else{
