@@ -11,7 +11,7 @@ class Ism extends Model
 {
     use HasFactory;
 
-    // public const BASE_URL = 'https://api-phantomx.veris.com.ec'; 
+    // public const BASE_URL = 'https://api-phantomx.veris.com.ec';  
     public const BASE_URL = 'https://api.phantomx.com.ec';
     public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
     public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
