@@ -295,14 +295,14 @@
                 <div class="row mt-3">
                     <div class="col-12 col-lg-6 offset-lg-3">
                         <div class="input-group input-group-merge">
-                            <input type="text"
+                            <span title="BUSCAR" class="input-group-text">
+                                <i class="ti ti-search"></i>
+                            </span>
+                            <input type="search"
                                 id="searchInputPrestacion"
                                 class="form-control fs-12"
                                 placeholder="Buscar prestación"
                                 aria-label="Buscar prestación"/>
-                            <span title="BUSCAR" class="input-group-text">
-                                <i class="ti ti-search"></i>
-                            </span>
                         </div>
                     </div>
                 </div>
@@ -413,33 +413,10 @@
             <div class="modal-body pt-2">
                 <div class="row" id="box-prestadores">
                 </div>
-                <div class="row table-responsive d-none">
-                    <table class="table">
-                        <thead class="sticky-top" id="box-prestadores-list-th">
-                            <tr>
-                                <th class="fs-12">Ciudades</th>
-                                <th class="fs-12" colspan="3">Guayaquil</th>
-                                <th class="fs-12" colspan="2">Manta</th>
-                            </tr>
-                            <tr class="tr_second">
-                                <th>Prestadores</th>
-                                <th>Servident</th>
-                                <th>Clínica los Esteros</th>
-                                <th>Mediar</th>
-                                <th>Clínica Metropolitana</th>
-                                <th>Interhospital</th>
-                            </tr>
-                        </thead>
-                        <tbody id="box-prestadores-list">
-                            <tr>
-                                <td>Biometría Hemática</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
+                <div class="row table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="sticky-top" id="box-prestadores-list-th"></thead>
+                        <tbody id="box-prestadores-list"></tbody>
                     </table>                    
                 </div>
             </div>
@@ -916,6 +893,7 @@
                 let msg = "";
                 dataCostos.push(
                     {
+                        "idCostoCotizacion": value.idCostoCotizacion,
                         "idCosto": value.idCosto,
                         "nombreCosto": value.nombreCosto,
                         "cantidad": 1,
@@ -1774,12 +1752,67 @@
             });*/
         })
     }
+/*
+var tableHtml = '<table>';
 
+// Create header rows
+tableHtml += '<tr>';
+tableHtml += '<th>Ciudad</th>';
+data.forEach(function(ciudad) {
+    tableHtml += '<th colspan="' + ciudad.prestaciones.length * 2 + '">' + ciudad.nombreCiudad + '</th>';
+});
+tableHtml += '</tr>';
+
+tableHtml += '<tr>';
+tableHtml += '<th>Prestadores</th>';
+data.forEach(function(ciudad) {
+    ciudad.prestaciones.forEach(function(prestacion) {
+        tableHtml += '<th colspan="2">' + prestacion.nombrePrestacion + '</th>';
+    });
+});
+tableHtml += '</tr>';
+
+tableHtml += '<tr>';
+tableHtml += '<th></th>';
+data.forEach(function(ciudad) {
+    ciudad.prestaciones.forEach(function(prestacion) {
+        tableHtml += '<th>Prestador</th>';
+        tableHtml += '<th>Precio</th>';
+    });
+});
+tableHtml += '</tr>';
+
+// Populate data
+var maxPrestadores = Math.max(...data.map(ciudad => ciudad.prestaciones.reduce((max, p) => Math.max(max, p.prestadores.length), 0)));
+
+for (var i = 0; i < maxPrestadores; i++) {
+    tableHtml += '<tr>';
+    data.forEach(function(ciudad) {
+        var prestacion = ciudad.prestaciones[i];
+        if (i === 0) {
+            tableHtml += '<td rowspan="' + prestacion.prestadores.length + '">' + ciudad.nombreCiudad + '</td>';
+        }
+        var prestador = prestacion.prestadores[i];
+        if (prestador) {
+            tableHtml += '<td>' + prestador.nombreInstitucion + '</td>';
+            tableHtml += '<td>' + (prestador.valorCosto ? prestador.valorCosto : '---') + '</td>';
+        } else if (i === 0) {
+            tableHtml += '<td rowspan="' + maxPrestadores + '">---</td>';
+            tableHtml += '<td rowspan="' + maxPrestadores + '"></td>';
+        }
+    });
+    tableHtml += '</tr>';
+}
+
+tableHtml += '</table>';
+
+$('#tableContainer').html(tableHtml);
+*/
     function drawTablePrestadores(data){
         let dataGrouped = agruparDatos(data)
-        console.log(dataGrouped);
+        
         if(dataGrouped.length > 0){
-            $('#box-prestadores').empty();
+            /*$('#box-prestadores').empty();
             $.each(dataGrouped, function(key, value){
                 let elem = ``;
                 let tr_second = ``;
@@ -1812,11 +1845,84 @@
                 
                 $('#box-prestadores').append(elem);
                 $('.tr_ciudad_'+value.codigoPrestacion).append(tr_second);
+            })*/
+
+            let institucionesArr = [];
+            let theader = `<tr><th class="fs-12">Ciudades</th>`;
+            $.each(data.data, function(key, value){
+                let total = 0;
+                $.each(value.prestaciones, function(k,v){
+                    $.each(v.prestadores, function(k1,v1){
+                        if(!institucionesArr.includes(value.codigoCiudad+"_"+v1.idInstitucion)){
+                            total++;
+                            institucionesArr.push(value.codigoCiudad+"_"+v1.idInstitucion);
+                        }
+                    })
+                    //total += v.prestadores.length;
+                })
+                theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
             })
+            institucionesArr = [];
+            theader += `</tr>
+                        <tr class="tr_second"><th class="fs-12">Prestadores</th>`;
+            $.each(data.data, function(key, value){
+                $.each(value.prestaciones, function(k,v){
+                    $.each(v.prestadores, function(k1,v1){
+                        if(!institucionesArr.includes(value.codigoCiudad+"_"+v1.idInstitucion)){
+                            theader += `<th class="fs-12 text-center" id="th_${value.codigoCiudad+"_"+v1.idInstitucion}">${v1.nombreInstitucion}</th>`
+                            institucionesArr.push(value.codigoCiudad+"_"+v1.idInstitucion);
+                        }
+                    })
+                })
+            })
+            theader += `</tr>`;
+            $('#box-prestadores-list-th').html(theader);
+
+            //institucionesArr = []; 
+            let prestacionesArr = []
+            let tbody = ``;
+            $.each(data.data, function(key, value){
+                $.each(value.prestaciones, function(k,v){
+                    if(!prestacionesArr.includes(v.codigoPrestacion)){
+                        tbody += `<tr id="tr_prestacion_${v.codigoPrestacion}">`;
+                        tbody += `<td>${v.nombrePrestacion}</td>`;
+                        prestacionesArr.push(v.codigoPrestacion);
+                        tbody += getTds(v.codigoPrestacion, dataGrouped);
+                        tbody += '<tr>';
+                    }
+                })
+            })
+            $('#box-prestadores-list').html(tbody);
+            asignTdCostos(dataGrouped);
             $('#modalPrestadores').modal('show');
         }else{
             showMessage('warning','Atención',"La prestación seleccionada no tiene prestadores externos asociados.");
         }
+    }
+
+    function getTds(codigoPrestacion, dataGrouped){
+        var maxThPrestadores = $('#box-prestadores-list-th .tr_second th').length - 1;
+        let elemTd = ``;
+        for(var i=0; i<maxThPrestadores; i++){
+            elemTd += `<td id="prestacion_${codigoPrestacion}_${i+1}">---</td>`;
+        }
+        return elemTd;
+    }
+
+    function asignTdCostos(dataGrouped){
+        $.each(dataGrouped, function(key,value){
+            $.each(value.listadoCiudades, function(k, v){
+                $.each(v.listadoPrestadores, function(k1, v1){
+                    let thId = 'th_'+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
+                    let position = $('#box-prestadores-list-th .tr_second th#' + thId).index();
+                    let elem = `<div class="w-100 d-flex align-items-center">
+                                    <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}">
+                                    <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
+                                </div>`;
+                    $('#prestacion_'+value.codigoPrestacion+'_'+position).html(elem);
+                })
+            })
+        })
     }
 
     function getMaxDepth(data){
