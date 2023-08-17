@@ -22,7 +22,11 @@
                 @if(isset($edit) && $edit === true)
                 <form class="card-body" id="form-registro" action="/cotizador/actualizar-cliente" method="POST">
                     <input type="hidden" name="codigoCliente" id="codigoCliente" value="{{ $codigoCliente }}">
+                    @if(isset($cliente->infoEmpresarial->contactoEmpresarial))
                     <input type="hidden" name="idContacto" id="idContacto" value="{{ $cliente->infoEmpresarial->contactoEmpresarial->idContacto }}">
+                    @else
+                    <input type="hidden" name="idContacto" id="idContacto" value="null">
+                    @endif
                 @else
                 <form class="card-body" id="form-registro" action="/cotizador/crear-cliente" method="POST">
                 @endif
@@ -233,7 +237,7 @@
                                 class="form-control"
                                 id="personaContacto"
                                 name="personaContacto"
-                                value="{{ old('personaContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->nombre : '' ) }}"
+                                value="{{ old('personaContacto', isset($cliente->infoEmpresarial->contactoEmpresarial) ? $cliente->infoEmpresarial->contactoEmpresarial->nombre : '' ) }}"
                                 required 
                                 placeholder=""/>
                         </div>
@@ -253,7 +257,7 @@
                                         class="form-control"
                                         id="telefonoMovilContacto"
                                         name="telefonoMovilContacto"
-                                        value="{{ str_replace('+593', '', old('telefonoMovilContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoMovil : '')) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoMovilContacto', isset($cliente->infoEmpresarial->contactoEmpresarial) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoMovil : '')) }}"
                                         required 
                                         placeholder="999999999"/>
                                 </div>
@@ -275,7 +279,7 @@
                                         class="form-control"
                                         id="telefonoFijoContacto"
                                         name="telefonoFijoContacto"
-                                        value="{{ str_replace('+593', '', old('telefonoFijoContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoFijo : '')) }}"
+                                        value="{{ str_replace('+593', '', old('telefonoFijoContacto', isset($cliente->infoEmpresarial->contactoEmpresarial) ? $cliente->infoEmpresarial->contactoEmpresarial->telefonoFijo : '')) }}"
                                         placeholder="99999999"/>
                                 </div>
                             </div>
@@ -296,7 +300,7 @@
                                 class="form-control"
                                 id="cargoPersonaContacto"
                                 name="cargoPersonaContacto"
-                                value="{{ old('cargoPersonaContacto', isset($cliente) ? $cliente->infoEmpresarial->contactoEmpresarial->cargo : '' ) }}"
+                                value="{{ old('cargoPersonaContacto', isset($cliente->infoEmpresarial->contactoEmpresarial) ? $cliente->infoEmpresarial->contactoEmpresarial->cargo : '' ) }}"
                                 placeholder=""/>
                         </div>
                         <div class="col-12 text-end mt-4">
