@@ -4,7 +4,7 @@
     class="light-style layout-menu-fixed"
     dir="ltr"
     data-theme="theme-default"
-    data-assets-path="{{ secure_url('/') }}/assets/"
+    data-assets-path="{{ url('/') }}/assets/"
     data-template="vertical-menu-template"><!--layout-navbar-fixed-->
     <head>
         <meta charset="utf-8" />
@@ -15,24 +15,24 @@
         <meta name="description" content="" />
 
         <!-- Favicon -->
-        <link rel="icon" type="image/x-icon" href="{{ secure_url('/') }}/assets/img/favicon/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{ url('/') }}/assets/img/favicon/favicon.ico" />
 
-        <link rel="apple-touch-icon" sizes="57x57" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-57x57.png">
-        <link rel="apple-touch-icon" sizes="60x60" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-60x60.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-72x72.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-76x76.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-114x114.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-120x120.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-144x144.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-152x152.png">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ secure_url('/') }}/assets/img/favicon/apple-icon-180x180.png">
-        <link rel="icon" type="image/png" sizes="192x192" href="{{ secure_url('/') }}/assets/img/favicon/android-icon-192x192.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ secure_url('/') }}/assets/img/favicon/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ secure_url('/') }}/assets/img/favicon/favicon-96x96.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ secure_url('/') }}/assets/img/favicon/favicon-16x16.png">
-        <!-- <link rel="manifest" href="{{ secure_url('/') }}/assets/img/favicon/manifest.json"> -->
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ url('/') }}/assets/img/favicon/apple-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ url('/') }}/assets/img/favicon/apple-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ url('/') }}/assets/img/favicon/apple-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ url('/') }}/assets/img/favicon/apple-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ url('/') }}/assets/img/favicon/apple-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ url('/') }}/assets/img/favicon/apple-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ url('/') }}/assets/img/favicon/apple-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ url('/') }}/assets/img/favicon/apple-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url('/') }}/assets/img/favicon/apple-icon-180x180.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ url('/') }}/assets/img/favicon/android-icon-192x192.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url('/') }}/assets/img/favicon/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="{{ url('/') }}/assets/img/favicon/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url('/') }}/assets/img/favicon/favicon-16x16.png">
+        <!-- <link rel="manifest" href="{{ url('/') }}/assets/img/favicon/manifest.json"> -->
         <meta name="msapplication-TileColor" content="#171D49">
-        <meta name="msapplication-TileImage" content="{{ secure_url('/') }}/assets/img/favicon/ms-icon-144x144.png">
+        <meta name="msapplication-TileImage" content="{{ url('/') }}/assets/img/favicon/ms-icon-144x144.png">
         <meta name="theme-color" content="#171D49">
 
         <!-- Fonts -->
@@ -44,43 +44,43 @@
         />
 
         <!-- Icons -->
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/fonts/fontawesome.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/fonts/tabler-icons.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/fonts/flag-icons.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/fonts/fontawesome.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/fonts/tabler-icons.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/fonts/flag-icons.css" />
 
         <!-- Core CSS -->
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/css/demo.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/css/style.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/css/rtl/core.css" class="template-customizer-core-css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/css/rtl/theme-default.css" class="template-customizer-theme-css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/css/demo.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/css/style.css" />
 
         <!-- Vendors CSS -->
-        {{-- <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/node-waves/node-waves.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/typeahead-js/typeahead.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/apex-charts/apex-charts.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/swiper/swiper.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/select2/select2.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/toastr/toastr.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/animate-css/animate.css" />
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.css" />
+        {{-- <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/node-waves/node-waves.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/typeahead-js/typeahead.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/apex-charts/apex-charts.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/swiper/swiper.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/select2/select2.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/toastr/toastr.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/animate-css/animate.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.css" />
         {{-- <link rel="stylesheet" href="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" /> --}}
 
         <!-- Page CSS -->
-        <link rel="stylesheet" href="{{ secure_url('/') }}/assets/vendor/css/pages/cards-advance.css" />
+        <link rel="stylesheet" href="{{ url('/') }}/assets/vendor/css/pages/cards-advance.css" />
         
         <!-- Helpers -->
-        <script src="{{ secure_url('/') }}/assets/vendor/js/helpers.js"></script>
-        <script src="{{ secure_url('/') }}/assets/js/config.js"></script>
+        <script src="{{ url('/') }}/assets/vendor/js/helpers.js"></script>
+        <script src="{{ url('/') }}/assets/js/config.js"></script>
         <script>
             let _token = "{{ session('accessToken') }}";
             const _application = "{{ \App\Models\Ism::APPLICATION }}";
             const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
             const api_url = "{{ \App\Models\Ism::BASE_URL }}";
-            const url_site = "{{ secure_url('/') }}";
+            const url_site = "{{ url('/') }}";
         </script>
     </head>
 
@@ -129,45 +129,45 @@
 
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/jquery/jquery.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/popper/popper.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/js/bootstrap.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/jquery/jquery.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/popper/popper.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/js/bootstrap.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/node-waves/node-waves.js"></script>
 
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/hammer/hammer.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/i18n/i18n.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/typeahead-js/typeahead.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/hammer/hammer.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/i18n/i18n.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/typeahead-js/typeahead.js"></script>
 
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/block-ui/block-ui.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/block-ui/block-ui.js"></script>
 
-    <script src="{{ secure_url('/') }}/assets/vendor/js/menu.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/apex-charts/apexcharts.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/swiper/swiper.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/datatables/jquery.dataTables.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/select2/select2.js"></script>
-    <script src="{{ secure_url('/') }}/assets/js/forms-selects.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/toastr/toastr.js"></script>
-    <script src="{{ secure_url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/swiper/swiper.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/datatables/jquery.dataTables.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/datatables-responsive/datatables.responsive.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/select2/select2.js"></script>
+    <script src="{{ url('/') }}/assets/js/forms-selects.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/toastr/toastr.js"></script>
+    <script src="{{ url('/') }}/assets/vendor/libs/sweetalert2/sweetalert2.js"></script>
     {{-- <link rel="stylesheet" href="../../assets/vendor/libs/spinkit/spinkit.css" /> --}}
     {{-- <script src="../../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script> --}}
 
     <!-- Main JS -->
-    <script src="{{ secure_url('/') }}/assets/js/main.js"></script>
+    <script src="{{ url('/') }}/assets/js/main.js"></script>
 
     <!-- Page JS -->
-    <script src="{{ secure_url('/') }}/assets/js/dashboards-analytics.js"></script>
+    <script src="{{ url('/') }}/assets/js/dashboards-analytics.js"></script>
     {{-- <script src="../../assets/js/extended-ui-perfect-scrollbar.js"></script> --}}
     {{-- <script src="../../assets/js/typeahead.bundle.js"></script> --}}
 
     <!-- ISM -->
-    <script src="{{ secure_url('/') }}/assets/js/ism-helper.js"></script>
+    <script src="{{ url('/') }}/assets/js/ism-helper.js"></script>
     </body>
 </html>
