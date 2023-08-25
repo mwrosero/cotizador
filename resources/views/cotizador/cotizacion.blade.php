@@ -313,6 +313,9 @@
                 </div>
                 <div class="row g-3 box-resumen d-none">
                     <div class="col-12 mt-4">
+                        <span class="badge bg-orange" id="precio_total">$25</span>
+                    </div>
+                    <div class="col-12 mt-2">
                         <span class="badge" id="t_h"></span>
                     </div>
                     @if(isset($edit))
@@ -785,7 +788,11 @@
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
                 "cantidadPacientes": parseInt($(this).val()),
                 "costoUnitario": prestacion.valorCosto,
+                @if(isset($edit))
+                "precioUnitario": $(this).attr("precioUnitario-rel"),
+                @else
                 "precioUnitario": prestacion.valorPvp,
+                @endif
                 "aplicaIva": prestacion.aplicaIva,
                 "valorPvp": prestacion.valorPvp,
                 "id": $(this).attr("id"),
@@ -978,6 +985,7 @@
                     if(v.activo){
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
+                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
                     }
                 })
@@ -1042,8 +1050,10 @@
                 `;
             });
 
+            let total_precios = 0;
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
+                    total_precios += (v.precioUnitario*v.cantidadPacientes);
                     elem += `
                     <tr class="border-bottom">
                         <td>${ value.nombreGrupo }</td>
@@ -1070,6 +1080,8 @@
                     `;
                 });
             });
+
+            $('#precio_total').html("$"+formatDollar(total_precios));
 
             calcularTH();
 
@@ -1166,6 +1178,7 @@
                 if (prestacion.idItem === idItem) {
                     prestacion.cantidadPacientes = getInput('cantidadEdit');
                     prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                    // precioUnitario-rel
                     $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
                     $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
@@ -1576,11 +1589,9 @@
     function formatDollar(numero){
         let numStr = numero.toString().replace(/^0+/, '');
         let numeroRedondeado = parseFloat(numStr).toFixed(2);
-        let numeroFormateado = numeroRedondeado.toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-        // console.log(numeroFormateado);
+        let partes = numeroRedondeado.split('.');
+        partes[0] = partes[0].replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Agregar comas para separación de miles
+        let numeroFormateado = partes.join('.');
         return numeroFormateado;
     }
 
@@ -1962,16 +1973,20 @@ $('#tableContainer').html(tableHtml);
             let theader = `<tr><th class="fs-12">Ciudades</th>`;
             $.each(data.data, function(key, value){
                 let total = 0;
+                let existenPrestadores = false;
                 $.each(value.prestaciones, function(k,v){
                     $.each(v.prestadores, function(k1,v1){
                         if(!institucionesArr.includes(value.codigoCiudad+"_"+v1.idInstitucion)){
                             total++;
+                            existenPrestadores = true;
                             institucionesArr.push(value.codigoCiudad+"_"+v1.idInstitucion);
                         }
                     })
                     //total += v.prestadores.length;
                 })
-                theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
+                if(existenPrestadores){
+                    theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
+                }
             })
             institucionesArr = [];
             theader += `</tr>
