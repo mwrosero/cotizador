@@ -31,6 +31,7 @@ class CotizadorController extends Controller
             session()->flash('success', $response->message);
             return redirect()->route('consulta-cotizaciones');
         }
+
         // dd($response);
         return view('cotizador.cotizacion')
             ->with('edit', true)
@@ -338,5 +339,21 @@ class CotizadorController extends Controller
             //return view('cotizador.clientes');
         }
         
+    }
+
+    public function visualizarCotizacion($idCotizacion){
+        $method = '/empresarial/v1/cotizacion/resumen?idCotizacion='.base64_decode($idCotizacion);
+        
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => '',
+            'method'   => 'GET'
+        ]);
+
+        // echo Ism::BASE_URL.$method;
+        // dd($response);
+        return view('cotizador.visualizarCotizador')
+            ->with('data',$response->data)
+            ->with('idCotizacion',base64_decode($idCotizacion));
     }
 }
