@@ -88,6 +88,84 @@
                     </div>
                 </div>
                 <hr class="my-4 mx-n4" />
+                <h6 class="txt-veris">Parametrizaciones</h6>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                    @if(isset($edit))
+                        <label class="form-label fs-12">Teléfono</label>
+                        <p>{{ $data->nombreEntidadAfiliada }}</p>
+                    @else
+                        <label for="entidadAfiliada" class="form-label">Entidad Afiliada<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
+                        <div class="select2-dark">
+                            <select id="entidadAfiliada" class="select2 form-select">
+                            </select>
+                        </div>
+                    @endif
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-3">
+                        <label for="aplicaGeneracionOrden" class="form-label">Aplica Generar Orden</label>
+                        <div class="form-check form-switch mb-2 mt-2">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                id="aplicaGeneracionOrden" 
+                                name="aplicaGeneracionOrden"
+                                value="aplicaGeneracionOrden" 
+                                @if(isset($edit))
+                                readonly disabled 
+                                @endif
+                            />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label for="aplicaEnvioMailPaciente" class="form-label">Aplica Enviar Resultados Paciente</label>
+                        <div class="form-check form-switch mb-2 mt-2">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                id="aplicaEnvioMailPaciente" 
+                                name="aplicaEnvioMailPaciente"
+                                value="aplicaEnvioMailPaciente" 
+                                @if(isset($edit))
+                                readonly disabled 
+                                @endif
+                            />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label for="aplicaEnvioMailEmpresa" class="form-label">Aplica Enviar Resultados Empresa</label>
+                        <div class="form-check form-switch mb-2 mt-2">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                id="aplicaEnvioMailEmpresa" 
+                                name="aplicaEnvioMailEmpresa"
+                                value="aplicaEnvioMailEmpresa" 
+                                @if(isset($edit))
+                                readonly disabled 
+                                @endif
+                            />
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label for="validaLineaNegocio" class="form-label">Valida Línea Negocio</label>
+                        <div class="form-check form-switch mb-2 mt-2">
+                            <input 
+                                class="form-check-input" 
+                                type="checkbox" 
+                                id="validaLineaNegocio" 
+                                name="validaLineaNegocio"
+                                value="validaLineaNegocio" 
+                                @if(isset($edit))
+                                readonly disabled 
+                                @endif
+                            />
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4 mx-n4" />
                 <h6 class="txt-veris">Tipos de Servicios</h6>
                 <div class="row g-3">
                     <div class="col-12 col-md-6">
@@ -101,9 +179,10 @@
                         <label for="lugarServicio" class="form-label">¿Dónde deseas el servicio?<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                         <div class="select2-dark">
                             <select id="lugarServicio" class="select2 form-select" multiple>
-                                <option value="1" >En el lugar de la empresa</option>
-                                <option value="2" >En el centro médico Veris</option>
-                                <option value="3">Otros</option>
+                                {{-- LUGAR_EMPRESA, CENTRO_MEDICO_VERIS, OTROS --}}
+                                <option value="LUGAR_EMPRESA">En el lugar de la empresa</option>
+                                <option value="CENTRO_MEDICO_VERIS">En el centro médico Veris</option>
+                                <option value="OTROS">Otros</option>
                             </select>
                         </div>
                     </div>
@@ -551,6 +630,9 @@
         @if(isset($numeroIdentificacion))
         buscarCliente();
         @endif
+        @if(isset($edit))
+        showLoader();
+        @endif
         modalCliente = new bootstrap.Modal('#modalCliente');
         obtenerTiposContrato();
         obtenerCentralesMedicas();
@@ -586,41 +668,42 @@
 
             /*
                 lugarServicio: 1.Empresa 2.Veris 3.Otros
+                {{-- LUGAR_EMPRESA, CENTRO_MEDICO_VERIS, OTROS --}}
             */
             let filtroLugar = getInput('lugarServicio','select2');
             //Solo en Veris
-            if(filtroLugar.length == 1 && $.inArray("2", filtroLugar) !== -1) {
+            if(filtroLugar.length == 1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1) {
                 $('.req-centroMedico').removeClass('d-none');
             }
 
             //En la Empresa o en Otro lugar
-            if(filtroLugar.length == 1 && ($.inArray("1", filtroLugar) !== -1 || $.inArray("3", filtroLugar) !== -1)){
+            if(filtroLugar.length == 1 && ($.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 || $.inArray("OTROS", filtroLugar) !== -1)){
                 $('.req-ciudadChequeo').removeClass('d-none');
                 $('.req-detalleLugar').removeClass('d-none');
             }
 
             //En la Empresa y en Veris
-            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1) {
+            if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1) {
                 $('.req-centroMedico').removeClass('d-none');
                 $('.req-ciudadChequeo').removeClass('d-none');
                 $('.req-detalleLugar').removeClass('d-none');                
             }
 
             //En Veris y Otros
-            if(filtroLugar.length > 1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+            if(filtroLugar.length > 1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
                 $('.req-centroMedico').removeClass('d-none');
                 $('.req-ciudadChequeo').removeClass('d-none');
                 $('.req-detalleLugar').removeClass('d-none');
             }
 
             //En la Empresa y Otros
-            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1){
+            if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1){
                 $('.req-ciudadChequeo').removeClass('d-none');
                 $('.req-detalleLugar').removeClass('d-none');
             }
 
             //En los 3
-            if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+            if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
                 $('.req-centroMedico').removeClass('d-none');
                 $('.req-ciudadChequeo').removeClass('d-none');
                 $('.req-detalleLugar').removeClass('d-none');
@@ -640,6 +723,7 @@
             $('#box-info-cliente').removeClass('d-none');
             $('#cliente').val(detalle.codigoCliente);
             $('#cliente').attr("cliente-rel",JSON.stringify(detalle));
+            obtenerEntidadesAfiliadas();
             modalCliente.hide();
         })
 
@@ -703,6 +787,7 @@
                 "costoUnitario": prestacion.valorCosto,
                 "precioUnitario": prestacion.valorPvp,
                 "aplicaIva": prestacion.aplicaIva,
+                "valorPvp": prestacion.valorPvp,
                 "id": $(this).attr("id"),
                 "activo":true,
                 @if(isset($edit))
@@ -867,9 +952,24 @@
         @if(isset($edit))
             $('#box-info-cliente').removeClass('d-none');
             $('#tipoServicio').val({{ $data->codigoTipoContrato }}).trigger("change");
+            @if(isset($data->codigoSucursal))
             $('#centroMedico').val({{ $data->codigoSucursal }}).trigger("change");
+            @endif
+
+            //Parametrizaciones
+            $('#aplicaGeneracionOrden').prop('checked',{{ $data->aplicaGeneracionOrden }});
+            $('#aplicaEnvioMailPaciente').prop('checked',{{ $data->aplicaEnvioMailPaciente }});
+            $('#aplicaEnvioMailEmpresa').prop('checked',{{ $data->aplicaEnvioMailEmpresa }});
+            $('#validaLineaNegocio').prop('checked',{{ $data->validaLineaNegocio }});
+
             let ciudades = @json($data->ciudades);
-            $('#ciudadChequeo').val(ciudades).trigger("change");
+            let ciudadesArr = [];
+            $.each(ciudades, function(key, value){
+                ciudadesArr.push(value.codigoPais+"-"+value.codigoProvincia+"-"+value.codigoCiudad);
+            });
+            $('#ciudadChequeo').val(ciudadesArr).trigger("change");
+            let lugarServicio = "{{ $data->nemonicoLugarServicio }}";
+            $('#lugarServicio').val(lugarServicio.split(',')).trigger("change");
             let detalle = @json($data->detalle);
             //Lleno arrays
             $.each(detalle, function(key, value){
@@ -903,6 +1003,7 @@
                 );
             })
             drawTable();
+            hideLoader();
             //Sobre-escribo valores
         @endif
 
@@ -929,7 +1030,7 @@
                     <td id="total_${ value.idItem }">$${ formatDollar(value.valorUnitario) }</td>
                     <td width="100px" class="text-start align-middle">
                         <div class="d-flex">
-                            <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                            <a idItem-rel="${ value.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit-gasto d-inline" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasGastos" aria-controls="offcanvasGastos">
                                 <img class="action-ico d-inline" src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
                             </a>
                             <a idItem-rel="${ value.idItem }" title="Eliminar Costo" href="javascript:;" class="btn btn-sm btn-icon item-delete-costo d-inline item-delete-alt">
@@ -1261,6 +1362,7 @@
         let inicioChequeo  = getInput('inicioChequeo');
         let diasServicio  = getInput('diasServicio');
         let ciudadChequeo = getInput('ciudadChequeo','select2');
+        let entidadAfiliada = getInput('entidadAfiliada','select2');
 
         if(cliente == ""){
             msg += "<span class='fs-12'>-Seleccionar un cliente</span><br>";
@@ -1279,14 +1381,14 @@
         */
         let filtroLugar = getInput('lugarServicio','select2');
         //Solo en Veris
-        if(filtroLugar.length == 1 && $.inArray("2", filtroLugar) !== -1) {
+        if(filtroLugar.length == 1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1) {
             if(centroMedico == ""){
                 msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
             }
         }
 
         //En la Empresa o en Otro lugar
-        if(filtroLugar.length == 1 && ($.inArray("1", filtroLugar) !== -1 || $.inArray("3", filtroLugar) !== -1)){
+        if(filtroLugar.length == 1 && ($.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 || $.inArray("OTROS", filtroLugar) !== -1)){
             if(ciudadChequeo.length == 0){
                 msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
@@ -1297,7 +1399,7 @@
         }
 
         //En la Empresa y en Veris
-        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1) {
+        if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1) {
             if(centroMedico == ""){
                 msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
             }
@@ -1312,7 +1414,7 @@
         }
 
         //En Veris y Otros
-        if(filtroLugar.length > 1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+        if(filtroLugar.length > 1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
             if(centroMedico == ""){
                 msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
             }
@@ -1327,7 +1429,7 @@
         }
 
         //En la Empresa y Otros
-        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+        if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
             if(ciudadChequeo.length == 0){
                 msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
@@ -1338,7 +1440,7 @@
         }
 
         //En los 3
-        if(filtroLugar.length > 1 && $.inArray("1", filtroLugar) !== -1 && $.inArray("2", filtroLugar) !== -1 && $.inArray("3", filtroLugar) !== -1) {
+        if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("CENTRO_MEDICO_VERIS", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
             if(centroMedico == ""){
                 msg += "<span class='fs-12'>-Seleccionar un Centro Médico</span><br>";
             }
@@ -1388,6 +1490,12 @@
             args["showLoader"] = true;
             args["data"] = JSON.stringify({
                 "codigoCliente": parseInt(cliente),
+                "aplicaGeneracionOrden": $('#aplicaGeneracionOrden').is(":checked"),
+                "aplicaEnvioMailPaciente": $('#aplicaEnvioMailPaciente').is(":checked"),
+                "aplicaEnvioMailEmpresa": $('#aplicaEnvioMailEmpresa').is(":checked"),
+                "validaLineaNegocio": $('#validaLineaNegocio').is(":checked"),
+                "codigoEntidadAfiliada": parseInt(entidadAfiliada),
+                "nemonicoLugarServicio": getInput('lugarServicio','select2').join(','),
                 "codigoTipoContrato": parseInt(tipoServicio),
                 "codigoEmpresa":parseInt($('#centroMedico option:selected').attr('codigoEmpresa-rel')),
                 "codigoSucursal": parseInt(centroMedico),
@@ -1403,7 +1511,7 @@
             const data = await call(args);
             if(data.code == 200){
                 showMessage('success','Atención',"Cotización creada");
-                location.href = '/cotizador/consulta-cotizaciones';
+                // location.href = '/cotizador/consulta-cotizaciones';
             }else{
                 showMessage('warning','Atención',data.message);
                 $('#btn-crear-cotizacion').prop('disabled',false);
@@ -1540,6 +1648,8 @@
             $('#cliente').val('');
             $('#cliente').attr("cliente-rel",'');
 
+            $('#entidadAfiliada').empty().trigger('change');
+
             const data = await call(args);
             // console.log(data);
             if(data.data.totalRows == 0 ){
@@ -1551,6 +1661,7 @@
                 $('#box-info-cliente').removeClass('d-none');
                 $('#cliente').val(data.data.row[0].codigoCliente);
                 $('#cliente').attr("cliente-rel",JSON.stringify(data.data.row[0]));
+                obtenerEntidadesAfiliadas();
             }else{
                 let elem;
                 $('#clienteSearch').html($('#searchInput').val() +" ("+data.data.totalRows+" clientes encontrados)");
@@ -2047,6 +2158,24 @@ $('#tableContainer').html(tableHtml);
         const data = await call(args);
         console.log(data);
         drawTablePrestadores(data);
+    }
+
+    async function obtenerEntidadesAfiliadas(){
+        $('#entidadAfiliada').empty().trigger('change');
+        let args = [];
+        args["endpoint"] = api_url+"/comercial/v1/entidadesAfiliadas/entidades_por_cliente?page=1&perPage=100&estado=ACTIVO&codigoCliente="+getInput('cliente');
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+        
+        $.each(data.data.rows, function(key, value){
+            console.log(value);
+            $('#entidadAfiliada').append(`<option value="${value.codigoEntidadAfiliada}">${value.nombreEntidadAfiliada}</option>`);
+        })
+
+        $('#entidadAfiliada').trigger('change');
     }
 
     async function obtenerServiciosCostos(){

@@ -24,9 +24,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/recuperar-clave', [SeguridadesController::class, 'recuperarClave'])->name('recuperar_clave')->withoutMiddleware(['loggedUser']);
     Route::get('/reestablecer-clave', [SeguridadesController::class, 'reestablecerClave'])->name('reestablecer_clave')->withoutMiddleware(['loggedUser']);
 
-    Route::get('/cotizacion', function () {
-        return view('cotizador.cotizacion');
-    })->withoutMiddleware(['loggedUser']);
+    // Route::get('/cotizacion', function () {
+    //     return view('cotizador.cotizacion');
+    // })->withoutMiddleware(['loggedUser']);
+
+    /*Visualizar Prestaciones*/
+    Route::get('/cliente/cotizacion/{idCotizacion}/aprobar', [CotizadorController::class, 'visualizarCotizacion'])->name('visualizar_cotizacion')->withoutMiddleware(['loggedUser']);
 });
 
 //Route::middleware('auth')->group(function () {
