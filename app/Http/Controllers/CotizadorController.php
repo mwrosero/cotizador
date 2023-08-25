@@ -137,6 +137,7 @@ class CotizadorController extends Controller
             'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
+        // dd($responseContratos);
         
         return view('cotizador.cotizaciones')
             ->with('datosPaginados', $datosPaginados)

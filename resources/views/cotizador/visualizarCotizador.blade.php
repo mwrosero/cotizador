@@ -73,9 +73,9 @@
                                                 @endif
                                             </td>
                                             <td>{{ $prestacion->codigoPrestacion }}</td>
-                                            <td>{{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
+                                            <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
                                             <td>{{ $prestacion->cantidadPacientes }}</td>
-                                            <td>{{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
+                                            <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
                                         </tr>
                                         @endforeach
                                     @endforeach
