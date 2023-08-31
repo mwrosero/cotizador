@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Models\Ism;
 
@@ -93,12 +94,12 @@ class SeguridadesController extends Controller
         }
     }
 
-    /*Login*/
+    /*Formulario de Olvide clave*/
     public function olvideClave(){
         return view('login.olvide_clave');
     }
 
-    /*Login*/
+    /*Envio de petición para reestablecer clave*/
     public function recuperarClave(Request $request){
         $data = $request->all();
         $user = $data['user'];
@@ -119,6 +120,31 @@ class SeguridadesController extends Controller
     /*Reestablecer clave*/
     public function reestablecerClave(){
         return view('login.reestablecer_clave');
+    }
+
+    public function formularioActualizarClave($codigo, $usuario){
+        return view('login.actualizar_clave')
+            ->with('codigo',$codigo)
+            ->with('usuario',$usuario);
+    }
+
+    public function actualizarClave(Request $request){
+        $data = $request->all();
+        $method = '/seguridad/v1/usuarios/recuperacion_clave';
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            //'token'    => Ism::getToken(),
+            'data'     => ['usuario' => $data['usuario'], 'codigoRecuperacion' => $data['codigo'], 'claveNueva' => $data['nuevaClave']],
+            'method'   => 'POST'
+        ]);
+
+        if($response->code != 200){
+            session()->flash('mensaje', $response->message);
+            return Redirect::route('actualizar_clave.form', ['codigo' => $data['codigo'], 'usuario' => $data['usuario']]);
+        }
+
+        session()->flash('mensaje', "Contraseña actualizada exitosamente.");
+        return redirect()->route('login');
     }
 
     /*Refresh Token*/

@@ -83,6 +83,7 @@
                                 <th>Fecha Inicio</th>
                                 <th>Total</th>
                                 <th>Rentabilidad</th>
+                                <th>Usuario</th>
                                 <th>Estado</th>
                                 <th>Acción</th>
                             </tr>
@@ -109,6 +110,7 @@
                                     <span class="badge bg-danger t_h">{{ $dato->porcentajeRentabilidad }}%</span>
                                     @endif
                                 </td>
+                                <td>{{ $dato->usuarioIngreso }}</td>
                                 <td>{{ $dato->estado }}</td>
                                 <td width="100px" class="text-start align-middle">
                                     <div class="d-flex">

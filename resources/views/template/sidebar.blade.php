@@ -8,8 +8,8 @@
             </a>
         </div>
         <div class="col-12 mt-4 text-center">
-            <img class="logo-sidebar" src="{{ secure_url('/') }}/assets/img/veris/icono-ism-large.svg">
-            <img class="logo-sidebar-iso" src="{{ secure_url('/') }}/assets/img/veris/isotipo.svg" alt="">
+            <img class="logo-sidebar" src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/img/veris/icono-ism-large.svg">
+            <img class="logo-sidebar-iso" src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/img/veris/isotipo.svg" alt="">
         </div>
     </div>
     <!-- <div class="app-brand demo">

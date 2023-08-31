@@ -59,6 +59,7 @@
         <!-- Vendors CSS -->
         
         <link rel="stylesheet" href="../../../assets/vendor/libs/bootstrap-select/bootstrap-select.css" />
+        <link rel="stylesheet" href="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/vendor/libs/toastr/toastr.css" />
 
         <!-- Page CSS -->
         <script src="../../../assets/vendor/js/helpers.js"></script>
@@ -127,6 +128,7 @@
       <!-- Vendors JS -->
       <script src="../../../assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js"></script>
       <script src="../../../assets/vendor/libs/formvalidation/dist/js/plugins/Bootstrap5.min.js"></script>
+      <script src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/vendor/libs/toastr/toastr.js"></script>
       <!--<script src="../../../assets/vendor/libs/formvalidation/dist/js/plugins/AutoFocus.min.js"></script>-->
 
       <!-- Main JS -->
@@ -134,5 +136,6 @@
 
       <!-- Page JS -->
       {{-- <script src="../../../assets/js/pages-auth.js"></script> --}}
+      <script src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/js/ism-helper.js"></script>
 </body>
 </html>

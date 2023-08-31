@@ -787,11 +787,12 @@
                 "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
                 "cantidadPacientes": parseInt($(this).val()),
-                "costoUnitario": prestacion.valorCosto,
                 @if(isset($edit))
-                "precioUnitario": $(this).attr("precioUnitario-rel"),
+                "precioUnitario": parseFloat($(this).attr("precioUnitario-rel")),
+                "costoUnitario": parseFloat($(this).attr("costoUnitario-rel")),
                 @else
-                "precioUnitario": prestacion.valorPvp,
+                "costoUnitario": parseFloat(prestacion.valorCosto),
+                "precioUnitario": parseFloat(prestacion.valorPvp),
                 @endif
                 "aplicaIva": prestacion.aplicaIva,
                 "valorPvp": prestacion.valorPvp,
@@ -986,6 +987,7 @@
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
+                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("costoUnitario-rel",v.costoUnitario);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
                     }
                 })
@@ -1535,8 +1537,8 @@
     async function actualizarCotizacion(){
         $('#btn-crear-cotizacion').prop('disabled',true);
         let ciudadesArr = [];
-        let ciudades = getInput('ciudadChequeo','select2')
-        $.each(ciudades, function(value){
+        let ciudades = getInput('ciudadChequeo','select2');
+        $.each(ciudades, function(key, value){
             ciudadesArr.push({
                 "idCiudad": value,
                 "activo": true,
