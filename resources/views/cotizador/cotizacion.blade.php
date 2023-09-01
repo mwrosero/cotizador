@@ -313,7 +313,7 @@
                 </div>
                 <div class="row g-3 box-resumen d-none">
                     <div class="col-12 mt-4">
-                        <span class="badge bg-orange" id="precio_total">$25</span>
+                        <span class="badge bg-orange" id="precio_total"></span>
                     </div>
                     <div class="col-12 mt-2">
                         <span class="badge" id="t_h"></span>
@@ -1083,7 +1083,7 @@
                 });
             });
 
-            $('#precio_total').html("$"+formatDollar(total_precios));
+            $('#precio_total').html("Total: $"+formatDollar(total_precios));
 
             calcularTH();
 
@@ -1481,7 +1481,8 @@
             showMessage('warning','Atención',msg);
             $('#btn-crear-cotizacion').prop('disabled',false);
         }else{
-            const fecha = new Date(inicioChequeo);
+            const fecha = new Date(inicioChequeo + 'T00:00:00');
+            fecha.setHours(fecha.getHours() + 5); // Ajustar para GMT-0500
             const dia = fecha.getDate();
             const mes = fecha.getMonth() + 1; // Los meses van de 0 a 11 en JavaScript
             const anio = fecha.getFullYear();
@@ -1526,7 +1527,7 @@
             const data = await call(args);
             if(data.code == 200){
                 showMessage('success','Atención',"Cotización creada");
-                // location.href = '/cotizador/consulta-cotizaciones';
+                location.href = '/cotizador/consulta-cotizaciones';
             }else{
                 showMessage('warning','Atención',data.message);
                 $('#btn-crear-cotizacion').prop('disabled',false);
