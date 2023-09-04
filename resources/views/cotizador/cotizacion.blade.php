@@ -1063,7 +1063,7 @@
                         <td>${ v.nombrePrestacion }</td>
                         <td>${ v.codigoPrestacion }</td>
                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
-                        <td id="precioUnitario_${ v.idItem }">$${ formatDollar(v.precioUnitario) }</td>
+                        <td id="precioUnitario_${ v.idItem }" class="precioUnitario_${ v.codigoPrestacion }">$${ formatDollar(v.precioUnitario) }</td>
                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
                         <td width="100px" class="text-end align-middle">
                             <div class="d-flex">
@@ -1178,13 +1178,16 @@
         for (const elemento of dataPrestaciones) {
             for (const prestacion of elemento.prestaciones) {
                 if (prestacion.idItem === idItem) {
-                    prestacion.cantidadPacientes = getInput('cantidadEdit');
+                    console.log(idItem);
+                    prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
                     prestacion.precioUnitario = getInput('precioUnitarioEdit');
                     // precioUnitario-rel
                     $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
                     $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                    $('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
+                    actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
                     calcularTH();
                     return true;
                 }
@@ -1193,6 +1196,24 @@
 
         return false; // Si no se encuentra el elemento, retorna false
     }
+
+    function actualizarItemsConCodigoPrestacion(objeto, codigoPrestacion, nuevoPrecioUnitario) {
+        // Recorremos el objeto
+        for (let i = 0; i < objeto.length; i++) {
+            const grupo = objeto[i];
+            // Recorremos las prestaciones dentro de cada grupo
+            for (let j = 0; j < grupo.prestaciones.length; j++) {
+                const prestacion = grupo.prestaciones[j];
+                // Verificamos si el código de prestación coincide
+                if (prestacion.codigoPrestacion === codigoPrestacion) {
+                    // Actualizamos el número con el nuevo valor
+                    prestacion.precioUnitario = parseFloat(nuevoPrecioUnitario); // Si deseas actualizar el precio también
+                }
+            }
+        }
+    }
+
+
 
     /*function actualizarPrestacion() {
         if(!$('#aplicaTodoGrupo').prop('checked')){
