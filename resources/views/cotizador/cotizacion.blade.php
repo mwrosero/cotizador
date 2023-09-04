@@ -2209,7 +2209,11 @@ $('#tableContainer').html(tableHtml);
 
         $('#servicioCosto').append(`<option value=""></option>`);
         $.each(data.data, function(key, value){
-            $('#servicioCosto').append(`<option value="${value.idCosto}" title="${value.descripcion}">${value.nombreCosto}</option>`);
+            let descripcion = "";
+            if(value.descripcion != null){
+                descripcion = value.descripcion;
+            }
+            $('#servicioCosto').append(`<option value="${value.idCosto}" title="${descripcion}">${value.nombreCosto}</option>`);
         })
     }
 

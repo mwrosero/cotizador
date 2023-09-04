@@ -37,8 +37,8 @@ async function updateToken() {
 
     const data = await call(args);
     console.log(data);
-    if(data.code != 200){
-        showMessage("warning","Atención",data.message);
+    if(!data || data.code != 200){
+        //showMessage("warning","Atención",data.message);
         logout();
     }else{
         _token = data.idToken;
