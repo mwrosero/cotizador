@@ -758,6 +758,7 @@
             let nombreGrupo = $('#grupoPerfil option:selected').html();
             let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
             let idDetalle = null;
+            console.log(prestacion);
 
             // Obtener el índice del grupo en el arreglo dataPrestaciones
             let grupoIndex = dataPrestaciones.findIndex(function(item) {
@@ -779,6 +780,13 @@
                 return;
             }
 
+            let costoUnitario = prestacion.valorCosto;
+            let precioUnitario = prestacion.valorPvp;
+            if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
+                precioUnitario = $(this).attr("precioUnitario-rel");
+                costoUnitario = $(this).attr("costoUnitario-rel");
+            }
+
             // Crear el objeto de la prestación
             let prestacionObj = {
                 "idItem":grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion,
@@ -787,13 +795,15 @@
                 "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
                 "nombreServicio": $(this).attr("nombreServicio-rel"),
                 "cantidadPacientes": parseInt($(this).val()),
-                @if(isset($edit))
+                "precioUnitario": parseFloat(precioUnitario),
+                "costoUnitario": parseFloat(costoUnitario),
+                /*@if(isset($edit))
                 "precioUnitario": parseFloat($(this).attr("precioUnitario-rel")),
                 "costoUnitario": parseFloat($(this).attr("costoUnitario-rel")),
                 @else
                 "costoUnitario": parseFloat(prestacion.valorCosto),
                 "precioUnitario": parseFloat(prestacion.valorPvp),
-                @endif
+                @endif*/
                 "aplicaIva": prestacion.aplicaIva,
                 "valorPvp": prestacion.valorPvp,
                 "id": $(this).attr("id"),
