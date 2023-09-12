@@ -1199,12 +1199,25 @@
                     $('#offcanvasPrestacion').offcanvas('hide');
                     actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
                     calcularTH();
+                    calcularTotal()
+
                     return true;
                 }
             }
         }
 
         return false; // Si no se encuentra el elemento, retorna false
+    }
+
+    function calcularTotal(){
+        let total_precios = 0;
+        $.each(dataPrestaciones, function(key, value){
+            $.each(value.prestaciones, function(k, v){
+                console.log(total_precios,(v.precioUnitario*v.cantidadPacientes));
+                total_precios += (v.precioUnitario*v.cantidadPacientes);
+            })
+        })
+        $('#precio_total').html("Total: $"+formatDollar(total_precios));
     }
 
     function actualizarItemsConCodigoPrestacion(objeto, codigoPrestacion, nuevoPrecioUnitario) {

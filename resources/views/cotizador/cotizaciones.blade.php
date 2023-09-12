@@ -99,7 +99,7 @@
                         @foreach ($datosPaginados as $dato)
                             @if( session('userData')->codigoUsuario == $dato->usuarioIngreso || session('userData')->codigoUsuario == "MVELEZ" )
                             <tr class="fs-12">
-                                <td>{{ $dato->codigoCliente }}</td>
+                                <td>{{ $dato->idCotizacion }}</td>
                                 <td>{{ $dato->nombreCliente }}</td>
                                 <td>{{ $dato->nombreTipoContrato }}</td>
                                 <td>{{ $dato->fechaInicio }}</td>
