@@ -312,11 +312,22 @@
                     </div>
                 </div>
                 <div class="row g-3 box-resumen d-none">
-                    <div class="col-12 mt-4">
-                        <span class="badge bg-orange" id="precio_total"></span>
+                    <div class="col-12 col-md-4 mt-4 mb-2">
+                        <div class="row">
+                            <div class="col-12 label_costo_0 d-none">
+                                <span class="badge tr_costo_0 text-dark fw-bold">* Prestación con Costo $0</span>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <span class="badge bg-orange" id="precio_total"></span>
+                            </div>
+                            <div class="col-12 mt-2">
+                                <span class="badge" id="t_h"></span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-12 mt-2">
-                        <span class="badge" id="t_h"></span>
+                    <div class="col-12 col-md-8">
+                        <label for="observacion" class="form-label">Observación</label>
+                        <textarea class="form-control" id="observacion" name="observacion" rows="3" maxlength="4000"></textarea>
                     </div>
                     @if(isset($edit))
                     <div class="col-12">
@@ -625,6 +636,7 @@
     let modalCliente;
     let swiper;
     let dataPrestaciones = [];
+    let dataPrestacionesEditOriginal = [];
     let dataCostos = [];
     let costosPrestadores = [];
     let th_cotizacion = 0;
@@ -758,7 +770,7 @@
             let nombreGrupo = $('#grupoPerfil option:selected').html();
             let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
             let idDetalle = null;
-            console.log(prestacion);
+            // console.log(prestacion);
 
             // Obtener el índice del grupo en el arreglo dataPrestaciones
             let grupoIndex = dataPrestaciones.findIndex(function(item) {
@@ -768,7 +780,7 @@
             if($(this).val() != ''){
                 $('#ck_'+$(this).attr("id")).prop('checked',true);
                 if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){
-                    console.log("Agregar idDetalle, activo:true y status:edit");
+                    // console.log("Agregar idDetalle, activo:true y status:edit");
                     idDetalle = $(this).attr("idDetalle-rel");
                 }
             }else{
@@ -787,9 +799,15 @@
                 costoUnitario = $(this).attr("costoUnitario-rel");
             }
 
+            let idItem = grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
+
+            prestacionesEliminadas = $.grep(prestacionesEliminadas, function(valor) {
+                return valor !== idItem;
+            });
+
             // Crear el objeto de la prestación
             let prestacionObj = {
-                "idItem":grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion,
+                "idItem":idItem,
                 "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
                 "nombrePrestacion": prestacion.nombrePrestacion,
                 "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
@@ -811,7 +829,7 @@
                 @if(isset($edit))
                 "status":"edit",
                 @endif
-                "idDetalle": idDetalle
+                "idDetalle": parseInt(idDetalle)
             };
 
             // Si el valor del input es vacío, eliminar la prestación del grupo
@@ -957,8 +975,11 @@
                     costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo });
                 }
 
+                bg_costo_0(idPrestacion,'remove');
+
             } else {
                 // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
+                bg_costo_0(idPrestacion,'add');
                 costosPrestadores = costosPrestadores.filter(function(item) {
                     return item.idPrestacion !== idPrestacion;
                 });
@@ -972,6 +993,10 @@
             $('#tipoServicio').val({{ $data->codigoTipoContrato }}).trigger("change");
             @if(isset($data->codigoSucursal))
             $('#centroMedico').val({{ $data->codigoSucursal }}).trigger("change");
+            @endif
+
+            @if(isset($data->observacion))
+            $('#observacion').val(`{{ $data->observacion }}`);
             @endif
 
             //Parametrizaciones
@@ -1004,7 +1029,7 @@
             })
             
             let costosAdicionales = @json($data->costosAdicionales);
-            console.log(costosAdicionales);
+            // console.log(costosAdicionales);
             $.each(costosAdicionales, function(key, value){
                 /*$('#servicioCosto').val(value.idCosto).trigger('change');
                 $('#costo').val(value.valorUnitario);
@@ -1024,9 +1049,24 @@
             })
             drawTable();
             hideLoader();
+            dataPrestacionesEditOriginal = jQuery.extend(true, [], dataPrestaciones);
+
             //Sobre-escribo valores
         @endif
 
+    }
+
+    function bg_costo_0(codigoPrestacion, type){
+        for (const elemento of dataPrestaciones) {
+            for (const prestacion of elemento.prestaciones) {
+                //Reemplazar costos de provincias
+                if(type == "add"){
+                    $('.tr-prestacion-'+codigoPrestacion).addClass('tr_costo_0');
+                }else{
+                    $('.tr-prestacion-'+codigoPrestacion).removeClass('tr_costo_0');
+                }
+            }
+        }
     }
 
     let tabla;
@@ -1062,12 +1102,20 @@
                 `;
             });
 
+            $('.label_costo_0').addClass('d-none');
             let total_precios = 0;
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
                     total_precios += (v.precioUnitario*v.cantidadPacientes);
+                    let class_costo_0 = "";
+                    // console.log(v.costoUnitario);
+                    if(v.costoUnitario == 0){
+                        $('.label_costo_0').removeClass('d-none');
+                        class_costo_0 = "tr_costo_0";
+                        //class_costo_0 = `<span class="badge bg-danger text-white fw-bold p-1" title="Prestación con Costo $0">*</span>`;
+                    }
                     elem += `
-                    <tr class="border-bottom">
+                    <tr class="border-bottom tr-prestacion-${v.codigoPrestacion} ${class_costo_0}">
                         <td>${ value.nombreGrupo }</td>
                         <td>${ v.nombreServicio }</td>
                         <td>${ v.nombrePrestacion }</td>
@@ -1104,6 +1152,7 @@
                 language: {
                     url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
                 },
+                pageLength: 25,
                 responsive: false,
                 columnDefs: [
                     {
@@ -1188,7 +1237,7 @@
         for (const elemento of dataPrestaciones) {
             for (const prestacion of elemento.prestaciones) {
                 if (prestacion.idItem === idItem) {
-                    console.log(idItem);
+                    // console.log(idItem);
                     prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
                     prestacion.precioUnitario = getInput('precioUnitarioEdit');
                     // precioUnitario-rel
@@ -1213,7 +1262,7 @@
         let total_precios = 0;
         $.each(dataPrestaciones, function(key, value){
             $.each(value.prestaciones, function(k, v){
-                console.log(total_precios,(v.precioUnitario*v.cantidadPacientes));
+                // console.log(total_precios,(v.precioUnitario*v.cantidadPacientes));
                 total_precios += (v.precioUnitario*v.cantidadPacientes);
             })
         })
@@ -1304,9 +1353,11 @@
     // Eliminar item desde tabla
     let prestacionesEliminadas = [];
     function eliminarItem(idItem) {
+        console.log("eliminarItem: "+idItem);
         // Buscar el elemento con el idItem dado
         const elemento = dataPrestaciones.find(item => item.prestaciones.some(prestacion => prestacion.idItem === idItem));
         console.log(elemento);
+        prestacionesEliminadas.push(idItem);
 
         if (elemento) {
             // Filtrar las prestaciones y eliminar la que tiene el idItem
@@ -1318,7 +1369,7 @@
                 dataPrestaciones = dataPrestaciones.filter(item => item.codigoGrupo !== elemento.codigoGrupo);
             }
         }
-        //drawTable();
+        drawTable();
         //return dataPrestaciones;
     }
 
@@ -1422,6 +1473,7 @@
         let diasServicio  = getInput('diasServicio');
         let ciudadChequeo = getInput('ciudadChequeo','select2');
         let entidadAfiliada = getInput('entidadAfiliada','select2');
+        let observacion = getInput('observacion');
 
         if(cliente == ""){
             msg += "<span class='fs-12'>-Seleccionar un cliente</span><br>";
@@ -1563,6 +1615,7 @@
                 "fechaInicio": fechaPrevista,
                 "cantidadDias": parseInt(diasServicio),
                 "porcentajeRentabilidad": parseFloat(th_cotizacion),
+                "observacion": observacion,
                 "ciudades":getInput('ciudadChequeo','select2'),
                 "detalle": dataPrestacionesTmp,
                 "costosAdicionales": dataCostos
@@ -1603,6 +1656,27 @@
             }
         }
 
+        $.each(prestacionesEliminadas, function(num, codigoPrestacion){
+            let prestacion = codigoPrestacion.split("_");
+            $.each(dataPrestacionesEditOriginal, function(key, value){
+                if(value.codigoGrupo == prestacion[0]){
+                    $.each(value.prestaciones, function(k,v){
+                        if(v.codigoServicio == prestacion[1] && v.codigoPrestacion == prestacion[2]){
+                            v.activo = false;
+                            console.log(v)
+                            let grupoExistente = dataPrestacionesTmp.find(function(grupo) {
+                                return grupo.codigoGrupo === value.codigoGrupo;
+                            });
+                            console.log(grupoExistente)
+                            if(grupoExistente) {
+                                grupoExistente.prestaciones.push(v);
+                            }
+                        }
+                    })
+                }
+            })
+        })
+
         let args = [];
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+getInput('idCotizacion')+"/detalle";
         args["method"] = "PUT";
@@ -1617,6 +1691,7 @@
             // "fechaInicio": fechaPrevista,
             // "cantidadDias": parseInt(diasServicio),
             "porcentajeRentabilidad": parseFloat(th_cotizacion),
+            "observacion": getInput('observacion'),
             "ciudades":ciudadesArr,
             "detalle": dataPrestacionesTmp,
             "costosAdicionales": dataCostos
@@ -1658,7 +1733,7 @@
                     if( costo_alterno == null){
                         total_costos += (v.costoUnitario*v.cantidadPacientes);
                     }else{
-                        console.log("Costo alterno")
+                        // console.log("Costo alterno")
                         total_costos += (costo_alterno*v.cantidadPacientes);
                     }
                     totales += (v.precioUnitario*v.cantidadPacientes);
@@ -2218,7 +2293,7 @@ $('#tableContainer').html(tableHtml);
         })
 
         const data = await call(args);
-        console.log(data);
+        // console.log(data);
         drawTablePrestadores(data);
     }
 
@@ -2233,7 +2308,7 @@ $('#tableContainer').html(tableHtml);
         const data = await call(args);
         
         $.each(data.data.rows, function(key, value){
-            console.log(value);
+            // console.log(value);
             $('#entidadAfiliada').append(`<option value="${value.codigoEntidadAfiliada}">${value.nombreEntidadAfiliada}</option>`);
         })
 
@@ -2281,9 +2356,9 @@ $('#tableContainer').html(tableHtml);
                     let cardId = item.id;
                     let searchText = event.target.value.toLowerCase();
                     let qty = 0;
-                    console.log(cardId)
+                    // console.log(cardId)
                     let labels = $('#'+cardId + ' label');
-                    console.log(labels)
+                    // console.log(labels)
                     labels.each(function(index, label) {
                         let labelContent = label.textContent.toLowerCase();
                         //let codRel = label.getAttribute('cod-rel');
@@ -2302,7 +2377,6 @@ $('#tableContainer').html(tableHtml);
                     }
                 })
             }else{
-                console.log(99)
                 $('#box-prestaciones .item li').show();
                 $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
                 resizeAllGridItems();
@@ -2487,6 +2561,10 @@ $('#tableContainer').html(tableHtml);
 
     .input-group i{
         font-size: 10px !important;
+    }
+
+    .tr_costo_0{
+        background: rgb(255 0 0 / 10%) !important;
     }
 
     @media only screen and (max-width: 600px) {

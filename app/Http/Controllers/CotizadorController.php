@@ -226,7 +226,7 @@ class CotizadorController extends Controller
             $esGrupoEmpresa = "true";
         }
         $method = '/comercial/v1/clientes';
-        $param = '?esGrupoEmpresa='.$esGrupoEmpresa;
+        $param = '?esGrupoEmpresa='.$esGrupoEmpresa.'&esEntidadAfiliada=true';
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,

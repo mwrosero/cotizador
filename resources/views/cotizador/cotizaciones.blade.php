@@ -84,6 +84,7 @@
                                 <th>Total</th>
                                 <th>Rentabilidad</th>
                                 <th>Usuario</th>
+                                <th>Observación</th>
                                 <th>Estado</th>
                                 <th>Acción</th>
                             </tr>
@@ -112,6 +113,7 @@
                                     @endif
                                 </td>
                                 <td>{{ $dato->usuarioIngreso }}</td>
+                                <td>{{ $dato->observacion }}</td>
                                 <td>{{ $dato->estado }}</td>
                                 <td width="100px" class="text-start align-middle">
                                     <div class="d-flex">
@@ -135,7 +137,7 @@
                                                 </a>
                                             </div>
                                         </div> --}}
-                                        <a class="dropdown-item" href="/cotizador/cotizador/{{ $dato->idCotizacion }}" title="Eliminar">
+                                        <a class="dropdown-item eliminarCotizacion" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" title="Eliminar Cotización">
                                             <i class="fa-solid fa-trash text-danger d-inline"></i>
                                         </a>
                                     </div>
@@ -190,19 +192,63 @@
         </div>
     </div>
 </div>
+
+<!-- MODAL ELIMINAR -->
+<div class="modal fade" id="modalEliminar" aria-labelledby="modalEliminarLabel" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content p-2">
+            <div class="modal-header">
+                <div class="col-12">
+                    <label class="form-label">¿Está seguro de eliminar la Cotización?</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn bg-veris" onclick="eliminarCotizacion()">
+                    Si
+                </button>
+                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     .t_h{
         width: 80px;
     }
 </style>
 <script>
+    let idCotizacionEliminar;
     window.onload = async () => {
         $('body').on('click touch', '.cambiarEstado', function(){
             let idCotizacion = $(this).attr("idCotizacion-rel");
             $('#idCotizacionEstado').val(idCotizacion);
             $('#modalEstado').modal('show');
         })
+
+        $('body').on('click touch', '.eliminarCotizacion', function(){
+            idCotizacionEliminar = $(this).attr("idCotizacion-rel");
+            $('#modalEliminar').modal('show');
+        })
     };
+
+    async function eliminarCotizacion() {
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+idCotizacionEliminar+"/activar?activo=false";
+        args["method"] = "PUT";
+        args["bodyType"] = "json";
+        args["showLoader"] = false;
+
+        const data = await call(args);
+
+        if(data.code != 200){
+            showMessage('warning','Atención',data.message);
+        }else{
+            //$('#modalEliminar').modal("hide");
+            location.reload();
+        }
+    }
 
     async function cambiarEstadoCotizacion(){
         let idCotizacion = getInput('idCotizacionEstado');
