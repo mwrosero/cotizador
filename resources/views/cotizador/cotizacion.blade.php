@@ -958,8 +958,9 @@
 
         $('body').on('change', '.ck-input-prestacion-costo', function() {
             // Obtener el idPrestacion del grupo al que pertenece el checkbox actual
-            var idPrestacion = parseInt($(this).attr("data-idPrestacion"));
-            var costo = parseFloat($(this).val());
+            let idPrestacion = parseInt($(this).attr("data-idPrestacion"));
+            let costo = parseFloat($(this).val());
+            let identificador = $(this).attr("identificador-rel");
 
             // Deseleccionar todos los checkboxes del grupo actual, excepto el checkbox actual
             $("[data-idPrestacion='" + idPrestacion + "']").not(this).prop("checked", false);
@@ -969,10 +970,10 @@
                 const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion);
                 if (index !== -1) {
                     // Si idPrestacion ya existe, reemplazar el elemento en el array
-                    costosPrestadores[index] = { idPrestacion: idPrestacion, costo: costo };
+                    costosPrestadores[index] = { idPrestacion: idPrestacion, costo: costo, identificador: identificador };
                 } else {
                     // Si no existe, hacer el push al array
-                    costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo });
+                    costosPrestadores.push({ idPrestacion: idPrestacion, costo: costo, identificador: identificador });
                 }
 
                 bg_costo_0(idPrestacion,'remove');
@@ -2163,14 +2164,25 @@ $('#tableContainer').html(tableHtml);
                 $.each(v.listadoPrestadores, function(k1, v1){
                     let thId = 'th_'+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
                     let position = $('#box-prestadores-list-th .tr_second th#' + thId).index();
+                    let isChecked = "";
+                    if(existeItemPorIdentificador(costosPrestadores,v.codigoCiudad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion)){
+                        isChecked = "checked";
+                    }
+
                     let elem = `<div class="w-100 d-flex align-items-center">
-                                    <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}">
+                                    <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" identificador-rel="${v.codigoCiudad}_${v1.idInstitucion}_${value.codigoPrestacion}" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}" ${isChecked}>
                                     <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
                                 </div>`;
                     $('#prestacion_'+value.codigoPrestacion+'_'+position).html(elem);
                 })
             })
         })
+    }
+
+    function existeItemPorIdentificador(array, identificador) {
+        return array.some(function(item) {
+            return item.identificador === identificador;
+        });
     }
 
     function getMaxDepth(data){
