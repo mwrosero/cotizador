@@ -98,7 +98,7 @@
                             </tr>
                         @endif
                         @foreach ($datosPaginados as $dato)
-                            @if( session('userData')->codigoUsuario == $dato->usuarioIngreso || session('userData')->codigoUsuario == "MVELEZ" )
+                            @if( session('userData')->codigoUsuario == $dato->usuarioIngreso || session('userData')->codigoUsuario == "MVELEZ" || session('userData')->codigoUsuario == "DREVELO" )
                             <tr class="fs-12">
                                 <td>{{ $dato->idCotizacion }}</td>
                                 <td>{{ $dato->nombreCliente }}</td>
