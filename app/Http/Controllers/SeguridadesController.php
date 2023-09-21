@@ -49,7 +49,14 @@ class SeguridadesController extends Controller
                     ])->post(Ism::BASE_URL.$method);
             $response = json_decode($res->body());
 
-            // dump($response);
+            //dd($response);
+            /*$method = '/seguridad/v1/usuarios/'.$response->data->secuenciaUsuario;
+            $response = Ism::call([
+                'endpoint' => Ism::BASE_URL.$method.$param,
+                'token'    => $response->data->idToken,
+                'method'   => 'GET'
+            ]);
+            dd($response);*/
             if($response->code == 200){
                 switch($response->data->estadoUsuario) {
                     case 'CONFIRMED':
