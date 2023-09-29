@@ -312,7 +312,8 @@
                     </div>
                 </div>
                 <div class="row g-3 box-resumen d-none">
-                    <div class="col-12 col-md-4 mt-4 mb-2">
+                    <div class="col-12 col-md-3 mb-2">
+                        <label for="observacion" class="form-label">Resumen</label>
                         <div class="row">
                             <div class="col-12 label_costo_0 d-none">
                                 <span class="badge tr_costo_0 text-dark fw-bold">* Prestación con Costo $0</span>
@@ -325,12 +326,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-8">
-                        <label for="observacion" class="form-label">Observación</label>
-                        <textarea class="form-control" id="observacion" name="observacion" rows="3" maxlength="4000"></textarea>
+                    <div class="col-12 col-md-6 mb-2">
+                        <label for="observacion" class="form-label">Observación (Para el Cliente)</label>
+                        <textarea class="form-control fs-12" id="observacion" name="observacion" rows="3" maxlength="4000"></textarea>
                     </div>
+                    <div class="col-12 col-md-3 mb-2">
+                        <label for="observacion" class="form-label">Sección Interna</label>
+                        <button 
+                            type="button" 
+                            @if(!isset($edit))
+                            title="Debe haber una cotización creada para agregar un comentario" 
+                            disabled 
+                            @endif
+                            class="btn btn-sm btn-secondary mb-2 waves-effect waves-light w-100" 
+                            data-bs-toggle="offcanvas" 
+                            data-bs-target="#offcanvasComentarios" 
+                            aria-controls="offcanvasComentarios">
+                            <i class="fa-regular fa-comments me-2"></i>
+                            Comentarios <span class="badge bg-veris ms-2" id="numeroComentarios">0</span>
+                        </button>
+                    </div>
+                    <div class="col-12 mt-5 text-center">
                     @if(isset($edit))
-                    <div class="col-12">
                         <button type="button"
                             id="btn-crear-cotizacion"
                             class="btn bg-veris"
@@ -340,9 +357,7 @@
                             <i class="fa-regular fa-floppy-disk me-2"></i>
                             Actualizar Cotización
                         </button>
-                    </div>
                     @else
-                    <div class="col-12">
                         <button type="button"
                             id="btn-crear-cotizacion"
                             class="btn bg-veris"
@@ -352,8 +367,8 @@
                             <i class="fa-regular fa-floppy-disk me-2"></i>
                             Crear Cotización
                         </button>
-                    </div>
                     @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -626,6 +641,41 @@
                     title="Actualizar Prestación">
                     <i class="fa-regular fa-floppy-disk me-2"></i>
                     Actualizar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Offcanvas Comentarios -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasComentarios" aria-labelledby="offcanvasComentariosLabel">
+    <div class="offcanvas-header">
+        <h5 id="offcanvasPrestacionLabel">Comentarios de Cotización</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="row g-3">
+            <div class="col-12 box-comentarios mb-2">
+                {{-- <div class="row rounded p-1 mb-1 fs-12">
+                    <div class="col-6 fw-bold fs-10 mb-2">MFARIAS</div>
+                    <div class="col-6 text-end fs-10 mb-2"><span class="badge bg-light text-dark fw-bold">hace 1 día</span></div>
+                    <div class="col-12">
+                        Lorem ipsum dolor sit amet consectetur adipisicing, elit. Praesentium quae optio asperiores nesciunt! Doloremque dolorum, culpa adipisci saepe inventore, voluptatem recusandae, nihil tempore possimus cumque at quas amet nemo tempora.
+                    </div>
+                </div> --}}
+            </div>
+            <div class="col-12 mb-2">
+                <textarea class="form-control fs-12" id="nuevoComentario" name="nuevoComentario" rows="3" maxlength="2000"></textarea>
+            </div>
+            <div class="col-12 mt-0">
+                <button type="button"
+                    id="btnAgregarComentario"
+                    class="btn bg-veris w-100"
+                    {{-- data-bs-dismiss="offcanvasGastos" --}}
+                    onclick="agregarComentario()" 
+                    title="Agregar Comentario">
+                    <i class="fa-regular fa-comments me-2"></i>
+                    Agregar Comentario
                 </button>
             </div>
         </div>
@@ -990,6 +1040,7 @@
         });
 
         @if(isset($edit))
+            loadComentarios();
             $('#box-info-cliente').removeClass('d-none');
             $('#tipoServicio').val({{ $data->codigoTipoContrato }}).trigger("change");
             @if(isset($data->codigoSucursal))
@@ -2401,8 +2452,107 @@ $('#tableContainer').html(tableHtml);
         $('.servicio-'+$('.item-selected').attr('codigoServicio-rel')).show();
         resizeAllGridItems();
     }
+
+    async function agregarComentario(idComentario = null){
+        $('#btnAgregarComentario').prop('disabled',true);
+        @if(isset($edit))
+        idComentario = {{ $data->idCotizacion }};
+        @endif
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/comentarios?idCotizacion="+idComentario;
+        args["method"] = "POST";
+        args["bodyType"] = "json";
+        args["showLoader"] = true;
+        args["data"] = JSON.stringify({
+            "comentario": getInput('nuevoComentario'),
+        });
+
+        const data = await call(args);
+        $('#btnAgregarComentario').prop('disabled',false);
+        if(data.code == 200){
+            $('#nuevoComentario').val("").trigger("change")
+            //showMessage('success','Atención',"Comentario agregado");
+            loadComentarios();
+        }else{
+            showMessage('warning','Atención',data.message);
+            $('#btn-crear-cotizacion').prop('disabled',false);
+        }
+    }
+
+    async function loadComentarios(){
+        let idCotizacion = getInput('idCotizacion');
+        let args = [];
+        args["endpoint"] = api_url+"/empresarial/v1/comentarios?idCotizacion="+idCotizacion;
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = true;
+        const data = await call(args);
+        let numeroComentarios = 0;
+        if(data.code == 200){
+            let elem = ``;
+            let comentarios = data.data;
+            comentarios.sort((a, b) => a.secuenciaComentario - b.secuenciaComentario);
+            numeroComentarios = comentarios.length;
+            $.each(comentarios, function(key, value){
+                elem += `<div class="row rounded pt-2 pb-2 ps-1 pe-1 mb-1 fs-12">
+                    <div class="col-6 fw-bold fs-10 mb-2">${value.usuarioIngreso}</div>
+                    <div class="col-6 text-end fs-10 mb-2"><span class="badge bg-light text-dark fw-bold">${calcularTiempoTranscurrido(value.fechaIngreso)}</span></div>
+                    <div class="col-12">${value.comentario}</div>
+                </div>`;
+            })
+
+            $('.box-comentarios').html(elem);
+        }else{
+            showMessage('warning','Atención',data.message);
+        }
+
+        $('#numeroComentarios').html(numeroComentarios);
+    }
+
+    function calcularTiempoTranscurrido(fecha) {
+        // Convierte la fecha proporcionada en formato "dd/mm/yyyy hh:mm" en un objeto Date
+        const fechaIngreso = new Date(fecha.replace(/(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2})/, '$3-$2-$1T$4:$5'));
+
+        // Obtiene la fecha actual
+        const fechaActual = new Date();
+
+        // Calcula la diferencia en milisegundos
+        const diferencia = fechaActual - fechaIngreso;
+
+        // Calcula el tiempo transcurrido en minutos, horas, días, meses y años
+        const minutos = Math.floor(diferencia / (1000 * 60));
+        const horas = Math.floor(diferencia / (1000 * 60 * 60));
+        const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+        const meses = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 30.44)); // Asumiendo un promedio de 30.44 días por mes
+        const anos = Math.floor(diferencia / (1000 * 60 * 60 * 24 * 365.25)); // Asumiendo un año bisiesto cada 4 años
+
+        // Determina y devuelve el tiempo transcurrido en el formato deseado
+        if (anos > 0) {
+            return `Hace ${anos} ${anos === 1 ? 'año' : 'años'}`;
+        } else if (meses > 0) {
+            return `Hace ${meses} ${meses === 1 ? 'mes' : 'meses'}`;
+        } else if (dias > 0) {
+            return `Hace ${dias} ${dias === 1 ? 'día' : 'días'}`;
+        } else if (horas > 0) {
+            return `Hace ${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+        } else {
+            return `Hace ${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+        }
+    }
 </script>
 <style>
+    textarea{
+        resize: none;
+    }
+
+    .box-comentarios .row:nth-child(even) {
+        background: rgb(192 192 192 / 10%);
+    }
+
+    .box-comentarios .row:nth-child(odd) {
+        background: rgb(164 114 58 / 10%);
+    }
+
     .item-selected {
         background: rgb(97 145 234 / 20%) !important;
         color: #3962e6 !important;
