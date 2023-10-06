@@ -1298,7 +1298,7 @@
                     $('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
-                    actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
+                    //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
                     calcularTH();
                     calcularTotal()
 
@@ -1336,8 +1336,6 @@
             }
         }
     }
-
-
 
     /*function actualizarPrestacion() {
         if(!$('#aplicaTodoGrupo').prop('checked')){
@@ -2500,8 +2498,12 @@ $('#tableContainer').html(tableHtml);
                     <div class="col-12">${value.comentario}</div>
                 </div>`;
             })
-
-            $('.box-comentarios').html(elem);
+            if(numeroComentarios == 0){
+                $('.box-comentarios').html(`<div class="row bg-white rounded pt-2 pb-2 ps-1 pe-1 mb-1 fs-12">
+                    <div class="col-12 fw-bold text-center mb-2">No existen comentarios que mostrar</div></div>`);
+            }else{
+                $('.box-comentarios').html(elem);
+            }
         }else{
             showMessage('warning','Atención',data.message);
         }
