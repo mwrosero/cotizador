@@ -851,7 +851,7 @@
             }
 
             if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
-                costoUnitario = $(this).attr("costoUnitario-rel");
+                precioUnitario = $(this).attr("precioUnitario-rel");
             }
 
             console.log({costoUnitario});
