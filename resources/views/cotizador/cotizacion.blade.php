@@ -846,7 +846,7 @@
             let costoUnitario = prestacion.valorCosto;
             let precioUnitario = prestacion.valorPvp;
             //if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
-            if(!modificadoPorCarga){
+            if(!modificadoPorCarga && $(this).attr("costoUnitario-rel") != 0){
                 precioUnitario = $(this).attr("precioUnitario-rel");
                 costoUnitario = $(this).attr("costoUnitario-rel");
             }
