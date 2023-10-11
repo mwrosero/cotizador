@@ -690,6 +690,7 @@
     let dataCostos = [];
     let costosPrestadores = [];
     let th_cotizacion = 0;
+    let modificadoPorCarga = false;
 
     window.onload = async () => {
         @if(isset($numeroIdentificacion))
@@ -844,10 +845,13 @@
 
             let costoUnitario = prestacion.valorCosto;
             let precioUnitario = prestacion.valorPvp;
-            if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
+            //if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
+            if(!modificadoPorCarga){
                 precioUnitario = $(this).attr("precioUnitario-rel");
                 costoUnitario = $(this).attr("costoUnitario-rel");
             }
+
+            console.log({costoUnitario});
 
             let idItem = grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
 
@@ -1079,6 +1083,8 @@
                     }
                 })
             })
+
+            modificadoPorCarga = true;
             
             let costosAdicionales = @json($data->costosAdicionales);
             // console.log(costosAdicionales);
