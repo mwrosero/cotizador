@@ -704,7 +704,7 @@
         obtenerCentralesMedicas();
         obtenerCiudades();
         obtenerGruposPerfiles();
-        obtenerServiciosCostos();
+        await obtenerServiciosCostos();
         await obtenerNivel1();
         await obtenerPrestaciones();
         showPrestaciones();
@@ -1098,16 +1098,21 @@
                 agregarCosto();*/
                 let idItem = "costo_"+value.idCosto;
                 let msg = "";
-                dataCostos.push(
-                    {
-                        "idCostoCotizacion": value.idCostoCotizacion,
-                        "idCosto": value.idCosto,
-                        "nombreCosto": value.nombreCosto,
-                        "cantidad": 1,
-                        "valorUnitario": parseFloat(value.valorUnitario),
-                        "idItem":idItem
-                    }
-                );
+                if(value.activo){
+                    dataCostos.push(
+                        {
+                            "idCostoCotizacion": value.idCostoCotizacion,
+                            "idCosto": value.idCosto,
+                            "nombreCosto": value.nombreCosto,
+                            "cantidad": 1,
+                            "valorUnitario": parseFloat(value.valorUnitario),
+                            "idItem":idItem,
+                            "activo": true,
+                            "status": "edit"
+                        }
+                    );
+                    $('#servicioCosto').find('option[value="'+value.idCosto+'"]').prop('disabled', true).trigger('change');
+                }
             })
             drawTable();
             hideLoader();
@@ -1485,6 +1490,10 @@
                 "nombreCosto": nombreCosto,
                 "cantidad": 1,
                 "valorUnitario": parseFloat(valorUnitario),
+                "activo":true,
+                @if(isset($edit))
+                "status":"edit",
+                @endif
                 "idItem":idItem
             }
         );
