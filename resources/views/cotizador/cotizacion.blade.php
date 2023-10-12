@@ -843,10 +843,10 @@
                 return;
             }
 
-            let costoUnitario = prestacion.valorCosto;
+            let costoUnitario =     prestacion.valorCosto;
             let precioUnitario = prestacion.valorPvp;
             //if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
-            if(!modificadoPorCarga && $(this).attr("costoUnitario-rel") != 0){
+            if(!modificadoPorCarga && $(this).attr("precioUnitario-rel") && $(this).attr("costoUnitario-rel") != 0){
                 costoUnitario = $(this).attr("costoUnitario-rel");
             }
 
@@ -854,6 +854,7 @@
                 precioUnitario = $(this).attr("precioUnitario-rel");
             }
 
+            console.log(prestacion);
             console.log({costoUnitario});
 
             let idItem = grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
