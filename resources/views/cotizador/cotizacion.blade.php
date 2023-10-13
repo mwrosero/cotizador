@@ -1035,10 +1035,14 @@
                 }
 
                 bg_costo_0(idPrestacion,'remove');
+                console.log('remove')
 
             } else {
                 // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
-                bg_costo_0(idPrestacion,'add');
+                console.log('add')
+                if(prestacionTieneCosto0(idPrestacion) == 0){
+                    bg_costo_0(idPrestacion,'add');
+                }
                 costosPrestadores = costosPrestadores.filter(function(item) {
                     return item.idPrestacion !== idPrestacion;
                 });
@@ -1134,6 +1138,18 @@
                 }
             }
         }
+    }
+
+    function prestacionTieneCosto0(codigoPrestacion){
+        for (const grupo of dataPrestaciones) {
+            for (const prestacion of grupo.prestaciones) {
+                if (prestacion.codigoPrestacion === codigoPrestacion) {
+                    return prestacion.costoUnitario;
+                }
+            }
+        }
+        // Si no se encuentra, puedes devolver un valor por defecto o manejarlo de otra forma
+        return 0; // O cualquier otro valor que desees
     }
 
     let tabla;
