@@ -829,10 +829,20 @@
             });
 
             if($(this).val() != ''){
+                console.log(0)
                 $('#ck_'+$(this).attr("id")).prop('checked',true);
-                if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){
-                    // console.log("Agregar idDetalle, activo:true y status:edit");
-                    idDetalle = $(this).attr("idDetalle-rel");
+                //if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){);
+                let gruposRel = $('.input_'+$(this).attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
+                if(gruposRel){
+                    console.log(1)
+                    let gruposRelArr = gruposRel.split(',').map( Number );
+                    console.log(parseInt(grupo));
+                    console.log(gruposRelArr);
+                    if(gruposRelArr.includes(parseInt(grupo))){
+                        console.log(2)
+                        // console.log("Agregar idDetalle, activo:true y status:edit");
+                        idDetalle = $(this).attr("idDetalle-rel");
+                    }
                 }
             }else{
                 $('#ck_'+$(this).attr("id")).prop('checked',false);
@@ -854,8 +864,8 @@
                 precioUnitario = $(this).attr("precioUnitario-rel");
             }
 
-            console.log(prestacion);
-            console.log({costoUnitario});
+            // console.log(prestacion);
+            // console.log({costoUnitario});
 
             let idItem = grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
 
@@ -1088,6 +1098,16 @@
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("costoUnitario-rel",v.costoUnitario);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
+                        let gruposRel = $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel");
+                        if(gruposRel){
+                            let gruposRelArr = gruposRel.split(',').map( Number );
+                            if(!gruposRelArr.includes(parseInt(value.codigoGrupo))){
+                                gruposRelArr.push(parseInt(value.codigoGrupo));
+                                $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",gruposRelArr.join(","))
+                            }
+                        }else{
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",parseInt(value.codigoGrupo));
+                        }
                     }
                 })
             })
