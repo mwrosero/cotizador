@@ -1326,7 +1326,8 @@
                     // precioUnitario-rel
                     $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
                     $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                    $('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                    $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                    //$('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
                     $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
                     $('#offcanvasPrestacion').offcanvas('hide');
                     //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
