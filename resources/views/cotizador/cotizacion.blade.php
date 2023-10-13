@@ -1417,6 +1417,7 @@
 
     // Eliminar item desde tabla
     let prestacionesEliminadas = [];
+    let costosEliminados = [];
     function eliminarItem(idItem) {
         console.log("eliminarItem: "+idItem);
         // Buscar el elemento con el idItem dado
@@ -1445,6 +1446,18 @@
         var indice = -1;
         for (var i = 0; i < dataCostos.length; i++) {
             if (dataCostos[i].idItem === idItem) {
+                if(dataCostos[i].idCostoCotizacion){
+                    costosEliminados.push({
+                        "idCostoCotizacion":dataCostos[i].idCostoCotizacion,
+                        "idCosto": dataCostos[i].idCosto,
+                        "nombreCosto": dataCostos[i].nombreCosto,
+                        "cantidad": 1,
+                        "valorUnitario": parseFloat(dataCostos[i].valorUnitario),
+                        "activo":false,
+                        "status":"edit",
+                        "idItem":idItem
+                    });
+                }
                 indice = i;
                 idCostoEliminado = dataCostos[i].idCosto;
                 break;
@@ -1746,6 +1759,8 @@
             })
         })
 
+        let _costos = dataCostos.concat(costosEliminados);
+
         let args = [];
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+getInput('idCotizacion')+"/detalle";
         args["method"] = "PUT";
@@ -1763,7 +1778,7 @@
             "observacion": getInput('observacion'),
             "ciudades":ciudadesArr,
             "detalle": dataPrestacionesTmp,
-            "costosAdicionales": dataCostos
+            "costosAdicionales": _costos
         });
 
         const data = await call(args);
