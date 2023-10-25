@@ -38,6 +38,12 @@
                         <label class="form-label fs-12">Total</label>
                         <p>${{ number_format(floatval(ltrim($data->total, '0')), 2, '.', ',') }}</p>
                     </div>
+                    @if(!is_null($data->observacion) && !empty($data->observacion))
+                    <div class="col-12">
+                        <label class="form-label fs-12">Observaciones</label>
+                        <p class="p-2 border rounded">{{ $data->observacion }}</p>
+                    </div>
+                    @endif
                 </div>
                 <hr class="my-4 mx-n4" />
                 <h6 class="txt-veris">Prestaciones</h6>
@@ -60,23 +66,25 @@
                                     <tbody id="prestaciones-seleccionadas">
                                     @foreach ($data->detalle as $detalle)
                                         @foreach ($detalle->prestaciones as $prestacion)
-                                        <tr>
-                                            <td>{{ $detalle->nombreGrupo }}</td>
-                                            <td>
-                                                @if(isset($prestacion->nombreServicio))
-                                                {{ $prestacion->nombreServicio }}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if(isset($prestacion->nombrePrestacion))
-                                                {{ $prestacion->nombrePrestacion }}
-                                                @endif
-                                            </td>
-                                            <td>{{ $prestacion->codigoPrestacion }}</td>
-                                            <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
-                                            <td>{{ $prestacion->cantidadPacientes }}</td>
-                                            <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
-                                        </tr>
+                                            @if($prestacion->activo)
+                                                <tr>
+                                                    <td>{{ $detalle->nombreGrupo }}</td>
+                                                    <td>
+                                                        @if(isset($prestacion->nombreServicio))
+                                                        {{ $prestacion->nombreServicio }}
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if(isset($prestacion->nombrePrestacion))
+                                                        {{ $prestacion->nombrePrestacion }}
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $prestacion->codigoPrestacion }}</td>
+                                                    <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
+                                                    <td>{{ $prestacion->cantidadPacientes }}</td>
+                                                    <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     @endforeach
                                     </tbody>
