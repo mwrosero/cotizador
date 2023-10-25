@@ -16,6 +16,11 @@ input[type="number"]::-webkit-outer-spin-button {
 .fs-18{font-size: 18px;}
 .fs-45{font-size: 45px;}
 
+.authentication-wrapper.authentication-basic .authentication-inner:before,
+.authentication-wrapper.authentication-basic .authentication-inner:after{
+    position: relative;
+}
+
 table th{
     font-size: 12px !important;
     background: #171D49 !important;
