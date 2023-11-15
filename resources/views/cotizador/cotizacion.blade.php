@@ -293,6 +293,7 @@
                                 <table class="dt-responsive-prestaciones table table-prestaciones table-borderless">
                                     <thead>
                                         <tr>
+                                            <th>Localidad</th>
                                             <th>Grupo</th>
                                             <th>Servicio</th>
                                             <th>Prestación</th>
@@ -381,8 +382,15 @@
     <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down">
         <div class="modal-content p-2">
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
-            <div class="modal-header">
-                <div class="col-12">
+            <div class="modal-header row">
+                <div class="col-12 col-md-6">
+                    <label for="localidad" class="form-label">Localidad</label>
+                    <div class="select2-dark">
+                        <select id="localidad" class="select2 form-select">
+                        </select>
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
                     <label for="grupoPerfil" class="form-label">Grupo Perfil</label>
                     <div class="select2-dark">
                         <select id="grupoPerfil" class="select2 form-select">
@@ -552,6 +560,10 @@
             <div class="col-12">
                 <span class="d-block">Servicio:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="nombreServicioEdit"></h6>
+            </div>
+            <div class="col-12">
+                <span class="d-block">Localidad:</span>
+                <h6 class="txt-veris fs-14 mb-0" id="localidadEdit"></h6>
             </div>
             <div class="col-12">
                 <span class="d-block">Grupo Perfil:</span>
@@ -777,6 +789,13 @@
 
         })
 
+        $('body').on('change', '#centroMedico', function(){
+            $('.localidad_veris').remove();
+            if($('#centroMedico option:selected').val() != ""){
+                $('#localidad').append(`<option class="localidad_veris" value="0">${ $('#centroMedico option:selected').html() }</option>`);
+            }
+        })
+
         /*$('.box-row-modal-clientes').each(function() {
             new PerfectScrollbar(this);
         });*/
@@ -789,6 +808,9 @@
             $('#box-info-cliente').removeClass('d-none');
             $('#cliente').val(detalle.codigoCliente);
             $('#cliente').attr("cliente-rel",JSON.stringify(detalle));
+            $.each(detalle.localidades,function(key, value){
+                $('#localidad').append(`<option value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+            })
             obtenerEntidadesAfiliadas();
             modalCliente.hide();
         })
@@ -807,9 +829,16 @@
             };
         })*/
 
+        $('body').on('change', '#localidad', function() {
+            cargarDataPrestaciones();
+
+            // $('.swiper-wrapper li').removeClass('item-selected');
+            // $('.swiper-wrapper li:first-child').addClass('item-selected');
+            // showPrestaciones();
+        });
+
         $('body').on('change', '#grupoPerfil', function() {
-            let codigoGrupo = $(this).val();
-            cargarDataPrestaciones(codigoGrupo);
+            cargarDataPrestaciones();
 
             // $('.swiper-wrapper li').removeClass('item-selected');
             // $('.swiper-wrapper li:first-child').addClass('item-selected');
@@ -817,23 +846,56 @@
         });
 
         $('body').on('change', '.input-prestacion', function() {
+            let localidad = parseInt(getInput('localidad'));
+            let nombreLocalidad = $('#localidad option:selected').html();
             let grupo = parseInt(getInput('grupoPerfil'));
             let nombreGrupo = $('#grupoPerfil option:selected').html();
             let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
             let idDetalle = null;
             // console.log(prestacion);
 
-            // Obtener el índice del grupo en el arreglo dataPrestaciones
-            let grupoIndex = dataPrestaciones.findIndex(function(item) {
+            // Si la secuenciaLocalidad no existe en dataPrestaciones, agregarla
+            let secuenciaLocalidad = parseInt($('#localidad').val());
+            let localidadIndex = dataPrestaciones.findIndex(function(item) {
+                return item.secuenciaLocalidad === secuenciaLocalidad;
+            });
+
+            // Si la localidad no existe en dataPrestaciones, agregarlo
+            if (localidadIndex === -1) {
+                let nuevaLocalidad = {
+                    "secuenciaLocalidad": secuenciaLocalidad,
+                    "nombreLocalidad": nombreLocalidad,
+                    "grupos": []
+                };
+                dataPrestaciones.push(nuevaLocalidad);
+                localidadIndex = dataPrestaciones.length - 1; // Obtener el índice de la nueva localidad
+            }
+
+            // Obtener el índice del grupo en el arreglo grupos
+            let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
                 return item.codigoGrupo === grupo;
             });
+
+            console.log({grupoIndex});
+
+            // Si el grupo no existe en la localidad actual, agregarlo
+            if (grupoIndex === -1) {
+                let nuevoGrupo = {
+                    "codigoGrupo": grupo,
+                    "nombreGrupo": nombreGrupo,
+                    "prestaciones": []
+                };
+                dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
+                grupoIndex = dataPrestaciones[localidadIndex].grupos.length - 1; // Obtener el índice del nuevo grupo
+            }
 
             if($(this).val() != ''){
                 $('#ck_'+$(this).attr("id")).prop('checked',true);
                 //if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){);
                 let gruposRel = $('.input_'+$(this).attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
-                console.log(gruposRel);
+                // Para cuando se esta editando la cotizacion
                 if(gruposRel){
+                    console.log(gruposRel);
                     let gruposRelArr = gruposRel.split(',').map( Number );
                     console.log(parseInt(grupo));
                     console.log(gruposRelArr);
@@ -850,10 +912,11 @@
 
             // Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción
             if (grupoIndex === -1 && $(this).val() === '') {
+                console.log("Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción")
                 return;
             }
 
-            let costoUnitario =     prestacion.valorCosto;
+            let costoUnitario = prestacion.valorCosto;
             let precioUnitario = prestacion.valorPvp;
             //if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
             if(!modificadoPorCarga && $(this).attr("precioUnitario-rel") && $(this).attr("costoUnitario-rel") != 0){
@@ -867,7 +930,7 @@
             // console.log(prestacion);
             // console.log({costoUnitario});
 
-            let idItem = grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
+            let idItem = localidad+"_"+grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
 
             prestacionesEliminadas = $.grep(prestacionesEliminadas, function(valor) {
                 return valor !== idItem;
@@ -900,11 +963,26 @@
                 "idDetalle": parseInt(idDetalle)
             };
 
+            let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
+                return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+            });
+
+            if (prestacionExistenteIndex !== -1) {
+                // Actualizar los valores de la prestación
+                dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones[prestacionExistenteIndex] = prestacionObj;
+            } else {
+                // Agregar la prestación al grupo
+                dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.push(prestacionObj);
+            }
+
+            console.log(localidadIndex)
+            console.log(grupoIndex)
             // Si el valor del input es vacío, eliminar la prestación del grupo
             if ($(this).val() === '') {
-                // Si el grupo existe en dataPrestaciones
-                if (grupoIndex !== -1) {
-                    let grupoExistente = dataPrestaciones[grupoIndex];
+                // Si la localidad y el grupo existen en dataPrestaciones
+                if (localidadIndex !== -1 && grupoIndex !== -1) {
+                    let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+                    console.log(grupoExistente);
                     let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
                         return item.codigoPrestacion === prestacionObj.codigoPrestacion;
                     });
@@ -916,13 +994,19 @@
 
                     // Si no quedan más prestaciones en el grupo, eliminar el grupo
                     if (grupoExistente.prestaciones.length === 0) {
-                        dataPrestaciones.splice(grupoIndex, 1);
+                        dataPrestaciones[localidadIndex].grupos.splice(grupoIndex, 1);
+                    }
+
+                    // Si no hay grupos eliminar localidad
+                    if(dataPrestaciones[localidadIndex].grupos.length == 0){
+                        dataPrestaciones.splice(localidadIndex, 1);
                     }
                 }
             } else {
-                // Si el grupo existe en dataPrestaciones
-                if (grupoIndex !== -1) {
-                    let grupoExistente = dataPrestaciones[grupoIndex];
+                // Si la localidad y el grupo existen en dataPrestaciones
+                if (localidadIndex !== -1 && grupoIndex !== -1) {
+                    let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+                    console.log(grupoExistente);
                     let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
                         return item.codigoPrestacion === prestacionObj.codigoPrestacion;
                     });
@@ -936,15 +1020,18 @@
                         grupoExistente.prestaciones.push(prestacionObj);
                     }
                 } else {
-                    // Crear un nuevo grupo y agregar la prestación
-                    let nuevoGrupo = {
-                        "codigoGrupo": grupo,
-                        "nombreGrupo": nombreGrupo,
-                        "prestaciones": [prestacionObj]
-                    };
-                    dataPrestaciones.push(nuevoGrupo);
+                    // Si la localidad existe pero el grupo no, crear un nuevo grupo y agregar la prestación
+                    if (localidadIndex !== -1) {
+                        let nuevoGrupo = {
+                            "codigoGrupo": grupo,
+                            "nombreGrupo": nombreGrupo,
+                            "prestaciones": [prestacionObj]
+                        };
+                        dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
+                    }
                 }
             }
+
         });
 
         $('body').on('click', '.item-prestadores', function(){
@@ -952,7 +1039,7 @@
         })
 
         $('body').on('click', '.item-edit', function(){
-            cargarItem($(this).attr('idItem-rel'));
+            cargarItem($(this).attr('idItem-rel'),$(this).attr('secuenciaLocalidad-rel'),$(this).attr('codigoGrupo-rel'));
         })
 
         $('body').on('click', '.item-edit-gasto', function(){
@@ -1208,40 +1295,43 @@
 
             $('.label_costo_0').addClass('d-none');
             let total_precios = 0;
-            $.each(dataPrestaciones, function(key, value){
-                $.each(value.prestaciones, function(k, v){
-                    total_precios += (v.precioUnitario*v.cantidadPacientes);
-                    let class_costo_0 = "";
-                    // console.log(v.costoUnitario);
-                    if(v.costoUnitario == 0){
-                        $('.label_costo_0').removeClass('d-none');
-                        class_costo_0 = "tr_costo_0";
-                        //class_costo_0 = `<span class="badge bg-danger text-white fw-bold p-1" title="Prestación con Costo $0">*</span>`;
-                    }
-                    elem += `
-                    <tr class="border-bottom tr-prestacion-${v.codigoPrestacion} ${class_costo_0}">
-                        <td>${ value.nombreGrupo }</td>
-                        <td>${ v.nombreServicio }</td>
-                        <td>${ v.nombrePrestacion }</td>
-                        <td>${ v.codigoPrestacion }</td>
-                        <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
-                        <td id="precioUnitario_${ v.idItem }" class="precioUnitario_${ v.codigoPrestacion }">$${ formatDollar(v.precioUnitario) }</td>
-                        <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
-                        <td width="100px" class="text-end align-middle">
-                            <div class="d-flex">
-                                <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
-                                    <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
-                                </a>
-                                <a idItem-rel="${ v.idItem }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
-                                    <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
-                                </a>
-                                <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
-                                    <i class="fa-solid fa-trash text-danger"></i>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>       
-                    `;
+            $.each(dataPrestaciones, function(kp, vp){
+                $.each(vp.grupos, function(kg, vg){
+                    $.each(vg.prestaciones, function(k, v){
+                        total_precios += (v.precioUnitario*v.cantidadPacientes);
+                        let class_costo_0 = "";
+                        // console.log(v.costoUnitario);
+                        if(v.costoUnitario == 0){
+                            $('.label_costo_0').removeClass('d-none');
+                            class_costo_0 = "tr_costo_0";
+                            //class_costo_0 = `<span class="badge bg-danger text-white fw-bold p-1" title="Prestación con Costo $0">*</span>`;
+                        }
+                        elem += `
+                        <tr class="border-bottom tr-prestacion-${v.codigoPrestacion} ${class_costo_0}">
+                            <td>${ vp.nombreLocalidad }</td>
+                            <td>${ vg.nombreGrupo }</td>
+                            <td>${ v.nombreServicio }</td>
+                            <td>${ v.nombrePrestacion }</td>
+                            <td>${ v.codigoPrestacion }</td>
+                            <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
+                            <td id="precioUnitario_${ v.idItem }" class="precioUnitario_${ v.codigoPrestacion }">$${ formatDollar(v.precioUnitario) }</td>
+                            <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
+                            <td width="100px" class="text-end align-middle">
+                                <div class="d-flex">
+                                    <a idPrestacion-rel="${ v.codigoPrestacion }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
+                                        <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
+                                    </a>
+                                    <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                        <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                    </a>
+                                    <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
+                                        <i class="fa-solid fa-trash text-danger"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>       
+                        `;
+                    });
                 });
             });
 
@@ -1275,51 +1365,73 @@
         }
     }
 
-    function cargarDataPrestaciones(codigoGrupo = null) {
-        if(codigoGrupo == null){
-            codigoGrupo = parseInt($('#grupoPerfil option:selected').val());
-        }
-        // Obtener el grupo correspondiente desde dataPrestaciones
-        let grupoExistente = dataPrestaciones.find(function(grupo) {
-            return grupo.codigoGrupo === codigoGrupo;
-        });
-
-        // console.log(grupoExistente)
-
-        let dataPrestacionesTmp = dataPrestaciones;
-        // Blanquear todos los inputs
+    function cargarDataPrestaciones() {
         $('.input-prestacion').val('');
         $('.ck-input-prestacion').prop('checked',false);
-        dataPrestaciones = dataPrestacionesTmp;
+        if(dataPrestaciones.length > 0){
+            console.log("cargarDataPrestaciones");
+            let secuenciaLocalidad = parseInt($('#localidad option:selected').val());
+            let grupo = parseInt($('#grupoPerfil option:selected').val());
 
-        // Si el grupo existe en dataPrestaciones
-        if (grupoExistente) {
-            // Cargar los datos en los inputs
-            grupoExistente.prestaciones.forEach(function(prestacion) {
-                $('#'+prestacion.id).val(prestacion.cantidadPacientes);
-                $('#ck_'+prestacion.id).prop("checked",true);
+            let localidadIndex = dataPrestaciones.findIndex(function(item) {
+                return item.secuenciaLocalidad === secuenciaLocalidad;
             });
-        } else {
-            dataPrestacionesTmp = [];
-        }
-    }
 
-    function cargarItem(idItem){
-        for (const elemento of dataPrestaciones) {
-            for (const prestacion of elemento.prestaciones) {
-                if (prestacion.idItem === idItem) {
-                    //console.table(prestacion)
-                    $('#nombrePrestacionEdit').html(prestacion.nombrePrestacion + ": "+ prestacion.codigoPrestacion );
-                    $('#nombreServicioEdit').html(prestacion.nombreServicio );
-                    $('#grupoPerfilEdit').html(elemento.nombreGrupo);
-                    $('#precioUnitarioEdit').val(prestacion.precioUnitario);
-                    $('#cantidadEdit').val(prestacion.cantidadPacientes);
-                    $('#idItemEdit').val(prestacion.idItem);
-                    $('#codigoPrestacionEdit').val(prestacion.codigoPrestacion);
-                    return prestacion;
+            if (localidadIndex != -1) {
+
+                let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
+                    return item.codigoGrupo === grupo;
+                });
+
+                let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+                
+                let dataPrestacionesTmp = dataPrestaciones;
+                // Blanquear todos los inputs
+                dataPrestaciones = dataPrestacionesTmp;
+
+                // Si el grupo existe en dataPrestaciones
+                if (grupoExistente) {
+                    // Cargar los datos en los inputs
+                    grupoExistente.prestaciones.forEach(function(prestacion) {
+                        $('#'+prestacion.id).val(prestacion.cantidadPacientes);
+                        $('#ck_'+prestacion.id).prop("checked",true);
+                    });
+                } else {
+                    dataPrestacionesTmp = [];
                 }
             }
         }
+    }
+
+    function cargarItem(idItem,secuenciaLocalidad,codigoGrupo){
+        console.log(idItem,secuenciaLocalidad,codigoGrupo)
+        let localidadIndex = dataPrestaciones.findIndex(function(item) {
+            return item.secuenciaLocalidad === parseInt(secuenciaLocalidad);
+        });
+
+        console.log(localidadIndex);
+
+        let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
+            return item.codigoGrupo === parseInt(codigoGrupo);
+        });
+
+        console.log(grupoIndex);
+
+        $.each(dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones, function(key, prestacion){
+            if (prestacion.idItem === idItem) {
+                //console.table(prestacion)
+                $('#nombrePrestacionEdit').html(prestacion.nombrePrestacion + ": "+ prestacion.codigoPrestacion );
+                $('#nombreServicioEdit').html(prestacion.nombreServicio );
+                $('#localidadEdit').html(dataPrestaciones[localidadIndex].nombreLocalidad);
+                $('#grupoPerfilEdit').html(dataPrestaciones[localidadIndex].grupos[grupoIndex].nombreGrupo);
+                $('#precioUnitarioEdit').val(prestacion.precioUnitario);
+                $('#cantidadEdit').val(prestacion.cantidadPacientes);
+                $('#idItemEdit').val(prestacion.idItem);
+                $('#codigoPrestacionEdit').val(prestacion.codigoPrestacion);
+                return prestacion;
+            }
+        });
+
         return null;
     }
 
@@ -1559,6 +1671,7 @@
         let elem = ``;
         elem += `
             <tr class="border-bottom">
+                <td>GENERAL</td>
                 <td>COSTO ADICIONAL</td>
                 <td>GASTO</td>
                 <td>${ nombreCosto }</td>
@@ -1916,6 +2029,10 @@
                 $('#box-info-cliente').removeClass('d-none');
                 $('#cliente').val(data.data.row[0].codigoCliente);
                 $('#cliente').attr("cliente-rel",JSON.stringify(data.data.row[0]));
+                $('#localidad').empty();
+                $.each(data.data.row[0].localidades,function(key, value){
+                    $('#localidad').append(`<option value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+                })
                 obtenerEntidadesAfiliadas();
             }else{
                 let elem;
@@ -2088,10 +2205,14 @@
                         elem += `       <li class="mb-1 d-flex align-items-center">
                                             <input type="checkbox" id="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="me-2 ck-input-prestacion">
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion }</label>
-                                            <div class="align-self-start input-group input-price ms-2">
+                                            <div title="Cantidad" class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}''>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}'>
                                             </div>
+                                            <!--div title="Precio" class="align-self-start input-group input-price ms-2">
+                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-dollar-sign"></i></span>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" id="price_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion price_input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}' value="${v2.pvpBaseOriginal}">
+                                            </div-->
                                         </li>`;
                     })
                     elem += `           </ul>

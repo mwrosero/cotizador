@@ -9,10 +9,7 @@ use App\Models\Ism;
 
 class CotizadorController extends Controller
 {
-    public function registroCliente(){
-        return view('cotizador.registroCliente');
-    }
-
+    
     public function cotizador($numeroIdentificacion = null){
         return view('cotizador.cotizacion')
             ->with('numeroIdentificacion', $numeroIdentificacion);
@@ -36,6 +33,79 @@ class CotizadorController extends Controller
         return view('cotizador.cotizacion')
             ->with('edit', true)
             ->with('data',$response->data);
+    }
+
+    public function cotizaciones(Request $request){
+        $method = '/empresarial/v1/cotizacion';
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
+
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method.$param,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+
+        // echo Ism::BASE_URL.$method.$param;
+        // dd($response);
+
+        if($response->code == 200){
+            $totalRegistros = $response->data->totalRows; // Número total de registros
+            $registrosPorPagina = count($response->data->rows); // Número de registros en la página actual
+            $datos = $response->data->rows;
+        }else{
+            $datos = [];
+            $totalRegistros = 0; // Número total de registros
+            $registrosPorPagina = count($datos); // Número de registros en la página actual
+        }
+
+        $elementosPorPagina = Ism::PERPAGE; // Define el número de elementos por página según tus necesidades
+        $totalPaginas = ceil($totalRegistros / $elementosPorPagina);
+
+        $paginaActual = $request->query('page', '1'); // Define la página actual según tus necesidades
+        $datosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
+            $datos, // Datos de la página actual
+            $totalRegistros, // Número total de registros
+            $elementosPorPagina, // Número de elementos por página
+            $paginaActual, // Página actual
+            [
+                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(), // Ruta actual
+                'pageName' => 'page', // Nombre del parámetro de la página en la URL
+            ]
+        );
+
+        $method = '/comercial/v1/tipos_contratos?codigoTipoProducto=2&estado=ACTIVO';
+        
+        $responseContratos = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+        // dd($responseContratos);
+        
+        return view('cotizador.cotizaciones')
+            ->with('datosPaginados', $datosPaginados)
+            ->with('dataContratos',$responseContratos->data)
+            ->with('data',$response);
+    }
+
+    public function visualizarCotizacion($idCotizacion){
+        $method = '/empresarial/v1/cotizacion/resumen?idCotizacion='.base64_decode($idCotizacion);
+        
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => '',
+            'method'   => 'GET'
+        ]);
+
+        // echo Ism::BASE_URL.$method;
+        // dd($response);
+        return view('cotizador.visualizarCotizador')
+            ->with('data',$response->data)
+            ->with('idCotizacion',base64_decode($idCotizacion));
+    }
+
+    public function registroCliente(){
+        return view('cotizador.registroCliente');
     }
 
     public function clientes(Request $request){
@@ -92,59 +162,6 @@ class CotizadorController extends Controller
             ->with('data',$response);
     }
 
-    public function cotizaciones(Request $request){
-        $method = '/empresarial/v1/cotizacion';
-        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
-
-        $response = Ism::call([
-            'endpoint' => Ism::BASE_URL.$method.$param,
-            'token'    => Session::get('accessToken'),
-            'method'   => 'GET'
-        ]);
-
-        // echo Ism::BASE_URL.$method.$param;
-        // dd($response);
-
-        if($response->code == 200){
-            $totalRegistros = $response->data->totalRows; // Número total de registros
-            $registrosPorPagina = count($response->data->rows); // Número de registros en la página actual
-            $datos = $response->data->rows;
-        }else{
-            $datos = [];
-            $totalRegistros = 0; // Número total de registros
-            $registrosPorPagina = count($datos); // Número de registros en la página actual
-        }
-
-        $elementosPorPagina = Ism::PERPAGE; // Define el número de elementos por página según tus necesidades
-        $totalPaginas = ceil($totalRegistros / $elementosPorPagina);
-
-        $paginaActual = $request->query('page', '1'); // Define la página actual según tus necesidades
-        $datosPaginados = new \Illuminate\Pagination\LengthAwarePaginator(
-            $datos, // Datos de la página actual
-            $totalRegistros, // Número total de registros
-            $elementosPorPagina, // Número de elementos por página
-            $paginaActual, // Página actual
-            [
-                'path' => \Illuminate\Pagination\Paginator::resolveCurrentPath(), // Ruta actual
-                'pageName' => 'page', // Nombre del parámetro de la página en la URL
-            ]
-        );
-
-        $method = '/comercial/v1/tipos_contratos?codigoTipoProducto=2&estado=ACTIVO';
-        
-        $responseContratos = Ism::call([
-            'endpoint' => Ism::BASE_URL.$method,
-            'token'    => Session::get('accessToken'),
-            'method'   => 'GET'
-        ]);
-        // dd($responseContratos);
-        
-        return view('cotizador.cotizaciones')
-            ->with('datosPaginados', $datosPaginados)
-            ->with('dataContratos',$responseContratos->data)
-            ->with('data',$response);
-    }
-
     public function obtenerInfoCliente($codigoCliente){
         $method = '/comercial/v1/clientes/'.$codigoCliente.'?infoEmpresarial=true';
         
@@ -154,6 +171,7 @@ class CotizadorController extends Controller
             'method'   => 'GET'
         ]);
 
+        // echo Ism::BASE_URL.$method;
         // dd($response);
         $cliente = $response->data;
         return view('cotizador.registroCliente', compact('cliente'))
@@ -253,6 +271,11 @@ class CotizadorController extends Controller
 
     public function actualizarCliente(Request $request){
         $data = $request->all();
+        $localidades = json_decode($data['dataLocalidades']);
+        /*foreach ($localidades as $key => $value) {
+            echo $value->nombreLocalidad;
+        }*/
+        // dd($localidades);
         $idGrupoEmpresa = null;
         if(isset($data['grupoEmpresa'])){
             $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
@@ -273,7 +296,7 @@ class CotizadorController extends Controller
                 "aplicaSolicitudEnvioPaperlessLote" => false,
                 "bloquearCreditosPrestaciones" => false
             ],
-            "datosContacto" => [
+            /*"datosContacto" => [
                 "codigoPaisCelular" => (int)$data['telefonoMovilOficinaCode'],
                 "telefonoCelular" => $data['telefonoMovilOficina'],
                 "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
@@ -290,7 +313,7 @@ class CotizadorController extends Controller
                 "latitud" => null,
                 "longitud" => null,
                 "direccionGmaps" => null
-            ],
+            ],*/
             "infoEmpresarial" => [
                 "codigoCiiu" => strval($data['codigoCiiu']),
                 "representanteLegal" => $data['representanteLegal'],
@@ -308,7 +331,8 @@ class CotizadorController extends Controller
                     "mail" => strtolower($data['correoContacto']),
                     "cargo" => $data['cargoPersonaContacto']
                 ]
-            ]
+            ],
+            "localidades" => $localidades
         ];
 
         $esGrupoEmpresa = "false";
@@ -326,6 +350,9 @@ class CotizadorController extends Controller
         ]);
         // print_r(json_encode($cliente));
         // echo Ism::BASE_URL.$method.$param;
+        // echo '<pre>';
+        // print_r($cliente);
+        // echo '</pre>';
         // dump($cliente);
         // dd($response);
 
@@ -340,19 +367,4 @@ class CotizadorController extends Controller
         
     }
 
-    public function visualizarCotizacion($idCotizacion){
-        $method = '/empresarial/v1/cotizacion/resumen?idCotizacion='.base64_decode($idCotizacion);
-        
-        $response = Ism::call([
-            'endpoint' => Ism::BASE_URL.$method,
-            'token'    => '',
-            'method'   => 'GET'
-        ]);
-
-        // echo Ism::BASE_URL.$method;
-        // dd($response);
-        return view('cotizador.visualizarCotizador')
-            ->with('data',$response->data)
-            ->with('idCotizacion',base64_decode($idCotizacion));
-    }
 }

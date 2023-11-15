@@ -140,6 +140,10 @@ function sonNumeros(str) {
   return /^\d+$/.test(str);
 }
 
+function getHtmlSelect(idElem){
+    return $("#"+idElem+" option:selected").html();
+}
+
 function getInput(idElem, type = 'input'){
     let valor;
     switch(type){
@@ -166,9 +170,9 @@ function getInput(idElem, type = 'input'){
         break;
         case 'checkbox':
             // console.log('#'+idElem)
-            valor = "I";
+            valor = false;
             if($('#'+idElem).is(":checked")){
-                valor = "A";
+                valor = true;
             }
         break;
     }

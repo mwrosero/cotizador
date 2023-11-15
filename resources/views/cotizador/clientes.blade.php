@@ -19,7 +19,7 @@
                         Filtros de búsqueda
                     </button>
                 </h2>
-                <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample" style="">
+                <div id="accordionOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
                     <form class="accordion-body" action="" method="GET">
                         <div class="row g-3">
                             <div class="col-12 col-sm-6 col-md-4">
