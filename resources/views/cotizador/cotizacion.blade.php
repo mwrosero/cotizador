@@ -1047,7 +1047,8 @@
         })
 
         $('body').on('click', '.item-delete', function(){
-            eliminarItem($(this).attr('idItem-rel'));
+            //eliminarItem($(this).attr('idItem-rel'));
+            eliminarItem($(this).attr('idItem-rel'),$(this).attr('secuenciaLocalidad-rel'),$(this).attr('codigoGrupo-rel'));
             tabla.row($(this).parents('tr')).remove().draw();
             calcularTH();
             if(dataPrestaciones.length == 0){
@@ -1263,7 +1264,8 @@
     let tabla;
     function drawTable(){
         if(tabla){
-            $('.dt-responsive-prestaciones').DataTable().clear().destroy();
+            tabla.clear().draw();
+            //$('.dt-responsive-prestaciones').DataTable().clear().destroy();
         }
 
         if(dataPrestaciones.length > 0){
@@ -1272,6 +1274,7 @@
             $.each(dataCostos, function(key, value){
                 elem += `
                 <tr class="border-bottom">
+                    <td>GENERAL</td>
                     <td>COSTO ADICIONAL</td>
                     <td>GASTO</td>
                     <td>${ value.nombreCosto }</td>
@@ -1324,7 +1327,7 @@
                                     <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
                                         <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                     </a>
-                                    <a idItem-rel="${ v.idItem }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
+                                    <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
                                         <i class="fa-solid fa-trash text-danger"></i>
                                     </a>
                                 </div>
@@ -1341,24 +1344,25 @@
 
             $('#prestaciones-seleccionadas').empty();
             $('#prestaciones-seleccionadas').append(elem);
-
-            tabla = $('.dt-responsive-prestaciones').DataTable({
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
-                },
-                pageLength: 25,
-                responsive: false,
-                columnDefs: [
-                    {
-                        targets: [2, 6, 7], // Índices de las columnas que deseas mantener visibles
-                        responsivePriority: 1, // Establece una prioridad alta para mantener estas columnas visibles
+            if(!tabla){
+                tabla = $('.dt-responsive-prestaciones').DataTable({
+                    language: {
+                        url: '//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json',
                     },
-                    {
-                        targets: '_all',
-                        responsivePriority: 2, // Establece una prioridad baja para el resto de las columnas
-                    }
-                ]
-            });
+                    pageLength: 25,
+                    responsive: false,
+                    columnDefs: [
+                        {
+                            targets: [2, 6, 7], // Índices de las columnas que deseas mantener visibles
+                            responsivePriority: 1, // Establece una prioridad alta para mantener estas columnas visibles
+                        },
+                        {
+                            targets: '_all',
+                            responsivePriority: 2, // Establece una prioridad baja para el resto de las columnas
+                        }
+                    ]
+                });
+            }
             $(window).scrollTop($(document).height());
         }else{
             $('.box-resumen').addClass('d-none');
@@ -1450,24 +1454,26 @@
 
     function actualizarPrestacion() {
         let idItem = $('#idItemEdit').val();
-        for (const elemento of dataPrestaciones) {
-            for (const prestacion of elemento.prestaciones) {
-                if (prestacion.idItem === idItem) {
-                    // console.log(idItem);
-                    prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
-                    prestacion.precioUnitario = getInput('precioUnitarioEdit');
-                    // precioUnitario-rel
-                    $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
-                    $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                    $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                    //$('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                    $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
-                    $('#offcanvasPrestacion').offcanvas('hide');
-                    //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
-                    calcularTH();
-                    calcularTotal()
+        for (const localidades of dataPrestaciones) {
+            for (const elemento of localidades.grupos) {
+                for (const prestacion of elemento.prestaciones) {
+                    if (prestacion.idItem === idItem) {
+                        // console.log(idItem);
+                        prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
+                        prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                        // precioUnitario-rel
+                        $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
+                        $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                        $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                        //$('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                        $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                        $('#offcanvasPrestacion').offcanvas('hide');
+                        //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
+                        calcularTH();
+                        calcularTotal()
 
-                    return true;
+                        return true;
+                    }
                 }
             }
         }
@@ -1568,14 +1574,47 @@
     // Eliminar item desde tabla
     let prestacionesEliminadas = [];
     let costosEliminados = [];
-    function eliminarItem(idItem) {
-        console.log("eliminarItem: "+idItem);
+    function eliminarItem(idItem,secuenciaLocalidad,codigoGrupo) {
+        console.log(idItem,secuenciaLocalidad,codigoGrupo)
+        
+        let localidadIndex = dataPrestaciones.findIndex(function(item) {
+            return item.secuenciaLocalidad === parseInt(secuenciaLocalidad);
+        });
+        console.log(localidadIndex);
+
+        let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
+            return item.codigoGrupo === parseInt(codigoGrupo);
+        });
+        console.log(grupoIndex);
+
+        //$.each(dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones, function(key, prestacion){})
         // Buscar el elemento con el idItem dado
-        const elemento = dataPrestaciones.find(item => item.prestaciones.some(prestacion => prestacion.idItem === idItem));
+        const elemento = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.find(prestacion => prestacion.idItem === idItem);
         console.log(elemento);
         prestacionesEliminadas.push(idItem);
 
-        if (elemento) {
+        const prestacionIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(prestacion => prestacion.idItem === idItem);
+
+        if (prestacionIndex !== -1) {
+            // Eliminar el elemento con el índice encontrado
+            dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.splice(prestacionIndex, 1);
+            console.log('Elemento eliminado:', idItem);
+
+            let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+
+            if (grupoExistente.prestaciones.length === 0) {
+                dataPrestaciones[localidadIndex].grupos.splice(grupoIndex, 1);
+            }
+
+            // Si no hay grupos eliminar localidad
+            if(dataPrestaciones[localidadIndex].grupos.length == 0){
+                dataPrestaciones.splice(localidadIndex, 1);
+            }
+        } else {
+            console.log('Elemento no encontrado');
+        }
+
+        /*if (elemento) {
             // Filtrar las prestaciones y eliminar la que tiene el idItem
             elemento.prestaciones = elemento.prestaciones.filter(prestacion => prestacion.idItem !== idItem);
 
@@ -1584,7 +1623,7 @@
                 // Eliminar el elemento superior
                 dataPrestaciones = dataPrestaciones.filter(item => item.codigoGrupo !== elemento.codigoGrupo);
             }
-        }
+        }*/
         drawTable();
         //return dataPrestaciones;
     }
@@ -1692,6 +1731,7 @@
         //$('#prestaciones-seleccionadas').append(elem);
         tabla.row.add($(elem)[0]).draw();
         tabla.draw();
+        drawTable();
     }
 
     async function crearCotizacion(){
@@ -2522,14 +2562,16 @@ $('#tableContainer').html(tableHtml);
         let prestaciones = [];
         if(id == null){
             $.each(dataPrestaciones, function(key, value){
-                $.each(value.prestaciones, function(k, v){
-                    let id = v.codigoPrestacion;
-                    if ($.inArray(id, prestaciones) !== -1) {
-                        var indice = $.inArray(id, prestaciones);
-                        prestaciones[indice] = id;
-                    } else {
-                        prestaciones.push(id);
-                    }
+                $.each(value.grupos, function(k, v){
+                    $.each(v.prestaciones, function(k1, v1){
+                        let id = v1.codigoPrestacion;
+                        if ($.inArray(id, prestaciones) !== -1) {
+                            var indice = $.inArray(id, prestaciones);
+                            prestaciones[indice] = id;
+                        } else {
+                            prestaciones.push(id);
+                        }
+                    })
                 })
             })
         }else{
