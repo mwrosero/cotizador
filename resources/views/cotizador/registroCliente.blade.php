@@ -435,9 +435,20 @@
     <script>
         let modalGiroNegocio;
         let localidades = [];
+        @if(!isset($edit))
+        let dataLocalidades = "{{ old('dataLocalidades', isset($cliente) ? $cliente->localidades : '' ) }}";
+        @endif
+        
         let allowCall = true;
         window.onload = async () => {
             modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
+            @if(!isset($edit))
+            if(dataLocalidades != ""){
+                $('#dataLocalidades').val(dataLocalidades).trigger('change');
+                localidades = JSON.parse(decodeURIComponent($("#dataLocalidades").val()).replace(/&quot;/g, '"'));
+                drawTableLocalidades();
+            }
+            @endif
 
             await obtenerGirosNegocio();
             await obtenerGrupoEmpresa();
@@ -623,6 +634,10 @@
                 $('#secuenciaLocalidad').val(data.secuenciaLocalidad);
                 $('#idLocalidadTmp').val(data.idLocalidadTmp);
                 $('#nombreLocalidad').val(data.nombreLocalidad);
+                $('#telefonoFijoOficinaCode').val(data.codigoPaisFijo);
+                $('#telefonoFijoOficina').val(data.telefonoFijo);
+                $('#telefonoMovilOficinaCode').val(data.codigoPaisMovil);
+                $('#telefonoMovilOficina').val(data.telefonoMovil);
                 $('#direccion').val(data.direccion);
                 $('#correoEmpresa').val(data.email);
                 if(data.esPrincipal){

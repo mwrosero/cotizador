@@ -183,6 +183,7 @@ class CotizadorController extends Controller
     public function crearCliente(Request $request){
         $data = $request->all();
         $idGrupoEmpresa = null;
+        $localidades = json_decode($data['dataLocalidades']);
         if(isset($data['grupoEmpresa'])){
             $idGrupoEmpresa = ($data['grupoEmpresa'] == "---") ? null : (int)$data['grupoEmpresa'];
         }
@@ -203,19 +204,19 @@ class CotizadorController extends Controller
                 "bloquearCreditosPrestaciones" => false
             ],
             "datosContacto" => [
-                "codigoPaisCelular" => (int)$data['telefonoMovilOficinaCode'],
-                "telefonoCelular" => $data['telefonoMovilOficina'],
-                "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
-                "telefonoConvencional" => $data['telefonoFijoOficina'],
-                "contactoCliente" => null,
-                "correoElectronico" => strtolower($data['correoEmpresa'])
+                "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
+                "telefonoCelular" => $data['telefonoMovilContacto'],
+                "codigoPaisConvencional" => $data['telefonoFijoContactoCode'],
+                "telefonoConvencional" => $data['telefonoFijoContacto'],
+                "contactoCliente" => $data['personaContacto'],
+                "correoElectronico" => strtolower($data['correoContacto'])
             ],
             "datosResidencia" => [
-                "codigoPais" => (int)$data['pais'],
-                "codigoProvincia" => (int)$data['provincia'],
-                "codigoCiudad" => (int)$data['ciudad'],
+                "codigoPais" => $localidades[0]->codigoPais,
+                "codigoProvincia" => $localidades[0]->codigoProvincia,
+                "codigoCiudad" => $localidades[0]->codigoCiudad,
                 "codigoSector" => null,
-                "direccion" => $data['direccion'],
+                "direccion" => $localidades[0]->direccion,
                 "latitud" => null,
                 "longitud" => null,
                 "direccionGmaps" => null
@@ -236,7 +237,8 @@ class CotizadorController extends Controller
                     "mail" => strtolower($data['correoContacto']),
                     "cargo" => $data['cargoPersonaContacto']
                 ]
-            ]
+            ],
+            "localidades" => $localidades
         ];
 
         $esGrupoEmpresa = "false";
@@ -253,10 +255,10 @@ class CotizadorController extends Controller
             'method'   => 'POST'
         ]);
         
-        // echo Ism::BASE_URL.$method.$param;
-        // dump($cliente);
-        // dd($response);
-        // die();
+        echo Ism::BASE_URL.$method.$param;
+        dump($cliente);
+        dd($response);
+        die();
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);
