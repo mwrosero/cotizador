@@ -193,14 +193,14 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6">
+                    <div class="col-12 col-md-6 d-none">
                         <label for="ciudadChequeo" class="form-label">Ciudad<i class="fa-solid fa-asterisk fs-10 text-danger ms-2 d-none req-ciudadChequeo"></i></label>
                         <div class="select2-dark">
                             <select id="ciudadChequeo" class="select2 form-select" multiple>
                             </select>
                         </div>
                     </div>
-                    <div class="col-12 col-md-12">
+                    <div class="col-12 col-md-6">
                         <label for="detalleLugar" class="form-label">Por favor detallar el lugar<i class="fa-solid fa-asterisk fs-10 text-danger ms-2 d-none req-detalleLugar"></i></label>
                         <input type="text"
                             class="form-control"
@@ -294,6 +294,7 @@
                                     <thead>
                                         <tr>
                                             <th>Localidad</th>
+                                            <th>Ciudad</th>
                                             <th>Grupo</th>
                                             <th>Servicio</th>
                                             <th>Prestación</th>
@@ -384,9 +385,11 @@
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             <div class="modal-header row">
                 <div class="col-12 col-md-6">
-                    <label for="localidad" class="form-label">Localidad</label>
+                    <label for="localidad" class="form-label d-flex justify-content-between">
+                        Localidad <span><input type="checkbox" id="selectAll"> Todos</span>
+                    </label>
                     <div class="select2-dark">
-                        <select id="localidad" class="select2 form-select">
+                        <select id="localidad" multiple class="select2 form-select">
                         </select>
                     </div>
                 </div>
@@ -721,6 +724,25 @@
         await obtenerPrestaciones();
         showPrestaciones();
 
+        $('body').on('change', '#localidad', function(){
+            if(getInput('localidad','select2').length > 0){
+                $('.input-prestacion').attr("disabled",false);
+            }else{
+                $('.input-prestacion').attr("disabled",true);
+            }
+        })
+
+        $('#selectAll').change(function() {
+            // Obtén el estado del checkbox de seleccionar/deseleccionar todos
+            var selectAllChecked = $(this).prop('checked');
+
+            // Selecciona o deselecciona todos los options en el select
+            $('#localidad option').prop('selected', selectAllChecked).trigger('change');
+
+            // Actualiza el estado del select2
+            $('#localidad').trigger('change');
+        });
+
         $('body').on('click touch', '.swiper-slide', function(){
             $('.swiper-slide').removeClass('item-selected');
             $(this).addClass('item-selected');
@@ -792,7 +814,7 @@
         $('body').on('change', '#centroMedico', function(){
             $('.localidad_veris').remove();
             if($('#centroMedico option:selected').val() != ""){
-                $('#localidad').append(`<option class="localidad_veris" value="0">${ $('#centroMedico option:selected').html() }</option>`);
+                $('#localidad').append(`<option class="localidad_veris" value="0" title='${ $('#centroMedico option:selected').html() }'>Veris</option>`);
             }
         })
 
@@ -809,7 +831,8 @@
             $('#cliente').val(detalle.codigoCliente);
             $('#cliente').attr("cliente-rel",JSON.stringify(detalle));
             $.each(detalle.localidades,function(key, value){
-                $('#localidad').append(`<option value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+                console.log(value.nombreCiudad);
+                $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
             })
             obtenerEntidadesAfiliadas();
             modalCliente.hide();
@@ -846,191 +869,201 @@
         });
 
         $('body').on('change', '.input-prestacion', function() {
-            let localidad = parseInt(getInput('localidad'));
-            let nombreLocalidad = $('#localidad option:selected').html();
-            let grupo = parseInt(getInput('grupoPerfil'));
-            let nombreGrupo = $('#grupoPerfil option:selected').html();
-            let prestacion = $.parseJSON($(this).attr("prestacion-rel"));
-            let idDetalle = null;
-            // console.log(prestacion);
+            //let localidad = parseInt(getInput('localidad'));
+            let inputChanged = $(this);
+            let localidades = getInput('localidad','select2');
+            $.each(localidades, function(key, localidad){
+                console.log({localidad})
+                let nombreLocalidad = $('#localidad option:selected').html();
+                let nombreCiudad = $('#localidad option[value="' + localidad + '"]').attr("nombreCiudad-rel");
+                let codigoCiudad = $('#localidad option[value="' + localidad + '"]').attr("codigoCiudad-rel");
+                console.log({codigoCiudad});
+                let grupo = parseInt(getInput('grupoPerfil'));
+                let nombreGrupo = $('#grupoPerfil option:selected').html();
+                let prestacion = $.parseJSON(inputChanged.attr("prestacion-rel"));
+                let idDetalle = null;
+                // console.log(prestacion);
 
-            // Si la secuenciaLocalidad no existe en dataPrestaciones, agregarla
-            let secuenciaLocalidad = parseInt($('#localidad').val());
-            let localidadIndex = dataPrestaciones.findIndex(function(item) {
-                return item.secuenciaLocalidad === secuenciaLocalidad;
-            });
+                // Si la secuenciaLocalidad no existe en dataPrestaciones, agregarla
+                let secuenciaLocalidad = parseInt(localidad);
+                let localidadIndex = dataPrestaciones.findIndex(function(item) {
+                    return item.secuenciaLocalidad === secuenciaLocalidad;
+                });
 
-            // Si la localidad no existe en dataPrestaciones, agregarlo
-            if (localidadIndex === -1) {
-                let nuevaLocalidad = {
-                    "secuenciaLocalidad": secuenciaLocalidad,
-                    "nombreLocalidad": nombreLocalidad,
-                    "grupos": []
-                };
-                dataPrestaciones.push(nuevaLocalidad);
-                localidadIndex = dataPrestaciones.length - 1; // Obtener el índice de la nueva localidad
-            }
-
-            // Obtener el índice del grupo en el arreglo grupos
-            let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
-                return item.codigoGrupo === grupo;
-            });
-
-            console.log({grupoIndex});
-
-            // Si el grupo no existe en la localidad actual, agregarlo
-            if (grupoIndex === -1) {
-                let nuevoGrupo = {
-                    "codigoGrupo": grupo,
-                    "nombreGrupo": nombreGrupo,
-                    "prestaciones": []
-                };
-                dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
-                grupoIndex = dataPrestaciones[localidadIndex].grupos.length - 1; // Obtener el índice del nuevo grupo
-            }
-
-            if($(this).val() != ''){
-                $('#ck_'+$(this).attr("id")).prop('checked',true);
-                //if($(this).attr('item-loaded') && $(this).attr('item-loaded') == "S"){);
-                let gruposRel = $('.input_'+$(this).attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
-                // Para cuando se esta editando la cotizacion
-                if(gruposRel){
-                    console.log(gruposRel);
-                    let gruposRelArr = gruposRel.split(',').map( Number );
-                    console.log(parseInt(grupo));
-                    console.log(gruposRelArr);
-                    if(gruposRelArr.includes(parseInt(grupo))){
-                        console.log("----------")
-                        // console.log("Agregar idDetalle, activo:true y status:edit");
-                        idDetalle = $(this).attr("idDetalle-rel");
-                        console.log(idDetalle)
-                    }
+                // Si la localidad no existe en dataPrestaciones, agregarlo
+                if (localidadIndex === -1) {
+                    let nuevaLocalidad = {
+                        "secuenciaLocalidad": secuenciaLocalidad,
+                        "nombreLocalidad": nombreLocalidad,
+                        "nombreCiudad": nombreCiudad,
+                        "codigoCiudad": codigoCiudad,
+                        "grupos": []
+                    };
+                    dataPrestaciones.push(nuevaLocalidad);
+                    localidadIndex = dataPrestaciones.length - 1; // Obtener el índice de la nueva localidad
                 }
-            }else{
-                $('#ck_'+$(this).attr("id")).prop('checked',false);
-            }
 
-            // Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción
-            if (grupoIndex === -1 && $(this).val() === '') {
-                console.log("Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción")
-                return;
-            }
+                // Obtener el índice del grupo en el arreglo grupos
+                let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
+                    return item.codigoGrupo === grupo;
+                });
 
-            let costoUnitario = prestacion.valorCosto;
-            let precioUnitario = prestacion.valorPvp;
-            //if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
-            if(!modificadoPorCarga && $(this).attr("precioUnitario-rel") && $(this).attr("costoUnitario-rel") != 0){
-                costoUnitario = $(this).attr("costoUnitario-rel");
-            }
+                console.log({grupoIndex});
 
-            if($(this).attr("precioUnitario-rel") && $(this).attr("precioUnitario-rel") != ""){
-                precioUnitario = $(this).attr("precioUnitario-rel");
-            }
-
-            // console.log(prestacion);
-            // console.log({costoUnitario});
-
-            let idItem = localidad+"_"+grupo+"_"+$(this).attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
-
-            prestacionesEliminadas = $.grep(prestacionesEliminadas, function(valor) {
-                return valor !== idItem;
-            });
-
-            // Crear el objeto de la prestación
-            let prestacionObj = {
-                "idItem":idItem,
-                "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
-                "nombrePrestacion": prestacion.nombrePrestacion,
-                "codigoServicio": parseInt($(this).attr("codigoServicio-rel")),
-                "nombreServicio": $(this).attr("nombreServicio-rel"),
-                "cantidadPacientes": parseInt($(this).val()),
-                "precioUnitario": parseFloat(precioUnitario),
-                "costoUnitario": parseFloat(costoUnitario),
-                /*@if(isset($edit))
-                "precioUnitario": parseFloat($(this).attr("precioUnitario-rel")),
-                "costoUnitario": parseFloat($(this).attr("costoUnitario-rel")),
-                @else
-                "costoUnitario": parseFloat(prestacion.valorCosto),
-                "precioUnitario": parseFloat(prestacion.valorPvp),
-                @endif*/
-                "aplicaIva": prestacion.aplicaIva,
-                "valorPvp": prestacion.valorPvp,
-                "id": $(this).attr("id"),
-                "activo":true,
-                @if(isset($edit))
-                "status":"edit",
-                @endif
-                "idDetalle": parseInt(idDetalle)
-            };
-
-            let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
-                return item.codigoPrestacion === prestacionObj.codigoPrestacion;
-            });
-
-            if (prestacionExistenteIndex !== -1) {
-                // Actualizar los valores de la prestación
-                dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones[prestacionExistenteIndex] = prestacionObj;
-            } else {
-                // Agregar la prestación al grupo
-                dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.push(prestacionObj);
-            }
-
-            console.log(localidadIndex)
-            console.log(grupoIndex)
-            // Si el valor del input es vacío, eliminar la prestación del grupo
-            if ($(this).val() === '') {
-                // Si la localidad y el grupo existen en dataPrestaciones
-                if (localidadIndex !== -1 && grupoIndex !== -1) {
-                    let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
-                    console.log(grupoExistente);
-                    let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
-                        return item.codigoPrestacion === prestacionObj.codigoPrestacion;
-                    });
-
-                    // Si la prestación existe en el grupo, se elimina
-                    if (prestacionExistenteIndex !== -1) {
-                        grupoExistente.prestaciones.splice(prestacionExistenteIndex, 1);
-                    }
-
-                    // Si no quedan más prestaciones en el grupo, eliminar el grupo
-                    if (grupoExistente.prestaciones.length === 0) {
-                        dataPrestaciones[localidadIndex].grupos.splice(grupoIndex, 1);
-                    }
-
-                    // Si no hay grupos eliminar localidad
-                    if(dataPrestaciones[localidadIndex].grupos.length == 0){
-                        dataPrestaciones.splice(localidadIndex, 1);
-                    }
+                // Si el grupo no existe en la localidad actual, agregarlo
+                if (grupoIndex === -1) {
+                    let nuevoGrupo = {
+                        "codigoGrupo": grupo,
+                        "nombreGrupo": nombreGrupo,
+                        "prestaciones": []
+                    };
+                    dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
+                    grupoIndex = dataPrestaciones[localidadIndex].grupos.length - 1; // Obtener el índice del nuevo grupo
                 }
-            } else {
-                // Si la localidad y el grupo existen en dataPrestaciones
-                if (localidadIndex !== -1 && grupoIndex !== -1) {
-                    let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
-                    console.log(grupoExistente);
-                    let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
-                        return item.codigoPrestacion === prestacionObj.codigoPrestacion;
-                    });
 
-                    // Si la prestación existe en el grupo
-                    if (prestacionExistenteIndex !== -1) {
-                        // Actualizar los valores de la prestación
-                        grupoExistente.prestaciones[prestacionExistenteIndex] = prestacionObj;
-                    } else {
-                        // Agregar la prestación al grupo
-                        grupoExistente.prestaciones.push(prestacionObj);
+                if(inputChanged.val() != ''){
+                    $('#ck_'+inputChanged.attr("id")).prop('checked',true);
+                    //if(inputChanged.attr('item-loaded') && inputChanged.attr('item-loaded') == "S"){);
+                    let gruposRel = $('.input_'+inputChanged.attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
+                    // Para cuando se esta editando la cotizacion
+                    if(gruposRel){
+                        console.log(gruposRel);
+                        let gruposRelArr = gruposRel.split(',').map( Number );
+                        console.log(parseInt(grupo));
+                        console.log(gruposRelArr);
+                        if(gruposRelArr.includes(parseInt(grupo))){
+                            console.log("----------")
+                            // console.log("Agregar idDetalle, activo:true y status:edit");
+                            idDetalle = inputChanged.attr("idDetalle-rel");
+                            console.log(idDetalle)
+                        }
+                    }
+                }else{
+                    $('#ck_'+inputChanged.attr("id")).prop('checked',false);
+                }
+
+                // Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción
+                if (grupoIndex === -1 && inputChanged.val() === '') {
+                    console.log("Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción")
+                    return;
+                }
+
+                let costoUnitario = prestacion.valorCosto;console.log({costoUnitario});
+                let precioUnitario = prestacion.valorPvp;
+                //if(inputChanged.attr("precioUnitario-rel") && inputChanged.attr("precioUnitario-rel") != ""){
+                if(!modificadoPorCarga && inputChanged.attr("precioUnitario-rel") && inputChanged.attr("costoUnitario-rel") != 0){
+                    costoUnitario = inputChanged.attr("costoUnitario-rel");
+                }
+                console.log({costoUnitario});
+                if(inputChanged.attr("precioUnitario-rel") && inputChanged.attr("precioUnitario-rel") != ""){
+                    precioUnitario = inputChanged.attr("precioUnitario-rel");
+                }
+
+                // console.log(prestacion);
+                // console.log({costoUnitario});
+
+                let idItem = localidad+"_"+grupo+"_"+inputChanged.attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
+
+                prestacionesEliminadas = $.grep(prestacionesEliminadas, function(valor) {
+                    return valor !== idItem;
+                });
+
+                // Crear el objeto de la prestación
+                let prestacionObj = {
+                    "idItem":idItem,
+                    "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
+                    "nombrePrestacion": prestacion.nombrePrestacion,
+                    "codigoServicio": parseInt(inputChanged.attr("codigoServicio-rel")),
+                    "nombreServicio": inputChanged.attr("nombreServicio-rel"),
+                    "cantidadPacientes": parseInt(inputChanged.val()),
+                    "precioUnitario": parseFloat(precioUnitario),
+                    "costoUnitario": parseFloat(costoUnitario),
+                    /*@if(isset($edit))
+                    "precioUnitario": parseFloat(inputChanged.attr("precioUnitario-rel")),
+                    "costoUnitario": parseFloat(inputChanged.attr("costoUnitario-rel")),
+                    @else
+                    "costoUnitario": parseFloat(prestacion.valorCosto),
+                    "precioUnitario": parseFloat(prestacion.valorPvp),
+                    @endif*/
+                    "aplicaIva": prestacion.aplicaIva,
+                    "valorPvp": prestacion.valorPvp,
+                    "id": inputChanged.attr("id"),
+                    "activo":true,
+                    @if(isset($edit))
+                    "status":"edit",
+                    @endif
+                    "idDetalle": parseInt(idDetalle)
+                };
+
+                let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
+                    return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                });
+
+                if (prestacionExistenteIndex !== -1) {
+                    // Actualizar los valores de la prestación
+                    dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones[prestacionExistenteIndex] = prestacionObj;
+                } else {
+                    // Agregar la prestación al grupo
+                    dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.push(prestacionObj);
+                }
+
+                console.log(localidadIndex)
+                console.log(grupoIndex)
+                // Si el valor del input es vacío, eliminar la prestación del grupo
+                if (inputChanged.val() === '') {
+                    // Si la localidad y el grupo existen en dataPrestaciones
+                    if (localidadIndex !== -1 && grupoIndex !== -1) {
+                        let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+                        console.log(grupoExistente);
+                        let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
+                            return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                        });
+
+                        // Si la prestación existe en el grupo, se elimina
+                        if (prestacionExistenteIndex !== -1) {
+                            grupoExistente.prestaciones.splice(prestacionExistenteIndex, 1);
+                        }
+
+                        // Si no quedan más prestaciones en el grupo, eliminar el grupo
+                        if (grupoExistente.prestaciones.length === 0) {
+                            dataPrestaciones[localidadIndex].grupos.splice(grupoIndex, 1);
+                        }
+
+                        // Si no hay grupos eliminar localidad
+                        if(dataPrestaciones[localidadIndex].grupos.length == 0){
+                            dataPrestaciones.splice(localidadIndex, 1);
+                        }
                     }
                 } else {
-                    // Si la localidad existe pero el grupo no, crear un nuevo grupo y agregar la prestación
-                    if (localidadIndex !== -1) {
-                        let nuevoGrupo = {
-                            "codigoGrupo": grupo,
-                            "nombreGrupo": nombreGrupo,
-                            "prestaciones": [prestacionObj]
-                        };
-                        dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
+                    // Si la localidad y el grupo existen en dataPrestaciones
+                    if (localidadIndex !== -1 && grupoIndex !== -1) {
+                        let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
+                        console.log(grupoExistente);
+                        let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
+                            return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                        });
+
+                        // Si la prestación existe en el grupo
+                        if (prestacionExistenteIndex !== -1) {
+                            // Actualizar los valores de la prestación
+                            grupoExistente.prestaciones[prestacionExistenteIndex] = prestacionObj;
+                        } else {
+                            // Agregar la prestación al grupo
+                            grupoExistente.prestaciones.push(prestacionObj);
+                        }
+                    } else {
+                        // Si la localidad existe pero el grupo no, crear un nuevo grupo y agregar la prestación
+                        if (localidadIndex !== -1) {
+                            let nuevoGrupo = {
+                                "codigoGrupo": grupo,
+                                "nombreGrupo": nombreGrupo,
+                                "prestaciones": [prestacionObj]
+                            };
+                            dataPrestaciones[localidadIndex].grupos.push(nuevoGrupo);
+                        }
                     }
                 }
-            }
+            })
 
         });
 
@@ -1049,8 +1082,9 @@
         $('body').on('click', '.item-delete', function(){
             //eliminarItem($(this).attr('idItem-rel'));
             eliminarItem($(this).attr('idItem-rel'),$(this).attr('secuenciaLocalidad-rel'),$(this).attr('codigoGrupo-rel'));
-            tabla.row($(this).parents('tr')).remove().draw();
-            calcularTH();
+            // tabla.row($(this).parents('tr')).remove().draw();
+            // calcularTH();
+            drawTable();
             if(dataPrestaciones.length == 0){
                 $('.box-resumen').addClass('d-none');
                 $('#servicioCosto option').prop('disabled', false);
@@ -1274,6 +1308,7 @@
             $.each(dataCostos, function(key, value){
                 elem += `
                 <tr class="border-bottom">
+                    <td>---</td>
                     <td>GENERAL</td>
                     <td>COSTO ADICIONAL</td>
                     <td>GASTO</td>
@@ -1310,8 +1345,9 @@
                             //class_costo_0 = `<span class="badge bg-danger text-white fw-bold p-1" title="Prestación con Costo $0">*</span>`;
                         }
                         elem += `
-                        <tr class="border-bottom tr-prestacion-${v.codigoPrestacion} ${class_costo_0}">
+                        <tr class="border-bottom tr-prestacion-${v.codigoPrestacion} tr-prestacion-${vp.secuenciaLocalidad}-${v.codigoPrestacion} ${class_costo_0}">
                             <td>${ vp.nombreLocalidad }</td>
+                            <td>${ vp.nombreCiudad }</td>
                             <td>${ vg.nombreGrupo }</td>
                             <td>${ v.nombreServicio }</td>
                             <td>${ v.nombrePrestacion }</td>
@@ -1774,7 +1810,7 @@
         //En la Empresa o en Otro lugar
         if(filtroLugar.length == 1 && ($.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 || $.inArray("OTROS", filtroLugar) !== -1)){
             if(ciudadChequeo.length == 0){
-                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+                // msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
 
             if(detalleLugar == ""){
@@ -1789,7 +1825,7 @@
             }
             
             if(ciudadChequeo.length == 0){
-                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+                // msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
 
             if(detalleLugar == ""){
@@ -1804,7 +1840,7 @@
             }
             
             if(ciudadChequeo.length == 0){
-                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+                // msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
 
             if(detalleLugar == ""){
@@ -1815,7 +1851,7 @@
         //En la Empresa y Otros
         if(filtroLugar.length > 1 && $.inArray("LUGAR_EMPRESA", filtroLugar) !== -1 && $.inArray("OTROS", filtroLugar) !== -1) {
             if(ciudadChequeo.length == 0){
-                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+                // msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
 
             if(detalleLugar == ""){
@@ -1830,7 +1866,7 @@
             }
             
             if(ciudadChequeo.length == 0){
-                msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
+                // msg += "<span class='fs-12'>-Seleccionar una Ciudad</span><br>";
             }
 
             if(detalleLugar == ""){
@@ -1984,6 +2020,9 @@
     }
 
     function formatDollar(numero){
+        if(numero == 0){
+            return numero;
+        }
         let numStr = numero.toString().replace(/^0+/, '');
         let numeroRedondeado = parseFloat(numStr).toFixed(2);
         let partes = numeroRedondeado.split('.');
@@ -2003,6 +2042,22 @@
             });
 
             $.each(dataPrestaciones, function(key, value){
+                $.each(value.grupos, function(k, v){
+                    $.each(v.prestaciones, function(k1, v1){
+                        let costo_alterno = obtenerCostoPorId(v1.codigoPrestacion);
+                        if( costo_alterno == null){
+                            total_costos += (v1.costoUnitario*v1.cantidadPacientes);
+                        }else{
+                            // console.log("Costo alterno")
+                            total_costos += (costo_alterno*v1.cantidadPacientes);
+                        }
+                        totales += (v1.precioUnitario*v1.cantidadPacientes);
+                    })
+                })
+            })
+
+
+            /*$.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
                     let costo_alterno = obtenerCostoPorId(v.codigoPrestacion);
                     if( costo_alterno == null){
@@ -2013,7 +2068,7 @@
                     }
                     totales += (v.precioUnitario*v.cantidadPacientes);
                 });
-            });
+            });*/
 
             // console.log(totales, total_costos)
 
@@ -2071,7 +2126,7 @@
                 $('#cliente').attr("cliente-rel",JSON.stringify(data.data.row[0]));
                 $('#localidad').empty();
                 $.each(data.data.row[0].localidades,function(key, value){
-                    $('#localidad').append(`<option value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+                    $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
                 })
                 obtenerEntidadesAfiliadas();
             }else{
@@ -2270,6 +2325,7 @@
                         resizeTimer = setTimeout(resizeAllGridItems, 1000); // Ajusta el tiempo de espera según tus necesidades (en milisegundos)
                     });
 
+                    $('.input-prestacion').attr("disabled",true);
                     $('#btn-prestaciones').prop('disabled', false);
                       
                 })
@@ -2553,8 +2609,19 @@ $('#tableContainer').html(tableHtml);
         obtenerPrestadores();
     }
 
+    async function getCiudadesDeLocalidades(){
+        let ciudadesArr = [];
+        $.each(dataPrestaciones, function(key,value){
+            if($.inArray(value.codigoCiudad, ciudadesArr) === -1){
+                ciudadesArr.push(value.codigoCiudad)
+            }
+        })
+        return ciudadesArr;
+    }
+
     async function obtenerPrestadores(id = null){
-        let ciudades = getInput('ciudadChequeo','select2');
+        //let ciudades = getInput('ciudadChequeo','select2');
+        let ciudades = await getCiudadesDeLocalidades();
         if(ciudades == ""){
             showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
             return;

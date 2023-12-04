@@ -350,13 +350,14 @@ class CotizadorController extends Controller
             'data'     => $cliente,
             'method'   => 'PUT'
         ]);
-        // print_r(json_encode($cliente));
-        // echo Ism::BASE_URL.$method.$param;
-        // echo '<pre>';
-        // print_r($cliente);
-        // echo '</pre>';
-        // dump($cliente);
-        // dd($response);
+        
+        /*print_r(json_encode($cliente));
+        echo Ism::BASE_URL.$method.$param;
+        echo '<pre>';
+        print_r($cliente);
+        echo '</pre>';
+        dump($cliente);
+        dd($response);*/
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);

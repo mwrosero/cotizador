@@ -165,9 +165,9 @@
                                     <tr>
                                         <th>Nombre Localidad</th>
                                         <th>Principal</th>
-                                        {{-- <th>País</th>
+                                        {{-- <th>País</th> --}}
                                         <th>Provincia</th>
-                                        <th>Ciudad</th> --}}
+                                        <th>Ciudad</th> 
                                         <th>Dirección</th>
                                         <th>Correo Empresa</th>
                                         <th>Teléfono Celular</th>
@@ -600,13 +600,13 @@
                 elem += `<tr>
                             <td>${value.nombreLocalidad}</td>
                             <td>${(value.esPrincipal) ? "SI" : "NO"}</td>
-                            <!--td>${value.nombrePais}</td>
+                            <!--td>${value.nombrePais}</td-->
                             <td>${value.nombreProvincia}</td>
-                            <td>${value.nombreCiudad}</td-->
+                            <td>${value.nombreCiudad}</td>
                             <td>${value.direccion}</td>
                             <td>${value.email}</td>
-                            <td>${value.codigoPaisMovil} ${value.telefonoMovil}</td>
-                            <td>${value.codigoPaisFijo} ${value.telefonoFijo}</td>
+                            <td>0${value.telefonoMovil}</td>
+                            <td>0${value.telefonoFijo}</td>
                             <td>
                                 <button type="button" 
                                     data-bs-toggle="offcanvas" 
