@@ -393,7 +393,7 @@
                     </div>
                 </div>
                 <div class="col-12 mt-1 mb-1">
-                    <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas</label>
+                    <label for="telefonoFijoOficina" class="form-label">Teléfono Fijo Oficinas<i class="fa-solid fa-asterisk fs-10 text-danger ms-2"></i></label>
                     <div class="row">
                         <div class="col-4 col-sm-6 col-md-6 col-lg-4">
                             <select id="telefonoFijoOficinaCode" name="telefonoFijoOficinaCode" class="form-select select2 w-100 fs-12" data-style="btn-default">
@@ -441,6 +441,16 @@
         
         let allowCall = true;
         window.onload = async () => {
+            let formulario = document.getElementById('form-registro');
+            formulario.addEventListener('submit', function(event) {
+                // Validar antes de enviar el formulario
+                if ($('#dataLocalidades').val() == "") {
+                    showMessage('warning','Atención','Debes agregar al menos una localidad antes de enviar el formulario.');
+                    event.preventDefault(); // Evita que el formulario se envíe
+                }
+            });
+
+
             modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
             @if(!isset($edit))
             if(dataLocalidades != ""){
@@ -556,14 +566,11 @@
         async function agregarLocalidad(){
             let valida = await validarLocalidad();
             if(valida){
+                let type = "tmp";
                 if(getInput('secuenciaLocalidad') == ''){
                     secuenciaLocalidad = idLocalidadTmp;
                     idLocalidadTmp++;
                     localidades.push({
-                        @if(isset($edit) && $edit === true)
-                        "activo": true,
-                        "status": "edit",
-                        @endif
                         "idLocalidadTmp": secuenciaLocalidad,
                         "secuenciaLocalidad": null,
                         "nombreLocalidad": getInput('nombreLocalidad'),
@@ -582,8 +589,41 @@
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     });
                 }else{
-                    secuenciaLocalidad = getInput('secuenciaLocalidad');
+                    type = "secuencia";
+                    secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
+                    let item = {
+                        "activo": true,
+                        "status": "edit",
+                        "idLocalidadTmp": null,
+                        "secuenciaLocalidad": parseInt(secuenciaLocalidad),
+                        "nombreLocalidad": getInput('nombreLocalidad'),
+                        "esPrincipal": getInput('esPrincipal','checkbox'),
+                        "codigoPais": parseInt(getInput('pais')),
+                        "codigoProvincia": parseInt(getInput('provincia')),
+                        "codigoCiudad": parseInt(getInput('ciudad')),
+                        "nombrePais": getHtmlSelect('pais'),
+                        "nombreProvincia": getHtmlSelect('provincia'),
+                        "nombreCiudad": getHtmlSelect('ciudad'),
+                        "direccion": getInput('direccion'),
+                        "email": getInput('correoEmpresa'),
+                        "codigoPaisMovil": getInput('telefonoMovilOficinaCode'),
+                        "telefonoMovil": getInput('telefonoMovilOficina'),
+                        "codigoPaisFijo": getInput('telefonoFijoOficinaCode'),
+                        "telefonoFijo": getInput('telefonoFijoOficina')
+                    }
 
+                    $.each(localidades, function(key, value) {
+                        console.log(key)
+                        if(value.secuenciaLocalidad == secuenciaLocalidad){
+                            console.log(key)
+                            console.log(item)
+                            localidades[key] = item;
+                        }
+                    })
+                }
+
+                if(getInput('esPrincipal','checkbox')){
+                    await updateLocalidadPrincipal(secuenciaLocalidad,type);
                 }
                 
                 $('#offcanvasLocalidades').offcanvas('hide');
@@ -591,6 +631,22 @@
                 $('#esPrincipal').prop('checked',false);
                 $('#box-localidades').removeClass('d-none');
                 drawTableLocalidades();
+            }
+        }
+
+        async function updateLocalidadPrincipal(secuenciaLocalidad, type){
+            if(type == "tmp"){
+                $.each(localidades, function(key, value) {
+                    if(value.idLocalidadTmp != secuenciaLocalidad){
+                        localidades[key]['esPrincipal'] = false;
+                    }
+                })
+            }else{
+                $.each(localidades, function(key, value) {
+                    if(value.secuenciaLocalidad != secuenciaLocalidad){
+                        localidades[key]['esPrincipal'] = false;
+                    }
+                })
             }
         }
 
