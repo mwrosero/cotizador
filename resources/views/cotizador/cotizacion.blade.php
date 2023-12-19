@@ -285,8 +285,101 @@
                         </button>
                     </div>
                 </div>
-                <div class="row g-3 box-resumen d-none">
+                <div class="row mt-2 mb-5">
                     <div class="col-12">
+                        <div class="card shadow-none">
+                            <div class="card-datatable table-responsive">
+                                <table class="table table-responsive table-borderless" id="table_prestaciones_niveles">
+                                    <!--thead>
+                                        <tr>
+                                            <th>Nivel</th>
+                                            <th>Cantidad</th>
+                                            <th>Precio Unitario</th>
+                                            <th>Precio Total</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="localidad_1">
+                                        <tr class="localidad">
+                                            <td>Localidad 1</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><i class="fas fa-chevron-right"></i></td>
+                                        </tr>
+                                        <tr class="perfil localidad_1_perfil" id="localidad_1_perfil1">
+                                            <td>Perfil 1</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><i class="fas fa-chevron-right"></i></td>
+                                        </tr>
+                                        <tr class="prestacion localidad_1_perfil localidad_1_perfil1">
+                                            <td>Prestación 1</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><button>Ir</button></td>
+                                        </tr>
+                                        <tr class="prestacion localidad_1_perfil localidad_1_perfil1">
+                                            <td>Prestación 2</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><button>Ir</button></td>
+                                        </tr>
+                                        <tr class="prestacion localidad_1_perfil localidad_1_perfil1">
+                                            <td>Prestación 3</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><button>Ir</button></td>
+                                        </tr>
+                                        <tr class="perfil localidad_1_perfil" id="localidad_1_perfil2">
+                                            <td>Perfil 2</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><i class="fas fa-chevron-right"></i></td>
+                                        </tr>
+                                        <tr class="prestacion localidad_1_perfil localidad_1_perfil2">
+                                            <td>Prestación 1</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><button>Ir</button></td>
+                                        </tr>
+                                    </tbody>
+                                    <tbody id="localidad_2">
+                                        <tr class="localidad">
+                                            <td>Localidad 2</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><i class="fas fa-chevron-right"></i></td>
+                                        </tr>
+                                        <tr class="perfil localidad_2_perfil" id="localidad_2_perfil1">
+                                            <td>Perfil 22</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><i class="fas fa-chevron-right"></i></td>
+                                        </tr>
+                                        <tr class="prestacion localidad_2_perfil localidad_2_perfil1">
+                                            <td>Prestación 23</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td>5</td>
+                                            <td><button>Ir</button></td>
+                                        </tr>
+                                    </tbody-->
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-3 box-resumen d-none">
+                    <div class="col-12 d-none">
                         <!-- Responsive Datatable -->
                         <div class="card shadow-none">
                             <div class="card-datatable table-responsive">
@@ -483,11 +576,20 @@
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             <div class="modal-header">
                 <div class="col-12">
-                    <label class="form-label">Agregar Costos</label>
+                    <label class="form-label txt-veris">Costos</label>
                 </div>
             </div>
             <div class="modal-body pt-2">
                 <div class="row g-3">
+                    <div class="col-12">
+                        <label for="localidadCosto" class="form-label d-flex justify-content-between">
+                            Localidad <span><input type="checkbox" id="selectAll"> Todos</span>
+                        </label>
+                        <div class="select2-dark">
+                            <select id="localidadCosto" class="select2 form-select">
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <label for="servicioCosto" class="form-label">Servicio</label>
                         <div class="select2-dark">
@@ -526,7 +628,7 @@
             {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
             <div class="modal-header">
                 <div class="col-12">
-                    <label class="form-label">Costos Prestadores</label>
+                    <label class="form-label txt-veris">Costos Prestadores</label>
                 </div>
             </div>
             <div class="modal-body pt-2">
@@ -634,8 +736,12 @@
     <div class="offcanvas-body">
         <div class="row g-3">
             <div class="col-12">
+                <span class="d-block">Localidad:</span>
+                <h6 class="txt-veris fs-14 mb-0 text-uppercase" id="nombreLocalidadGastoEdit"></h6>
+            </div>
+            <div class="col-12">
                 <span class="d-block">Servicio:</span>
-                <h6 class="txt-veris fs-14 mb-0" id="nombreServicioGastoEdit"></h6>
+                <h6 class="txt-veris fs-14 mb-0 text-uppercase" id="nombreServicioGastoEdit"></h6>
             </div>
             <input type="hidden" id="idItemGastoEdit">
             <div class="col-12">
@@ -723,6 +829,30 @@
         await obtenerNivel1();
         await obtenerPrestaciones();
         showPrestaciones();
+
+        $('body').on('click', '.perfil', function(){
+            var pId = $(this).attr("id");
+            if($('.'+pId).is(":visible")) {
+                $('.'+pId).hide(150);
+                $(this).find('.fas').removeClass('fa-chevron-down').addClass('fa-chevron-right')
+            } else {
+                $('.'+pId).show(150);
+                $(this).find('.fas').removeClass('fa-chevron-right').addClass('fa-chevron-down')
+            }
+        });
+
+        $('body').on('click', '.localidad', function(){
+            var perfilId = $(this).parent('tbody').attr("id") + "_perfil";
+            var prestacionId = $(this).parent('tbody').attr("id") + "_prestacion";
+            if($('.'+perfilId).is(":visible")) {
+                $('.'+prestacionId).hide(150);
+                $('.'+perfilId).hide(150);
+                $(this).find('.fas').removeClass('fa-chevron-down').addClass('fa-chevron-right')
+            } else {
+                $('.perfil.'+perfilId).show(300);
+                $(this).find('.fas').removeClass('fa-chevron-right').addClass('fa-chevron-down')
+            }
+        });
 
         $('body').on('change', '#localidad', function(){
             if(getInput('localidad','select2').length > 0){
@@ -831,8 +961,8 @@
             $('#cliente').val(detalle.codigoCliente);
             $('#cliente').attr("cliente-rel",JSON.stringify(detalle));
             $.each(detalle.localidades,function(key, value){
-                console.log(value.nombreCiudad);
-                $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+                // console.log(value.nombreCiudad);
+                $('#localidad, #localidadCosto').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
             })
             obtenerEntidadesAfiliadas();
             modalCliente.hide();
@@ -873,11 +1003,11 @@
             let inputChanged = $(this);
             let localidades = getInput('localidad','select2');
             $.each(localidades, function(key, localidad){
-                console.log({localidad})
-                let nombreLocalidad = $('#localidad option:selected').html();
+                // console.log({localidad})
+                let nombreLocalidad = $('#localidad option[value="' + localidad + '"]').html();
                 let nombreCiudad = $('#localidad option[value="' + localidad + '"]').attr("nombreCiudad-rel");
                 let codigoCiudad = $('#localidad option[value="' + localidad + '"]').attr("codigoCiudad-rel");
-                console.log({codigoCiudad});
+                // console.log({codigoCiudad});
                 let grupo = parseInt(getInput('grupoPerfil'));
                 let nombreGrupo = $('#grupoPerfil option:selected').html();
                 let prestacion = $.parseJSON(inputChanged.attr("prestacion-rel"));
@@ -908,7 +1038,7 @@
                     return item.codigoGrupo === grupo;
                 });
 
-                console.log({grupoIndex});
+                // console.log({grupoIndex});
 
                 // Si el grupo no existe en la localidad actual, agregarlo
                 if (grupoIndex === -1) {
@@ -927,15 +1057,15 @@
                     let gruposRel = $('.input_'+inputChanged.attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
                     // Para cuando se esta editando la cotizacion
                     if(gruposRel){
-                        console.log(gruposRel);
+                        // console.log(gruposRel);
                         let gruposRelArr = gruposRel.split(',').map( Number );
-                        console.log(parseInt(grupo));
-                        console.log(gruposRelArr);
+                        // console.log(parseInt(grupo));
+                        // console.log(gruposRelArr);
                         if(gruposRelArr.includes(parseInt(grupo))){
-                            console.log("----------")
+                            // console.log("----------")
                             // console.log("Agregar idDetalle, activo:true y status:edit");
                             idDetalle = inputChanged.attr("idDetalle-rel");
-                            console.log(idDetalle)
+                            // console.log(idDetalle)
                         }
                     }
                 }else{
@@ -944,17 +1074,17 @@
 
                 // Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción
                 if (grupoIndex === -1 && inputChanged.val() === '') {
-                    console.log("Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción")
+                    // console.log("Si el grupo no existe en dataPrestaciones y el valor del input es vacío, no se realiza ninguna acción")
                     return;
                 }
 
-                let costoUnitario = prestacion.valorCosto;console.log({costoUnitario});
+                let costoUnitario = prestacion.valorCosto;
                 let precioUnitario = prestacion.valorPvp;
                 //if(inputChanged.attr("precioUnitario-rel") && inputChanged.attr("precioUnitario-rel") != ""){
                 if(!modificadoPorCarga && inputChanged.attr("precioUnitario-rel") && inputChanged.attr("costoUnitario-rel") != 0){
                     costoUnitario = inputChanged.attr("costoUnitario-rel");
                 }
-                console.log({costoUnitario});
+                // console.log({costoUnitario});
                 if(inputChanged.attr("precioUnitario-rel") && inputChanged.attr("precioUnitario-rel") != ""){
                     precioUnitario = inputChanged.attr("precioUnitario-rel");
                 }
@@ -1007,14 +1137,14 @@
                     dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.push(prestacionObj);
                 }
 
-                console.log(localidadIndex)
-                console.log(grupoIndex)
+                // console.log(localidadIndex)
+                // console.log(grupoIndex)
                 // Si el valor del input es vacío, eliminar la prestación del grupo
                 if (inputChanged.val() === '') {
                     // Si la localidad y el grupo existen en dataPrestaciones
                     if (localidadIndex !== -1 && grupoIndex !== -1) {
                         let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
-                        console.log(grupoExistente);
+                        // console.log(grupoExistente);
                         let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
                             return item.codigoPrestacion === prestacionObj.codigoPrestacion;
                         });
@@ -1038,7 +1168,7 @@
                     // Si la localidad y el grupo existen en dataPrestaciones
                     if (localidadIndex !== -1 && grupoIndex !== -1) {
                         let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
-                        console.log(grupoExistente);
+                        // console.log(grupoExistente);
                         let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
                             return item.codigoPrestacion === prestacionObj.codigoPrestacion;
                         });
@@ -1068,7 +1198,7 @@
         });
 
         $('body').on('click', '.item-prestadores', function(){
-            obtenerPrestadores($(this).attr('idPrestacion-rel'));
+            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'));
         })
 
         $('body').on('click', '.item-edit', function(){
@@ -1095,8 +1225,7 @@
 
         $('body').on('click', '.item-delete-alt', function(){
             eliminarCosto($(this).attr('idItem-rel'));
-            tabla.row($(this).parents('tr')).remove().draw();
-            calcularTH()
+            drawTable();
         })
 
         $('#modalPrestaciones').on('shown.bs.modal', function() {
@@ -1167,11 +1296,11 @@
                 }
 
                 bg_costo_0(idPrestacion,'remove');
-                console.log('remove')
+                // console.log('remove')
 
             } else {
                 // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
-                console.log('add')
+                // console.log('add')
                 if(prestacionTieneCosto0(idPrestacion) == 0){
                     bg_costo_0(idPrestacion,'add');
                 }
@@ -1215,7 +1344,7 @@
                 $('#grupoPerfil').val(value.codigoGrupo).trigger('change')
                 $.each(value.prestaciones, function(k,v){
                     if(v.activo){
-                        console.log(">>>>>"+v.idDetalle)
+                        // console.log(">>>>>"+v.idDetalle)
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
@@ -1295,8 +1424,207 @@
         return 0; // O cualquier otro valor que desees
     }
 
-    let tabla;
+    function eliminarGrupoPorCodigo(codigoGrupo) {
+        Swal.fire({
+            text: '¿Estás seguro de eliminar el Perfil con sus Prestaciones?',
+            icon: 'warning',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            confirmButtonText: 'Si',
+            customClass: {
+              confirmButton: 'btn bg-orange me-2',
+              cancelButton: 'btn btn-label-secondary'
+            },
+            buttonsStyling: false
+        }).then(function (result) {
+            if (result.value) {
+                $.each(dataPrestaciones, function (index, localidad) {
+                    localidad.grupos = $.grep(localidad.grupos, function (grupo, i) {
+                        return grupo.codigoGrupo !== codigoGrupo;
+                    });
+                });
+            }
+        });
+    }
+
+
     function drawTable(){
+        let existData = false;
+        if(dataPrestaciones.length > 0 || dataCostos.length > 0){
+            existData = true;
+        }
+        // console.log(dataPrestaciones.length)
+        $('.box-resumen').removeClass('d-none');
+        $('#table_prestaciones_niveles').empty();
+        let theadElem = `<thead>
+                            <tr>
+                                <th>Nivel</th>
+                                <th width="115px">Cantidad</th>
+                                <th width="160px">Precio Unitario</th>
+                                <th width="140px">Precio Total</th>
+                                <th width="110px">Acción</th>
+                            </tr>
+                        </thead>`;
+        let tbodysElem = "";
+
+        let cantidadCostos = 0;
+        let totalCostos = 0;
+        if(dataCostos.length > 0){
+            let localidadCostoElem = "";
+            let cantidadCostosLocalidad = 0;
+            let totalCostosLocalidad = 0
+            $.each(dataCostos, function(kp, vp){
+                let costosElem = "";
+                totalCostosLocalidad = 0;
+                cantidadCostosLocalidad = 0;
+                $.each(vp.costos, function(kg, vg){
+                    cantidadCostos++;
+                    cantidadCostosLocalidad++;
+                    totalCostos += vg.valorUnitario;
+                    totalCostosLocalidad += vg.valorUnitario
+                    costosElem += `<tr class="prestacion localidad_costos_perfil localidad_costos_perfil${vp.secuenciaLocalidad}">
+                                            <td class="fs-10 text-uppercase">${ vg.nombreCosto }</td>
+                                            <td id="cantidad_${ vg.idItem }">1</td>
+                                            <td id="precioUnitario_${ vg.idItem }" class="precioUnitario_${ vg.idCosto }">$${ formatDollar(vg.valorUnitario) }</td>
+                                            <td id="total_${ vg.idItem }">$${ formatDollar(vg.valorUnitario) }</td>
+                                            <td width="100px" class="text-end align-middle">
+                                                <div class="d-flex justify-content-center">
+                                                    <div idItem-rel="${ vg.idItem }" title="Editar" class="btn btn-sm btn-icon item-edit-gasto d-flex justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasGastos" aria-controls="offcanvasGastos">
+                                                        <img class="action-ico " src="/assets/img/veris/edit-ico.svg" alt="" title="Editar">
+                                                    </div>
+                                                    <div idItem-rel="${ vg.idItem }" title="Eliminar Costo" class="btn btn-sm btn-icon item-delete-costo d-flex justify-content-center item-delete-alt" type="button">
+                                                        <i class="fa-solid fa-trash text-danger d-inline""></i>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>`
+                })
+
+                localidadCostoElem += `<tr class="perfil localidad_costos_perfil" id="localidad_costos_perfil${vp.secuenciaLocalidad}">
+                    <td class="fs-11 text-uppercase">${ vp.nombreLocalidad }</td>
+                    <td>${cantidadCostosLocalidad}</td>
+                    <td></td>>
+                    <td>$${formatDollar(totalCostos)}</td>
+                    <td>
+                        <i class="fas fa-chevron-right"></i>
+                        <!--a href="#" class="btn btn-sm btn-icon item-delete-group align-items-center pt-1 justify-content-center" onclick="eliminarGrupoPorCodigo(${vp.secuenciaLocalidad})">
+                            <i class="fa-solid fa-trash text-danger"></i>
+                        </a-->
+                    </td>
+                </tr>`
+                localidadCostoElem += costosElem;
+            })
+
+            tbodysElem += `<tbody id="localidad_costos">
+                                <tr class="localidad fw-bold">
+                                    <td class="text-uppercase">COSTOS</td>
+                                    <td>${cantidadCostos}</td>
+                                    <td></td>
+                                    <td>$${formatDollar(totalCostos)}</td>
+                                    <td><i class="fas fa-chevron-right"></i></td>
+                                </tr>`;
+            tbodysElem += localidadCostoElem;
+            tbodysElem += `</tbody>`;
+        }
+
+        
+        let total_precios = 0;
+        /*----------LOCALIDADES----------*/
+        $.each(dataPrestaciones, function(kp, vp){
+            let perfilElem = "";
+            let totalLocalidades = 0;
+            let precioUnitarioLocalidades = 0;
+            // console.log('Localidad: '+vp.nombreLocalidad);
+            /*----------GRUPOS----------*/
+            $.each(vp.grupos, function(kg, vg){
+                let totalGrupos = 0;
+                let precioUnitarioGrupos = 0;
+                // console.log('Grupo: '+vg.nombreGrupo);
+                let prestacionesElem = "";
+                /*----------PRESTACIONES----------*/
+                $.each(vg.prestaciones, function(k, v){
+                    // console.log('Prestación: '+v.nombrePrestacion);
+                    total_precios += (v.precioUnitario*v.cantidadPacientes);
+                    let class_costo_0 = "";
+                    if(v.costoUnitario == 0){
+                        $('.label_costo_0').removeClass('d-none');
+                        class_costo_0 = "tr_costo_0";
+                    }
+                
+                    totalGrupos += v.cantidadPacientes;
+                    precioUnitarioGrupos += v.precioUnitario;
+                    
+                    prestacionesElem += `<tr class="prestacion ${class_costo_0} localidad_${vp.secuenciaLocalidad}_perfil localidad_${vp.secuenciaLocalidad}_perfil${vg.codigoGrupo}">
+                                        <td class="fs-10">${ v.nombrePrestacion }</td>
+                                        <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
+                                        <td id="precioUnitario_${ v.idItem }" class="precioUnitario_${ v.codigoPrestacion }">$${ formatDollar(v.precioUnitario) }</td>
+                                        <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
+                                        <td width="100px" class="text-end align-middle">
+                                            <div class="d-flex justify-content-center">
+                                                <a idPrestacion-rel="${ v.codigoPrestacion }" idCiudad-rel="${vp.codigoCiudad}" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
+                                                    <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
+                                                </a>
+                                                <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
+                                                    <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                                </a>
+                                                <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Eliminar Prestación" href="javascript:;" class="btn btn-sm btn-icon item-delete align-items-center pt-1 justify-content-center">
+                                                    <i class="fa-solid fa-trash text-danger"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>`
+                })
+                /*----------PRESTACIONES----------*/
+                totalLocalidades += totalGrupos;
+                precioUnitarioLocalidades += precioUnitarioGrupos;
+
+                perfilElem += `<tr class="perfil localidad_${vp.secuenciaLocalidad}_perfil" id="localidad_${vp.secuenciaLocalidad}_perfil${vg.codigoGrupo}">
+                                    <td class="fs-11">${ vg.nombreGrupo }</td>
+                                    <td>${totalGrupos}</td>
+                                    <td></td>
+                                    <td>$${ formatDollar(precioUnitarioGrupos*totalGrupos) }</td>
+                                    <td>
+                                        <i class="fas fa-chevron-right"></i>
+                                        <!--a href="#" class="btn btn-sm btn-icon item-delete-group align-items-center pt-1 justify-content-center" onclick="eliminarGrupoPorCodigo(${vg.codigoGrupo})">
+                                            <i class="fa-solid fa-trash text-danger"></i>
+                                        </a-->
+                                    </td>
+                                </tr>`
+                perfilElem += prestacionesElem;
+            })
+            /*----------GRUPOS----------*/
+
+            tbodysElem += `<tbody id="localidad_${vp.secuenciaLocalidad}">
+                                <tr class="localidad fw-bold">
+                                    <td class="text-uppercase">${vp.nombreLocalidad}</td>
+                                    <td>${totalLocalidades}</td>
+                                    <td>$${formatDollar(precioUnitarioLocalidades)}</td>
+                                    <td>$${ formatDollar(totalLocalidades) }</td>
+                                    <td><i class="fas fa-chevron-right"></i></td>
+                                </tr>`;
+            tbodysElem += perfilElem;
+            tbodysElem += `</tbody>`;
+        })
+        /*----------LOCALIDADES----------*/
+
+        if(!existData){
+            tbodysElem += `<tr>
+                                <td colspan="5" class="text-center">
+                                    <p class="text-danger fw-bold fs-14 p-3">No existe data que mostrar</p>
+                                </td>
+                            </tr>`;
+        }
+
+        $('#table_prestaciones_niveles').append(theadElem + tbodysElem);
+
+        $('#precio_total').html("Total: $"+formatDollar(total_precios));
+        calcularTH();
+        $(window).scrollTop($(document).height());
+    }
+
+    let tabla;
+    function bk_drawTable(){
+        drawTableNiveles()
         if(tabla){
             tabla.clear().draw();
             //$('.dt-responsive-prestaciones').DataTable().clear().destroy();
@@ -1476,15 +1804,23 @@
     }
 
     function cargarGasto(idItem){
-        for (const gasto of dataCostos) {
-            if (gasto.idItem === idItem) {
-                //console.table(gasto)
-                $('#nombreServicioGastoEdit').html(gasto.nombreCosto+": "+gasto.idCosto);
-                $('#costoGastoEdit').val(gasto.valorUnitario);
-                $('#idItemGastoEdit').val(gasto.idItem);
-                return gasto;
+        let itemEncontrado;
+
+        $.each(dataCostos, function (index, localidad) {
+            var costoEncontrado = $.grep(localidad.costos, function (costo) {
+                return costo.idItem === idItem;
+            });
+
+            if (costoEncontrado.length > 0) {
+                itemEncontrado = costoEncontrado[0];
+                $('#nombreLocalidadGastoEdit').html(localidad.nombreLocalidad);
+                $('#nombreServicioGastoEdit').html(itemEncontrado.nombreCosto);
+                $('#costoGastoEdit').val(itemEncontrado.valorUnitario);
+                $('#idItemGastoEdit').val(itemEncontrado.idItem);
+                return itemEncontrado; // Rompe el bucle each ya que ya encontramos el elemento
             }
-        }
+        });
+
         return null;
     }
 
@@ -1593,40 +1929,43 @@
 
     function actualizarGasto(){
         let idItem = $('#idItemGastoEdit').val();
-        for (const gasto of dataCostos) {
-            if (gasto.idItem === idItem) {
-                gasto.valorUnitario = parseFloat(getInput('costoGastoEdit'));
+
+        $.each(dataCostos, function (index, localidad) {
+            var costoEncontrado = $.grep(localidad.costos, function (costo) {
+                return costo.idItem === idItem;
+            });
+
+            if (costoEncontrado.length > 0) {
+                costoEncontrado[0].valorUnitario = parseFloat(getInput('costoGastoEdit'));
                 $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#total_'+idItem).html("$"+formatDollar(getInput('costoGastoEdit')));
                 $('#offcanvasGastos').offcanvas('hide');
-                calcularTH();
-                return true;
+                drawTable();
+                return false; // Rompe el bucle each ya que ya encontramos el elemento
             }
-        }
-
-        return false; // Si no se encuentra el elemento, retorna false
+        });
     }
 
     // Eliminar item desde tabla
     let prestacionesEliminadas = [];
     let costosEliminados = [];
     function eliminarItem(idItem,secuenciaLocalidad,codigoGrupo) {
-        console.log(idItem,secuenciaLocalidad,codigoGrupo)
+        //console.log(idItem,secuenciaLocalidad,codigoGrupo)
         
         let localidadIndex = dataPrestaciones.findIndex(function(item) {
             return item.secuenciaLocalidad === parseInt(secuenciaLocalidad);
         });
-        console.log(localidadIndex);
+        //console.log(localidadIndex);
 
         let grupoIndex = dataPrestaciones[localidadIndex].grupos.findIndex(function(item) {
             return item.codigoGrupo === parseInt(codigoGrupo);
         });
-        console.log(grupoIndex);
+        //console.log(grupoIndex);
 
         //$.each(dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones, function(key, prestacion){})
         // Buscar el elemento con el idItem dado
         const elemento = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.find(prestacion => prestacion.idItem === idItem);
-        console.log(elemento);
+        //console.log(elemento);
         prestacionesEliminadas.push(idItem);
 
         const prestacionIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(prestacion => prestacion.idItem === idItem);
@@ -1634,7 +1973,7 @@
         if (prestacionIndex !== -1) {
             // Eliminar el elemento con el índice encontrado
             dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.splice(prestacionIndex, 1);
-            console.log('Elemento eliminado:', idItem);
+            //console.log('Elemento eliminado:', idItem);
 
             let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
 
@@ -1647,7 +1986,7 @@
                 dataPrestaciones.splice(localidadIndex, 1);
             }
         } else {
-            console.log('Elemento no encontrado');
+            //console.log('Elemento no encontrado');
         }
 
         /*if (elemento) {
@@ -1667,40 +2006,45 @@
     function eliminarCosto(idItem){
         let idCostoEliminado = null;
 
-        // Buscar el índice del item en el array
-        var indice = -1;
-        for (var i = 0; i < dataCostos.length; i++) {
-            if (dataCostos[i].idItem === idItem) {
-                if(dataCostos[i].idCostoCotizacion){
+        $.each(dataCostos, function (index, localidad) {
+            var indiceCosto = -1;
+            var costoEncontrado = $.grep(localidad.costos, function (costo, indice) {
+                if (costo.idItem === idItem) {
+                    indiceCosto = indice;
                     costosEliminados.push({
-                        "idCostoCotizacion":dataCostos[i].idCostoCotizacion,
-                        "idCosto": dataCostos[i].idCosto,
-                        "nombreCosto": dataCostos[i].nombreCosto,
+                        "idCostoCotizacion":costo.idCostoCotizacion,
+                        "idCosto": costo.idCosto,
+                        "nombreCosto": costo.nombreCosto,
                         "cantidad": 1,
-                        "valorUnitario": parseFloat(dataCostos[i].valorUnitario),
+                        "valorUnitario": parseFloat(costo.valorUnitario),
                         "activo":false,
                         "status":"edit",
                         "idItem":idItem
                     });
+                    return true;
                 }
-                indice = i;
-                idCostoEliminado = dataCostos[i].idCosto;
-                break;
-            }
-        }
+                return false;
+            });
 
-        // Si se encontró el item, eliminarlo del array
-        if (indice !== -1) {
-            dataCostos.splice(indice, 1);
-            $('#servicioCosto option[value="'+idCostoEliminado+'"]').prop("disabled",false);
-        }
+            if (costoEncontrado.length > 0) {
+                // Eliminar el elemento encontrado
+                localidad.costos.splice(indiceCosto, 1);
+
+                if (localidad.costos.length === 0) {
+                    dataCostos.splice(index, 1);
+                }
+                return false; // Rompe el bucle each ya que ya eliminamos el elemento
+            }
+        });
     }
 
     function agregarCosto(){
+        let idLocalidad = parseInt(getInput('localidadCosto'));
+        let nombreLocalidad = $('#localidadCosto option:selected').html();
         let idCosto = parseInt(getInput('servicioCosto'));
         let nombreCosto = $('#servicioCosto option:selected').html();
         let valorUnitario = getInput('costo');
-        let idItem = "costo_"+idCosto;
+        let idItem = "costo_"+idLocalidad+"_"+idCosto;
         let msg = "";
         
         if(getInput('servicioCosto') == ""){
@@ -1722,26 +2066,51 @@
             }
         }
 
-        dataCostos.push(
-            {
+        
+        let localidadIndex = dataCostos.findIndex(function(item) {
+            return item.secuenciaLocalidad === idLocalidad;
+        });
+
+        if (localidadIndex === -1) {
+            let nuevaLocalidad = {
+                "secuenciaLocalidad": idLocalidad,
+                "nombreLocalidad": nombreLocalidad,
+                "costos": []
+            };
+            dataCostos.push(nuevaLocalidad);
+            localidadIndex = dataCostos.length - 1; // Obtener el índice de la nueva localidad
+        }
+
+        let costoIndex = dataCostos[localidadIndex].costos.findIndex(function(item) {
+            return item.idCosto === idCosto;
+        });
+
+        if (costoIndex === -1) {
+            let nuevoCosto = {
                 "idCosto": idCosto,
                 "nombreCosto": nombreCosto,
                 "cantidad": 1,
                 "valorUnitario": parseFloat(valorUnitario),
+                "idItem":idItem,
                 "activo":true,
                 @if(isset($edit))
                 "status":"edit",
                 @endif
-                "idItem":idItem
-            }
-        );
+            };
+            dataCostos[localidadIndex].costos.push(nuevoCosto);
+            costoIndex = dataCostos[localidadIndex].costos.length - 1; // Obtener el índice del nuevo grupo
+        }else{
+            dataCostos[localidadIndex].costos[costoIndex].valorUnitario = parseFloat(valorUnitario);
+        }
 
-        $('#servicioCosto option[value="'+idCosto+'"]').prop("disabled",true);
+        //$('#servicioCosto option[value="'+idCosto+'"]').prop("disabled",true);
         $("#servicioCosto").val(null).trigger("change");
         $('#costo').val("");
         $('#modalCostos').modal('hide');
 
-        calcularTH();
+        drawTable();
+
+        /*calcularTH();
 
         let elem = ``;
         elem += `
@@ -1764,10 +2133,10 @@
                 </td>
             </tr>       
             `;
-        //$('#prestaciones-seleccionadas').append(elem);
+
         tabla.row.add($(elem)[0]).draw();
         tabla.draw();
-        drawTable();
+        drawTable();*/
     }
 
     async function crearCotizacion(){
@@ -1972,11 +2341,11 @@
                     $.each(value.prestaciones, function(k,v){
                         if(v.codigoServicio == prestacion[1] && v.codigoPrestacion == prestacion[2]){
                             v.activo = false;
-                            console.log(v)
+                            //console.log(v)
                             let grupoExistente = dataPrestacionesTmp.find(function(grupo) {
                                 return grupo.codigoGrupo === value.codigoGrupo;
                             });
-                            console.log(grupoExistente)
+                            //console.log(grupoExistente)
                             if(grupoExistente) {
                                 grupoExistente.prestaciones.push(v);
                             }
@@ -2126,7 +2495,7 @@
                 $('#cliente').attr("cliente-rel",JSON.stringify(data.data.row[0]));
                 $('#localidad').empty();
                 $.each(data.data.row[0].localidades,function(key, value){
-                    $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+                    $('#localidad, #localidadCosto').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
                 })
                 obtenerEntidadesAfiliadas();
             }else{
@@ -2393,6 +2762,7 @@ $('#tableContainer').html(tableHtml);
 */
     function drawTablePrestadores(data){
         let dataGrouped = agruparDatos(data)
+        console.log(dataGrouped)
         
         if(dataGrouped.length > 0){
             /*$('#box-prestadores').empty();
@@ -2508,8 +2878,8 @@ $('#tableContainer').html(tableHtml);
                     }
 
                     let elem = `<div class="w-100 d-flex align-items-center">
-                                    <input type="checkbox" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" identificador-rel="${v.codigoCiudad}_${v1.idInstitucion}_${value.codigoPrestacion}" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}" ${isChecked}>
-                                    <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoCiudad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
+                                    <input type="checkbox" name="ck_prestacion_costo_${value.codigoPrestacion}_${ v.codigoLocalidad }" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoLocalidad }" identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacion="${value.codigoPrestacion}" ${isChecked}>
+                                    <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoLocalidad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
                                 </div>`;
                     $('#prestacion_'+value.codigoPrestacion+'_'+position).html(elem);
                 })
@@ -2544,7 +2914,8 @@ $('#tableContainer').html(tableHtml);
                         "nombrePrestacion":v.nombrePrestacion,
                         "codigoPrestacion":v.codigoPrestacion,
                         "nombreCiudad":value.nombreCiudad,
-                        "codigoCiudad":value.codigoCiudad
+                        "codigoCiudad":value.codigoCiudad,
+                        "codigoLocalidad":value.codigoPais+"-"+value.codigoProvincia+"-"+value.codigoCiudad
                     })
                 })
             })
@@ -2554,7 +2925,7 @@ $('#tableContainer').html(tableHtml);
         const auxData = {};
 
         dataPrestadores.forEach((item) => {
-            const { codigoPrestacion, nombrePrestacion, nombreCiudad, codigoCiudad, nombreInstitucion, idInstitucion, valorCosto, aplicaIva } = item;
+            const { codigoPrestacion, nombrePrestacion, nombreCiudad, codigoCiudad, codigoLocalidad, nombreInstitucion, idInstitucion, valorCosto, aplicaIva } = item;
 
             if (!auxData[codigoPrestacion]) {
                 auxData[codigoPrestacion] = {
@@ -2571,6 +2942,7 @@ $('#tableContainer').html(tableHtml);
                 auxData[codigoPrestacion].listadoCiudades.push({
                     nombreCiudad,
                     codigoCiudad,
+                    codigoLocalidad,
                     listadoPrestadores: [{ nombreInstitucion, idInstitucion, valorCosto, aplicaIva }],
                 });
             } else {
@@ -2619,15 +2991,16 @@ $('#tableContainer').html(tableHtml);
         return ciudadesArr;
     }
 
-    async function obtenerPrestadores(id = null){
+    async function obtenerPrestadores(id = null, idCiudades = null){
         //let ciudades = getInput('ciudadChequeo','select2');
-        let ciudades = await getCiudadesDeLocalidades();
-        if(ciudades == ""){
+        let ciudades = [];
+        /*if(ciudades == ""){
             showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
             return;
-        }
+        }*/
         let prestaciones = [];
         if(id == null){
+            ciudades = await getCiudadesDeLocalidades();
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.grupos, function(k, v){
                     $.each(v.prestaciones, function(k1, v1){
@@ -2642,6 +3015,7 @@ $('#tableContainer').html(tableHtml);
                 })
             })
         }else{
+            ciudades.push(idCiudades);
             prestaciones.push(id);
         }
 
@@ -3031,6 +3405,36 @@ $('#tableContainer').html(tableHtml);
 
     .tr_costo_0{
         background: rgb(255 0 0 / 10%) !important;
+    }
+
+    /*Nueva tabla Prestaciones*/
+    table {table-layout:fixed}
+    table tr {  }
+
+    table tr th,
+    table tr td { text-align:center;}
+
+    table tr th:first-child,
+    table tr td:first-child {width: 200px; text-align: left;}
+
+    .perfil td:first-child {padding-left: 30px;}
+    .prestacion td:first-child {padding-left: 50px;}
+    .perfil{display:none;}
+    .prestacion{display:none;}
+    .localidad {
+        background: rgb(57 98 230 / 10%) !important;
+        color: #000 !important;
+    }
+    .perfil {
+        background: #c0c0c040;
+    }
+    .prestacion {
+        background: #cae6393b;
+    }
+    .localidad:hover,
+    .perfil:hover{
+        background: rgb(23 29 73 / 15%);
+        cursor: pointer;
     }
 
     @media only screen and (max-width: 600px) {

@@ -23,7 +23,7 @@ $(function () {
     select2.each(function () {
       var $this = $(this);
       var closeOnSelect = 'true';
-      if($(this).attr("id") == "localidad"){
+      if($(this).attr("id") == "localidad" /*|| $(this).attr("id") == "localidadCosto"*/){
         closeOnSelect = false;
       }
 

@@ -152,10 +152,11 @@
                         <button 
                             type="button" 
                             class="btn btn-sm bg-orange ms-auto"
+                            onclick="resetLocalidades();" 
                             data-bs-toggle="offcanvas" 
                             data-bs-target="#offcanvasLocalidades" 
                             aria-controls="offcanvasLocalidades" >
-                            <i class="fa-solid fa-plus me-2"></i>Nueva localidad
+                            <i class="fa-solid fa-plus me-2"></i>Nueva Localidad
                         </button>
                     </h6>
                     <div class="row g-3 d-none" id="box-localidades">
@@ -526,6 +527,10 @@
             allowCall = true;
         }
 
+        async function resetLocalidades(){
+            $('.offcanvas-body input').val('');
+        }
+
         async function buscarCliente(){
             if($('#numeroIdentificacion').val().length > 0){
                 let args = [];
@@ -557,7 +562,39 @@
                     showMessage('warning','Atención','Campos con <i class="fa-solid fa-asterisk fs-10 text-danger"></i> son obligatorios');
                     return false;
             }else{
-                return true;
+                let msg = "";
+                let nombreLocalidad = getInput('nombreLocalidad');
+                let direccion = getInput('direccion');
+                let correoEmpresa = getInput('correoEmpresa');
+                let telefonoMovilOficina = getInput('telefonoMovilOficina');
+                let telefonoFijoOficina = getInput('telefonoFijoOficina');
+
+                if(nombreLocalidad == ""){
+                    msg += "<span class='fs-12'>-Agregar Nombre</span><br>";
+                }
+
+                if(direccion == ""){
+                    msg += "<span class='fs-12'>-Agregar una dirección</span><br>";
+                }
+
+                if(correoEmpresa == ""){
+                    msg += "<span class='fs-12'>-Agregar un correo electrónico</span><br>";
+                }
+
+                if(telefonoMovilOficina.length != 9){
+                    msg += "<span class='fs-12'>-Teléfono Celular debe tener 9 dígitos</span><br>";
+                }
+
+                if(telefonoFijoOficina.length != 8){
+                    msg += "<span class='fs-12'>-Teléfono Fijo debe tener 8 dígitos</span><br>";
+                }
+
+                if(msg != ""){
+                    showMessage('warning','Atención',msg);
+                    return false;
+                }else{
+                    return true;
+                }
             }
 
         }
@@ -572,6 +609,8 @@
                     idLocalidadTmp++;
                     localidades.push({
                         "idLocalidadTmp": secuenciaLocalidad,
+                        "status": "edit",
+                        "activo": true,
                         "secuenciaLocalidad": null,
                         "nombreLocalidad": getInput('nombreLocalidad'),
                         "esPrincipal": getInput('esPrincipal','checkbox'),
@@ -588,6 +627,7 @@
                         "codigoPaisFijo": getInput('telefonoFijoOficinaCode'),
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     });
+                    console.log(localidades);
                 }else{
                     type = "secuencia";
                     secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
@@ -611,6 +651,8 @@
                         "codigoPaisFijo": getInput('telefonoFijoOficinaCode'),
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     }
+
+                    console.log(item);
 
                     $.each(localidades, function(key, value) {
                         console.log(key)
