@@ -31,6 +31,7 @@ class SeguridadesController extends Controller
             //'data'     => ['' => $var],
             'method'   => 'GET'
         ]);
+        
 
         if($response->code == 200){
             $method = '/seguridad/v1/autenticacion/login';
