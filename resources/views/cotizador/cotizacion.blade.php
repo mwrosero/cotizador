@@ -1347,7 +1347,7 @@
 
         @if(isset($edit))
             console.log('1111111111111111111');
-            await buscarClientePorCodigo();
+            await buscarClientePorCodigo({{ $data->codigoCliente }});
             loadComentarios();
             $('#box-info-cliente').removeClass('d-none');
             $('#tipoServicio').val({{ $data->codigoTipoContrato }}).trigger("change");
@@ -1376,7 +1376,7 @@
             let detalle = @json($data->detalle);
             console.log(detalle);
             //Lleno arrays
-            $.each(detalle, function(key, value){
+            /*$.each(detalle, function(key, value){
                 $('#grupoPerfil').val(value.codigoGrupo).trigger('change')
                 $.each(value.prestaciones, function(k,v){
                     if(v.activo){
@@ -1398,16 +1398,38 @@
                         $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
                     }
                 })
+            })*/
+            $.each(detalle, function(kp, vp){
+                $('#localidad').val(vp.secuenciaLocalidad).trigger('change')
+                $.each(vp.grupos, function(kg, vg){
+                    $('#grupoPerfil').val(vg.codigoGrupo).trigger('change')
+                    $.each(vg.prestaciones, function(k, v){
+                        if(v.activo){
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("costoUnitario-rel",v.costoUnitario);
+                            let gruposRel = $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel");
+                            if(gruposRel){
+                                let gruposRelArr = gruposRel.split(',').map( Number );
+                                if(!gruposRelArr.includes(parseInt(vg.codigoGrupo))){
+                                    gruposRelArr.push(parseInt(vg.codigoGrupo));
+                                    $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",gruposRelArr.join(","))
+                                }
+                            }else{
+                                $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",parseInt(vg.codigoGrupo));
+                            }
+                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');                
+                        }
+                    })
+                })
             })
 
             modificadoPorCarga = true;
             
             let costosAdicionales = @json($data->costosAdicionales);
-            // console.log(costosAdicionales);
-            $.each(costosAdicionales, function(key, value){
-                /*$('#servicioCosto').val(value.idCosto).trigger('change');
-                $('#costo').val(value.valorUnitario);
-                agregarCosto();*/
+            console.log(costosAdicionales);
+            /*$.each(costosAdicionales, function(key, value){
                 let idItem = "costo_"+value.idCosto;
                 let msg = "";
                 if(value.activo){
@@ -1425,6 +1447,49 @@
                     );
                     $('#servicioCosto').find('option[value="'+value.idCosto+'"]').prop('disabled', true).trigger('change');
                 }
+            })*/
+            $.each(costosAdicionales, function(kp, vp){
+                $('#localidadCosto').val(vp.secuenciaLocalidad).trigger('change');
+                $.each(vp.costos, function(kg, vg){
+                    if(vg.activo){
+                        let idItem = "costo_"+vp.secuenciaLocalidad+"_"+vg.idCosto;
+                        let localidadIndex = dataCostos.findIndex(function(item) {
+                            return item.secuenciaLocalidad === vp.secuenciaLocalidad;
+                        });
+
+                        if (localidadIndex === -1) {
+                            let nuevaLocalidad = {
+                                "secuenciaLocalidad": vp.secuenciaLocalidad,
+                                "nombreLocalidad": vp.nombreLocalidad,
+                                "costos": []
+                            };
+                            dataCostos.push(nuevaLocalidad);
+                            localidadIndex = dataCostos.length - 1; // Obtener el índice de la nueva localidad
+                        }
+
+                        let costoIndex = dataCostos[localidadIndex].costos.findIndex(function(item) {
+                            return item.idCosto === vg.idCosto;
+                        });
+
+                        if (costoIndex === -1) {
+                            let nuevoCosto = {
+                                "idCosto": vg.idCosto,
+                                "nombreCosto": vg.nombreCosto,
+                                "cantidad": 1,
+                                "valorUnitario": parseFloat(vg.valorUnitario),
+                                "idItem":idItem,
+                                "activo":true,
+                                @if(isset($edit))
+                                "status":"edit",
+                                @endif
+                            };
+                            dataCostos[localidadIndex].costos.push(nuevoCosto);
+                            costoIndex = dataCostos[localidadIndex].costos.length - 1; // Obtener el índice del nuevo grupo
+                        }else{
+                            dataCostos[localidadIndex].costos[costoIndex].valorUnitario = parseFloat(vg.valorUnitario);
+                        }
+                    }
+                })
             })
             drawTable();
             hideLoader();
@@ -1433,6 +1498,23 @@
             //Sobre-escribo valores
         @endif
 
+    }
+
+    async function buscarClientePorCodigo(codigoCliente){
+        let args = [];
+        args["endpoint"] = api_url+`/comercial/v1/clientes/${codigoCliente}?infoEmpresarial=true`;
+        args["method"] = "GET";
+        args["bodyType"] = "json";
+        args["showLoader"] = true;
+        const data = await call(args);
+        console.log(data);
+        if(data.code == 200){
+            $.each(data.data.localidades,function(key, value){
+                $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
+            })
+        }else{
+            showMessage('warning','Atención',data.message);
+        }
     }
 
     function bg_costo_0(codigoPrestacion, idLocalidad, type){
@@ -1549,7 +1631,7 @@
                     <td class="fs-11 text-uppercase">${ vp.nombreLocalidad }</td>
                     <td>${cantidadCostosLocalidad}</td>
                     <td></td>>
-                    <td>$${formatDollar(totalCostos)}</td>
+                    <td>$${formatDollar(totalCostosLocalidad)}</td>
                     <td>
                         <i class="fas fa-chevron-right"></i>
                         <!--a href="#" class="btn btn-sm btn-icon item-delete-group align-items-center pt-1 justify-content-center" onclick="eliminarGrupoPorCodigo(${vp.secuenciaLocalidad})">
@@ -1597,7 +1679,7 @@
                     }
                 
                     totalGrupos += v.cantidadPacientes;
-                    precioUnitarioGrupos += v.precioUnitario;
+                    precioUnitarioGrupos += (v.precioUnitario*v.cantidadPacientes);
                     
                     prestacionesElem += `<tr class="prestacion ${class_costo_0} localidad_${vp.secuenciaLocalidad}_perfil localidad_${vp.secuenciaLocalidad}_perfil${vg.codigoGrupo} tr-prestacion-${v.codigoPrestacion} tr-prestacion-${vp.codigoCiudad}-${v.codigoPrestacion}">
                                         <td class="fs-10">${ v.nombrePrestacion }</td>
@@ -1627,7 +1709,7 @@
                                     <td class="fs-11">${ vg.nombreGrupo }</td>
                                     <td>${totalGrupos}</td>
                                     <td></td>
-                                    <td>$${ formatDollar(precioUnitarioGrupos*totalGrupos) }</td>
+                                    <td>$${ formatDollar(precioUnitarioGrupos) }</td>
                                     <td>
                                         <i class="fas fa-chevron-right"></i>
                                         <!--a href="#" class="btn btn-sm btn-icon item-delete-group align-items-center pt-1 justify-content-center" onclick="eliminarGrupoPorCodigo(${vg.codigoGrupo})">
@@ -1643,8 +1725,8 @@
                                 <tr class="localidad fw-bold">
                                     <td class="text-uppercase">${vp.nombreLocalidad}</td>
                                     <td>${totalLocalidades}</td>
-                                    <td>$${formatDollar(precioUnitarioLocalidades)}</td>
-                                    <td>$${ formatDollar(totalLocalidades) }</td>
+                                    <td></td>
+                                    <td>$${ formatDollar(precioUnitarioLocalidades) }</td>
                                     <td><i class="fas fa-chevron-right"></i></td>
                                 </tr>`;
             tbodysElem += perfilElem;
@@ -2381,12 +2463,24 @@
 
         let dataPrestacionesTmp = [...dataPrestaciones];
 
-        for (const elemento of dataPrestacionesTmp) {
-            for (const prestacion of elemento.prestaciones) {
+        // for (const elemento of dataPrestacionesTmp) {
+        //     for (const prestacion of elemento.prestaciones) {
+        //         //Reemplazar costos de provincias
+        //         let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+        //         if( costo_alterno != null){
+        //             prestacion.costoUnitario = costo_alterno;
+        //         }
+        //     }
+        // }
+
+        for (const localidad of dataPrestacionesTmp) {
+            for (const grupo of localidad.grupos) {
                 //Reemplazar costos de provincias
-                let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
-                if( costo_alterno != null){
-                    prestacion.costoUnitario = costo_alterno;
+                for (const prestacion of grupo.prestaciones) {
+                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+                    if( costo_alterno != null){
+                        prestacion.costoUnitario = costo_alterno;
+                    }
                 }
             }
         }
