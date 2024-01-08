@@ -2486,8 +2486,8 @@
         }
 
         $.each(prestacionesEliminadas, function(num, codigoPrestacion){
-            let prestacion = codigoPrestacion.split("_");
-            $.each(dataPrestacionesEditOriginal, function(key, value){
+            let idItem = codigoPrestacion.split("_");
+            /*$.each(dataPrestacionesEditOriginal, function(key, value){
                 if(value.codigoGrupo == prestacion[0]){
                     $.each(value.prestaciones, function(k,v){
                         if(v.codigoServicio == prestacion[1] && v.codigoPrestacion == prestacion[2]){
@@ -2503,7 +2503,25 @@
                         }
                     })
                 }
-            })
+            })*/
+            let secuenciaLocalidad = parseInt(idItem[0]);
+            let localidadIndex = dataPrestacionesEditOriginal.findIndex(function(item) {
+                return item.secuenciaLocalidad === secuenciaLocalidad;
+            });
+            
+            let grupo = parseInt(idItem[1]);
+            let grupoIndex = dataPrestacionesEditOriginal[localidadIndex].grupos.findIndex(function(item) {
+                return item.codigoGrupo === grupo;
+            });
+
+            let prestacion = parseInt(idItem[3]);
+            let prestacionIndex = dataPrestacionesEditOriginal[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
+                return item.codigoPrestacion === prestacion;
+            });
+            dataPrestacionesEditOriginal[localidadIndex].grupos[grupoIndex].prestaciones[prestacionIndex].activo = false;
+            //console.log(dataPrestacionesEditOriginal[localidadIndex].grupos[grupoIndex].prestaciones[prestacionIndex]);
+
+            dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.push(dataPrestacionesEditOriginal[localidadIndex].grupos[grupoIndex].prestaciones[prestacionIndex]);
         })
 
         let _costos = dataCostos.concat(costosEliminados);
@@ -2532,7 +2550,7 @@
         if(data.code == 200){
             $('#btn-crear-cotizacion').prop('disabled',false);
             showMessage('success','Atención',"Cotización actualizada");
-            location.href = '/cotizador/consulta-cotizaciones';
+            //location.href = '/cotizador/consulta-cotizaciones';
         }else{
             showMessage('warning','Atención',data.message);
             $('#btn-crear-cotizacion').prop('disabled',false);
