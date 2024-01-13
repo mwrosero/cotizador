@@ -120,18 +120,18 @@
 								@endforeach
 							@endforeach
 						@endforeach
-						<tr>
+						<tr class="bg-orange">
 							<td colspan="6" class="text-end fw-bold">Total Costos</td>
 							<td class="text-center fw-bold">${{ number_format($totalPresupuestadoCostos, 2, '.', ',') }}</td>
 						</tr>
-						<tr>
+						<tr class="bg-orange">
 							<td colspan="6" class="text-end fw-bold">Total Cotización</td>
 							<td class="text-center fw-bold">${{ number_format($totalPresupuestado, 2, '.', ',') }}</td>
 						</tr>
-						<tr>
+						{{-- <tr>
 							<td colspan="6" class="text-end fw-bold">Rentabilidad</td>
 							<td class="text-center fw-bold">{{ $cotizacion->porcentajeRentabilidad }}%</td>
-						</tr>
+						</tr> --}}
 					</tbody>
 				</table>
 			</div>
