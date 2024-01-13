@@ -52,6 +52,10 @@ Route::group(['middleware' => ['loggedUser']], function () {
         
         Route::get('/cotizacion/edit/{idCotizacion}', [CotizadorController::class, 'obtenerCotizacion'])->name('obtener-cotizacion')->withoutMiddleware(['guest']);
 
+        Route::get('/cotizacion/pdf/{idCotizacion}', [CotizadorController::class, 'pdfCotizacion'])->name('pdf-cotizacion')->withoutMiddleware(['guest']);
+
+        // Route::get('/cotizacion/test/{idCotizacion}', [CotizadorController::class, 'testCotizacion'])->name('test-cotizacion')->withoutMiddleware(['guest']);
+
         Route::get('/consulta-clientes', [CotizadorController::class, 'clientes'])->name('consulta-clientes')->withoutMiddleware(['guest']);
         
         Route::get('/cliente/edit/{codigoCliente}', [CotizadorController::class, 'obtenerInfoCliente'])->name('consulta-info-cliente')->withoutMiddleware(['guest']);

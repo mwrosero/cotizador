@@ -67,6 +67,14 @@
         </div>
     </div>
     @endif
+    @if (session()->has('warning'))
+    <div class="col-12 mt-4">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+            {{ session('warning') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    @endif
     <div class="col-12 mt-2">
         <div class="card mb-4">
             {{-- <div class="card-header">
@@ -117,6 +125,9 @@
                                 <td>{{ $dato->estado }}</td>
                                 <td width="100px" class="text-start align-middle">
                                     <div class="d-flex">
+                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/pdf/{{ $dato->idCotizacion }}" title="Descargar Reporte" target="_blank">
+                                            <img class="action-ico" src="{{ asset('assets/img/veris/reporte-ico.svg') }}" alt="" title="Editar">
+                                        </a>
                                         <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
                                             <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                         </a>

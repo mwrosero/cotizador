@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Models\Ism;
 
@@ -33,6 +34,38 @@ class CotizadorController extends Controller
         return view('cotizador.cotizacion')
             ->with('edit', true)
             ->with('data',$response->data);
+    }
+
+    public function pdfCotizacion($idCotizacion){
+        $method = '/empresarial/v1/cotizacion/'.$idCotizacion;
+        $response = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+
+        if($response->code != 200){
+            session()->flash('warning', $response->message);
+            return redirect()->route('consulta-cotizaciones');
+        }
+
+        $method = '/comercial/v1/clientes/'.$response->data->codigoCliente.'?infoEmpresarial=true';
+        $cliente = Ism::call([
+            'endpoint' => Ism::BASE_URL.$method,
+            'token'    => Session::get('accessToken'),
+            'method'   => 'GET'
+        ]);
+
+        if($cliente->code != 200){
+            session()->flash('warning', $cliente->message);
+            return redirect()->route('consulta-cotizaciones');
+        }
+
+        $pdf = PDF::loadView('cotizador.pdf-cotizacion', [ "cotizacion" => $response->data, "cliente" => $cliente->data ] )->setPaper('a4', 'landscape')->setWarnings(false);
+        //$pdf->setOptions(['isHtml5ParserEnabled' => true, 'isPhpEnabled' => true]);
+
+        return $pdf->stream('cotizacon-'.$idCotizacion.'.pdf');//download
+        // return view('cotizador.pdf-cotizacion')->with('data',$response->data);
     }
 
     public function cotizaciones(Request $request){
