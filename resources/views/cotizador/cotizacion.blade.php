@@ -1723,7 +1723,7 @@
 
             tbodysElem += `<tbody id="localidad_${vp.secuenciaLocalidad}">
                                 <tr class="localidad fw-bold">
-                                    <td class="text-uppercase">${vp.nombreLocalidad}</td>
+                                    <td class="text-uppercase">${vp.nombreLocalidad} <small class="fs-8">(${vp.nombreCiudad})</small></td>
                                     <td>${totalLocalidades}</td>
                                     <td></td>
                                     <td>$${ formatDollar(precioUnitarioLocalidades) }</td>
@@ -1951,7 +1951,7 @@
         return null;
     }
 
-    function actualizarPrestacion() {
+    async function actualizarPrestacion() {
         let idItem = $('#idItemEdit').val();
         for (const localidades of dataPrestaciones) {
             for (const elemento of localidades.grupos) {
@@ -1969,14 +1969,14 @@
                         $('#offcanvasPrestacion').offcanvas('hide');
                         //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
                         calcularTH();
-                        calcularTotal()
+                        calcularTotal();
+                        await drawTable();
 
                         return true;
                     }
                 }
             }
         }
-
         return false; // Si no se encuentra el elemento, retorna false
     }
 
@@ -2071,6 +2071,8 @@
                 return false; // Rompe el bucle each ya que ya encontramos el elemento
             }
         });
+
+        drawTable()
     }
 
     // Eliminar item desde tabla
