@@ -604,7 +604,7 @@
             let valida = await validarLocalidad();
             if(valida){
                 let type = "tmp";
-                if(getInput('secuenciaLocalidad') == ''){
+                if(getInput('secuenciaLocalidad') == '' && getInput('idLocalidadTmp') == ''){
                     secuenciaLocalidad = idLocalidadTmp;
                     idLocalidadTmp++;
                     localidades.push({
@@ -629,13 +629,11 @@
                     });
                     console.log(localidades);
                 }else{
-                    type = "secuencia";
-                    secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
                     let item = {
                         "activo": true,
                         "status": "edit",
-                        "idLocalidadTmp": null,
-                        "secuenciaLocalidad": parseInt(secuenciaLocalidad),
+                        //"idLocalidadTmp": null,
+                        //"secuenciaLocalidad": parseInt(secuenciaLocalidad),
                         "nombreLocalidad": getInput('nombreLocalidad'),
                         "esPrincipal": getInput('esPrincipal','checkbox'),
                         "codigoPais": parseInt(getInput('pais')),
@@ -652,16 +650,24 @@
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     }
 
-                    console.log(item);
-
-                    $.each(localidades, function(key, value) {
-                        console.log(key)
-                        if(value.secuenciaLocalidad == secuenciaLocalidad){
-                            console.log(key)
-                            console.log(item)
-                            localidades[key] = item;
-                        }
-                    })
+                    if(getInput('secuenciaLocalidad') != ''){
+                        type = "secuencia";
+                        item.secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
+                        item.idLocalidadTmp =  null;
+                        $.each(localidades, function(key, value) {
+                            if(parseInt(value.secuenciaLocalidad) == parseInt(getInput('secuenciaLocalidad'))){
+                                localidades[key] = item;
+                            }
+                        })
+                    }else{
+                        item.secuenciaLocalidad = null;
+                        item.idLocalidadTmp =  parseInt(getInput('idLocalidadTmp'));
+                        $.each(localidades, function(key, value) {
+                            if(parseInt(value.idLocalidadTmp) == parseInt(getInput('idLocalidadTmp'))){
+                                localidades[key] = item;
+                            }
+                        })
+                    }
                 }
 
                 if(getInput('esPrincipal','checkbox')){

@@ -1473,6 +1473,7 @@
 
                         if (costoIndex === -1) {
                             let nuevoCosto = {
+                                "idCostoCotizacion": vg.idCostoCotizacion,
                                 "idCosto": vg.idCosto,
                                 "nombreCosto": vg.nombreCosto,
                                 "cantidad": 1,
@@ -2552,7 +2553,8 @@
         if(data.code == 200){
             $('#btn-crear-cotizacion').prop('disabled',false);
             showMessage('success','Atención',"Cotización actualizada");
-            //location.href = '/cotizador/consulta-cotizaciones';
+            // location.href = '/cotizador/consulta-cotizaciones';
+            location.reload();
         }else{
             showMessage('warning','Atención',data.message);
             $('#btn-crear-cotizacion').prop('disabled',false);
