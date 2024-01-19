@@ -131,7 +131,7 @@
                                         <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
                                             <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                         </a>
-                                        <a class="dropdown-item cambiarEstado" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" title="Cambiar Estado">
+                                        <a class="dropdown-item cambiarEstado" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" estadoCotizacion-rel="{{ $dato->estado }}" title="Cambiar Estado">
                                             <i class="fa-solid fa-rotate me-2"></i>
                                         </a>
                                         {{-- <div class="dropdown">
@@ -234,6 +234,8 @@
     window.onload = async () => {
         $('body').on('click touch', '.cambiarEstado', function(){
             let idCotizacion = $(this).attr("idCotizacion-rel");
+            let estadoCotizacion = $(this).attr("estadoCotizacion-rel").toUpperCase();
+            $('#estadoCotizacion').val(estadoCotizacion).trigger("change");
             $('#idCotizacionEstado').val(idCotizacion);
             $('#modalEstado').modal('show');
         })

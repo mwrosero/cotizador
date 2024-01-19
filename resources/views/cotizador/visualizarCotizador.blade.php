@@ -54,6 +54,7 @@
                                 <table class="dt-responsive-prestaciones table table-prestaciones table-borderless">
                                     <thead>
                                         <tr>
+                                            <th>Localidad</th>
                                             <th>Grupo</th>
                                             <th>Servicio</th>
                                             <th>Prestación</th>
@@ -64,27 +65,30 @@
                                         </tr>
                                     </thead>
                                     <tbody id="prestaciones-seleccionadas">
-                                    @foreach ($data->detalle as $detalle)
-                                        @foreach ($detalle->prestaciones as $prestacion)
-                                            @if($prestacion->activo)
-                                                <tr>
-                                                    <td>{{ $detalle->nombreGrupo }}</td>
-                                                    <td>
-                                                        @if(isset($prestacion->nombreServicio))
-                                                        {{ $prestacion->nombreServicio }}
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if(isset($prestacion->nombrePrestacion))
-                                                        {{ $prestacion->nombrePrestacion }}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $prestacion->codigoPrestacion }}</td>
-                                                    <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
-                                                    <td>{{ $prestacion->cantidadPacientes }}</td>
-                                                    <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
-                                                </tr>
-                                            @endif
+                                    @foreach ($data->detalle as $localidad)
+                                        @foreach ($localidad->grupos as $grupo)
+                                            @foreach ($grupo->prestaciones as $prestacion)
+                                                @if($prestacion->activo)
+                                                    <tr class="text-uppercase">
+                                                        <td>{{ $localidad->nombreLocalidad }}</td>
+                                                        <td>{{ $grupo->nombreGrupo }}</td>
+                                                        <td>
+                                                            @if(isset($prestacion->nombreServicio))
+                                                            {{ $prestacion->nombreServicio }}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if(isset($prestacion->nombrePrestacion))
+                                                            {{ $prestacion->nombrePrestacion }}
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $prestacion->codigoPrestacion }}</td>
+                                                        <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
+                                                        <td>{{ $prestacion->cantidadPacientes }}</td>
+                                                        <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
                                         @endforeach
                                     @endforeach
                                     </tbody>
