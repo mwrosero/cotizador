@@ -580,6 +580,10 @@
 
                 if(correoEmpresa == ""){
                     msg += "<span class='fs-12'>-Agregar un correo electrónico</span><br>";
+                }else{
+                    if(!esEmailValido(correoEmpresa)){
+                        msg += "<span class='fs-12'>-Formato correo electrónico incorrecto</span><br>";
+                    }
                 }
 
                 if(telefonoMovilOficina.length != 9){
@@ -598,6 +602,12 @@
                 }
             }
 
+        }
+
+        function esEmailValido(email) {
+            // Expresión regular para validar una dirección de correo electrónico
+            var patronEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return patronEmail.test(email);
         }
 
         let idLocalidadTmp = 1;
