@@ -458,6 +458,7 @@
                 $('#dataLocalidades').val(dataLocalidades).trigger('change');
                 localidades = JSON.parse(decodeURIComponent($("#dataLocalidades").val()).replace(/&quot;/g, '"'));
                 drawTableLocalidades();
+                $('#box-localidades').removeClass('d-none');
             }
             @endif
 

@@ -45,11 +45,11 @@
 					<table width="100%">
 						<tr>
 							<td><p class="fw-bold mb-1">Fecha Cotización:</p></td>
-							<td>10/01/2023</td>
-							<td><p class="fw-bold mb-1">Vigencia Cotización:</p></td>
-							<td>30 días</td>
+							<td>{{ $cotizacion->fechaIngreso }}</td>
+							{{-- <td><p class="fw-bold mb-1">Vigencia Cotización:</p></td>
+							<td>30 días</td> --}}
 							<td><p class="fw-bold mb-1">Vendedor:</p></td>
-							<td>Jonathan Vargas O</td>
+							<td>{{ $cotizacion->nombreUsuarioIngreso }}</td>
 						</tr>
 						<tr>
 							<td><p class="fw-bold mb-1">Tipo Contrato:</p></td>
@@ -59,20 +59,26 @@
 							<td><p class="fw-bold mb-1">Días planificados:</p></td>
 							<td><p class="mb-1">{{ $cotizacion->cantidadDias }}</p></td>
 						</tr>
+						@if($cotizacion->observacion != "")
+						<tr>
+							<td><p class="fw-bold mb-1">Observación:</p></td>
+							<td colspan="5"><p class="mb-1">{{ $cotizacion->observacion }}</p></td>
+						</tr>
+						@endif
 					</table>
 				</div>
 			</div>
 			<div class="col-12 mt-2" style="page-break-after:auto;">
 				<table width="100%" class="table">
 					<thead>
-						<tr>
-							<th>Nivel</th>
-							<th>Localidad</th>
-							<th>Grupo Perfil</th>
-							<th>Descripción</th>
-							<th>Cantidad</th>
-							<th>Precio Unitario</th>
-							<th>Precio Total</th>
+						<tr class="bg-menu-theme">
+							<th valign="middle">Nivel</th>
+							<th valign="middle">Localidad</th>
+							<th valign="middle">Grupo Perfil</th>
+							<th valign="middle">Descripción</th>
+							<th valign="middle">Cantidad</th>
+							<th valign="middle">Precio Unitario</th>
+							<th valign="middle">Precio Total</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -84,9 +90,9 @@
 								@if($costo->activo)
 									<tr>
 										<td>COSTO</td>
-										<td>{{ $localidad->nombreLocalidad }}</td>
+										<td>{{ strtoupper($localidad->nombreLocalidad) }}</td>
 										<td>SERVICIO</td>
-										<td>{{ $costo->nombreCosto }}</td>
+										<td>{{ strtoupper($costo->nombreCosto) }}</td>
 										<td class="text-center">{{ $costo->cantidad }}</td>
 										<td class="text-center">${{ number_format($costo->valorUnitario, 2, '.', ',') }}</td>
 										<td class="text-center">${{ number_format($costo->cantidad * $costo->valorUnitario, 2, '.', ',') }}</td>
@@ -147,10 +153,18 @@
 		th, td{
 			font-size: 12px;
 		}
+		th{
+			line-height: 12px;
+			font-weight: 700;
+		}
 		.table, .table th, .table td {
 		  	border: 1px solid #aeb8b1;
 		  	padding: 2px;
 		  	border-collapse: collapse;
+		}
+		.bg-menu-theme{
+		    background: #171D49 !important;
+		    color: #fff !important;
 		}
 		.bg-orange {
 		    background: #FF9E19;

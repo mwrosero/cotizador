@@ -832,20 +832,15 @@
 
         //$("input:checkbox").on('click', function() {
         $('body').on('click', '.ck-input-prestacion-costo:checkbox', function(){
-            // in the handler, 'this' refers to the box clicked on
             var $box = $(this);
             if ($box.is(":checked")) {
-            // the name of the box is retrieved using the .attr() method
-            // as it is assumed and expected to be immutable
-            var group = "input:checkbox[name='" + $box.attr("name") + "']";
-            // the checked state of the group/box on the other hand will change
-            // and the current value is retrieved using .prop() method
-            $(group).prop("checked", false);
-            $box.prop("checked", true);
+                var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                $(group).prop("checked", false);
+                $box.prop("checked", true);
             } else {
-            $box.prop("checked", false);
+                $box.prop("checked", false);
             }
-            });
+        });
 
         $('body').on('click', '.perfil', function(){
             var pId = $(this).attr("id");
@@ -1215,7 +1210,7 @@
         });
 
         $('body').on('click', '.item-prestadores', function(){
-            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'));
+            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'), $(this).attr('idGrupo-rel'));
         })
 
         $('body').on('click', '.item-edit', function(){
@@ -1300,46 +1295,86 @@
             console.log(itemPrestador,idPrestacion,idLocalidad)
             let costo = parseFloat($(this).val());
             let identificador = $(this).attr("identificador-rel");
-
+            let idGrupo = (idGrupoPrestadorSeleccionado === null) ? '' : parseInt(idGrupoPrestadorSeleccionado);
             // Deseleccionar todos los checkboxes del grupo actual, excepto el checkbox actual
             $("[data-idPrestacionLocalidad='" + $(this).attr("data-idPrestacionLocalidad") + "']").not(this).prop("checked", false);
             
             if ($(this).prop("checked")) {
-                // Agregar el idPrestacion y costo al array costosPrestadores si el checkbox está seleccionado
-                // const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion);
-                const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion && item.idLocalidad === idLocalidad);
-                console.log({index});
-                if (index !== -1) { 
-                    // Si idPrestacion ya existe, reemplazar el elemento en el array
-                    costosPrestadores[index] = {
-                        idPrestacion: idPrestacion, 
-                        idLocalidad: idLocalidad,
-                        costo: costo, 
-                        identificador: identificador 
-                    };
-                } else {
-                    // Si no existe, hacer el push al array
-                    costosPrestadores.push({ 
-                        idPrestacion: idPrestacion,
-                        idLocalidad: idLocalidad,
-                        costo: costo, 
-                        identificador: identificador 
-                    });
-                }
+                if(idGrupo == ''){
+                    // Agregar el idPrestacion y costo al array costosPrestadores si el checkbox está seleccionado
+                    // const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion);
+                    const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion && item.idLocalidad === idLocalidad);
+                    console.log({index});
+                    if (index !== -1) { 
+                        // Si idPrestacion ya existe, reemplazar el elemento en el array
+                        costosPrestadores[index] = {
+                            idPrestacion: idPrestacion, 
+                            idLocalidad: idLocalidad,
+                            costo: costo, 
+                            identificador: identificador,
+                            individual: []
+                        };
+                    } else {
+                        // Si no existe, hacer el push al array
+                        costosPrestadores.push({ 
+                            idPrestacion: idPrestacion,
+                            idLocalidad: idLocalidad,
+                            costo: costo, 
+                            identificador: identificador,
+                            individual: []
+                        });
+                    }
 
-                console.log('remove')
-                bg_costo_0(idPrestacion,idLocalidad,'remove');
+                    console.log('remove masivo')
+                    bg_costo_0(idPrestacion,idLocalidad,null,'remove');
+                }else{
+                    const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion && item.idLocalidad === idLocalidad && item.idGrupo === idGrupo);
+                    console.log({index});
+                    if (index !== -1) { 
+                        // Si idPrestacion ya existe, reemplazar el elemento en el array
+                        costosPrestadores[index] = {
+                            idPrestacion: idPrestacion, 
+                            idLocalidad: idLocalidad,
+                            idGrupo: idGrupo,
+                            costo: costo, 
+                            identificador: identificador
+                        };
+                    } else {
+                        // Si no existe, hacer el push al array
+                        costosPrestadores.push({ 
+                            idPrestacion: idPrestacion,
+                            idLocalidad: idLocalidad,
+                            idGrupo: idGrupo,
+                            costo: costo, 
+                            identificador: identificador
+                        });
+                    }
+
+                    console.log('remove individual')
+                    bg_costo_0(idPrestacion,idLocalidad,idGrupo,'remove');
+                }
 
             } else {
                 // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
-                console.log('add')
-                if(prestacionTieneCosto0(idPrestacion,idLocalidad) == 0){
-                    bg_costo_0(idPrestacion,idLocalidad,'add');
+                if(idGrupo == ''){
+                    console.log('add masivo')
+                    if(prestacionTieneCosto0(idPrestacion,idLocalidad,null) == 0){
+                        bg_costo_0(idPrestacion,idLocalidad,null,'add');
+                    }
+                    costosPrestadores = costosPrestadores.filter(function(item) {
+                        // return item.idPrestacion !== idPrestacion;
+                        return item.idPrestacion !== idPrestacion || item.idLocalidad !== idLocalidad;
+                    });
+                }else{
+                    console.log('add individual')
+                    if(prestacionTieneCosto0(idPrestacion,idLocalidad,idGrupo) == 0){
+                        bg_costo_0(idPrestacion,idLocalidad,idGrupo,'add');
+                    }
+                    costosPrestadores = costosPrestadores.filter(function(item) {
+                        // return item.idPrestacion !== idPrestacion;
+                        return item.idPrestacion !== idPrestacion || item.idLocalidad !== idLocalidad || item.idGrupo !== idGrupo;
+                    });
                 }
-                costosPrestadores = costosPrestadores.filter(function(item) {
-                    // return item.idPrestacion !== idPrestacion;
-                    return item.idPrestacion !== idPrestacion || item.idLocalidad !== idLocalidad;
-                });
             }
 
             calcularTH();
@@ -1518,35 +1553,48 @@
         }
     }
 
-    function bg_costo_0(codigoPrestacion, idLocalidad, type){
-        console.log(codigoPrestacion, idLocalidad, type);
-        if(type == "add"){
-            $('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).addClass('tr_costo_0');
-        }else{
-            $('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).removeClass('tr_costo_0');
-        }
-        /*for (const elemento of dataPrestaciones) {
-            for (const prestacion of elemento.prestaciones) {
-                //Reemplazar costos de provincias
-                if(type == "add"){
-                    $('.tr-prestacion-'+codigoPrestacion+'.tr-prestacion-'+idLocalidad).addClass('tr_costo_0');
-                }else{
-                    $('.tr-prestacion-'+codigoPrestacion+'.tr-prestacion-'+idLocalidad).removeClass('tr_costo_0');
-                }
+    function bg_costo_0(codigoPrestacion, idLocalidad, idGrupo, type){
+        console.log(codigoPrestacion, idLocalidad, idGrupo, type);
+        if(idGrupo === null){
+            if(type == "add"){
+                $('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).addClass('tr_costo_0');
+            }else{
+                $('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).removeClass('tr_costo_0');
             }
-        }*/
+        }else{
+            console.log('.localidad_ciudad_'+idLocalidad+'_perfil'+idGrupo+'.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion);
+            if(type == "add"){
+                $('.localidad_ciudad_'+idLocalidad+'_perfil'+idGrupo+'.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).addClass('tr_costo_0');
+            }else{
+                $('.localidad_ciudad_'+idLocalidad+'_perfil'+idGrupo+'.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion).removeClass('tr_costo_0');
+            }
+        }
     }
 
-    function prestacionTieneCosto0(codigoPrestacion,codigoLocalidad){
-        $.each(dataPrestaciones, function(kp, vp){
-            $.each(vp.grupos, function(kg, vg){
-                $.each(vg.prestaciones, function(k, v){
-                    if (v.codigoPrestacion === codigoPrestacion) {
-                        return v.costoUnitario;
+    function prestacionTieneCosto0(codigoPrestacion,codigoLocalidad,idGrupo){
+        if(idGrupo === null){
+            $.each(dataPrestaciones, function(kp, vp){
+                $.each(vp.grupos, function(kg, vg){
+                    $.each(vg.prestaciones, function(k, v){
+                        if (v.codigoPrestacion === codigoPrestacion) {
+                            return v.costoUnitario;
+                        }
+                    })
+                })
+            })
+        }else{
+            $.each(dataPrestaciones, function(kp, vp){
+                $.each(vp.grupos, function(kg, vg){
+                    if(vg.codigoGrupo == idGrupo){
+                        $.each(vg.prestaciones, function(k, v){
+                            if (v.codigoPrestacion === codigoPrestacion) {
+                                return v.costoUnitario;
+                            }
+                        })
                     }
                 })
             })
-        })
+        }
         // Si no se encuentra, puedes devolver un valor por defecto o manejarlo de otra forma
         return 0; // O cualquier otro valor que desees
     }
@@ -1682,14 +1730,14 @@
                     totalGrupos += v.cantidadPacientes;
                     precioUnitarioGrupos += (v.precioUnitario*v.cantidadPacientes);
                     
-                    prestacionesElem += `<tr class="prestacion ${class_costo_0} localidad_${vp.secuenciaLocalidad}_perfil localidad_${vp.secuenciaLocalidad}_perfil${vg.codigoGrupo} tr-prestacion-${v.codigoPrestacion} tr-prestacion-${vp.codigoCiudad}-${v.codigoPrestacion}">
+                    prestacionesElem += `<tr class="prestacion ${class_costo_0} localidad_${vp.secuenciaLocalidad}_perfil localidad_${vp.secuenciaLocalidad}_perfil${vg.codigoGrupo} localidad_ciudad_${vp.codigoCiudad}_perfil${vg.codigoGrupo} tr-prestacion-${v.codigoPrestacion} tr-prestacion-${vp.codigoCiudad}-${v.codigoPrestacion}">
                                         <td class="fs-10">${ v.nombrePrestacion }</td>
                                         <td id="cantidad_${ v.idItem }">${ v.cantidadPacientes }</td>
                                         <td id="precioUnitario_${ v.idItem }" class="precioUnitario_${ v.codigoPrestacion }">$${ formatDollar(v.precioUnitario) }</td>
                                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
                                         <td width="100px" class="text-end align-middle">
                                             <div class="d-flex justify-content-center">
-                                                <a idPrestacion-rel="${ v.codigoPrestacion }" idCiudad-rel="${vp.codigoCiudad}" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
+                                                <a idPrestacion-rel="${ v.codigoPrestacion }" idCiudad-rel="${vp.codigoCiudad}" idGrupo-rel="${ vg.codigoGrupo }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
                                                     <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
                                                 </a>
                                                 <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
@@ -3149,7 +3197,8 @@ $('#tableContainer').html(tableHtml);
         return ciudadesArr;
     }
 
-    async function obtenerPrestadores(id = null, idCiudades = null){
+    let idGrupoPrestadorSeleccionado = null;
+    async function obtenerPrestadores(id = null, idCiudades = null, idGrupo = null){
         //let ciudades = getInput('ciudadChequeo','select2');
         let ciudades = [];
         /*if(ciudades == ""){
@@ -3158,6 +3207,7 @@ $('#tableContainer').html(tableHtml);
         }*/
         let prestaciones = [];
         if(id == null){
+            idGrupoPrestadorSeleccionado = null;
             ciudades = await getCiudadesDeLocalidades();
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.grupos, function(k, v){
@@ -3175,6 +3225,7 @@ $('#tableContainer').html(tableHtml);
         }else{
             ciudades.push(idCiudades);
             prestaciones.push(id);
+            idGrupoPrestadorSeleccionado = idGrupo
         }
 
         let args = [];

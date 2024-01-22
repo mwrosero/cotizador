@@ -24,7 +24,7 @@ class CotizadorController extends Controller
             'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
-        
+
         if($response->code != 200){
             session()->flash('success', $response->message);
             return redirect()->route('consulta-cotizaciones');
@@ -43,6 +43,7 @@ class CotizadorController extends Controller
             'token'    => Session::get('accessToken'),
             'method'   => 'GET'
         ]);
+        // dd($response);
 
         if($response->code != 200){
             session()->flash('warning', $response->message);

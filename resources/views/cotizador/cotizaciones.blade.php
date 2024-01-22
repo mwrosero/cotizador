@@ -125,14 +125,15 @@
                                 <td>{{ $dato->estado }}</td>
                                 <td width="100px" class="text-start align-middle">
                                     <div class="d-flex">
-                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/pdf/{{ $dato->idCotizacion }}" title="Descargar Reporte" target="_blank">
-                                            <img class="action-ico" src="{{ asset('assets/img/veris/reporte-ico.svg') }}" alt="" title="Editar">
-                                        </a>
                                         <a class="d-inline-block me-2" href="/cotizador/cotizacion/edit/{{ $dato->idCotizacion }}">
                                             <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
                                         </a>
                                         <a class="dropdown-item cambiarEstado" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" estadoCotizacion-rel="{{ $dato->estado }}" title="Cambiar Estado">
-                                            <i class="fa-solid fa-rotate me-2"></i>
+                                            <i class="fa-solid fa-rotate me-1"></i>
+                                        </a>
+                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/pdf/{{ $dato->idCotizacion }}" title="Descargar Reporte" target="_blank">
+                                            {{-- <img class="action-ico" src="{{ asset('assets/img/veris/reporte-ico.svg') }}" alt="" title="Editar"> --}}
+                                            <i class="fs-14 mt-1 fa-regular fa-file-pdf text-success action-ico" title="Editar"></i>
                                         </a>
                                         {{-- <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
