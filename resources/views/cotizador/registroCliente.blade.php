@@ -451,7 +451,6 @@
                 }
             });
 
-
             modalGiroNegocio = new bootstrap.Modal('#modalGiroNegocio');
             @if(!isset($edit))
             if(dataLocalidades != ""){
@@ -471,6 +470,10 @@
 
             $('body').on('change','#numeroIdentificacion',function(){
                 buscarCliente();
+            });
+
+            $('body').on('change','#esPrincipal',function(){
+                //if()
             });
 
             $('body').on('change','#pais',function(){
@@ -518,11 +521,13 @@
             }
 
             @if(isset($edit) && isset($cliente->localidades) )
+                // showLoader();
                 localidades = {!! json_encode($cliente->localidades) !!};
                 if(localidades.length > 0){
                     $('#box-localidades').removeClass('d-none');
                     drawTableLocalidades();
                 }
+                // hideLoader()
             @endif
 
             allowCall = true;
@@ -682,7 +687,7 @@
                 }
 
                 if(getInput('esPrincipal','checkbox')){
-                    await updateLocalidadPrincipal(secuenciaLocalidad,type);
+                    await updateLocalidadPrincipal(getInput('secuenciaLocalidad'),type);
                 }
                 
                 $('#offcanvasLocalidades').offcanvas('hide');
@@ -694,19 +699,21 @@
         }
 
         async function updateLocalidadPrincipal(secuenciaLocalidad, type){
+            console.log(secuenciaLocalidad, type)
             if(type == "tmp"){
                 $.each(localidades, function(key, value) {
-                    if(value.idLocalidadTmp != secuenciaLocalidad){
+                    if(parseInt(value.idLocalidadTmp) != parseInt(secuenciaLocalidad)){
                         localidades[key]['esPrincipal'] = false;
                     }
                 })
             }else{
                 $.each(localidades, function(key, value) {
-                    if(value.secuenciaLocalidad != secuenciaLocalidad){
+                    if(parseInt(value.secuenciaLocalidad) != parseInt(secuenciaLocalidad)){
                         localidades[key]['esPrincipal'] = false;
                     }
                 })
             }
+            console.log(localidades);
         }
 
         async function drawTableLocalidades(){
