@@ -131,9 +131,9 @@
                                         <a class="dropdown-item cambiarEstado" href="#" idCotizacion-rel="{{ $dato->idCotizacion }}" estadoCotizacion-rel="{{ $dato->estado }}" title="Cambiar Estado">
                                             <i class="fa-solid fa-rotate me-1"></i>
                                         </a>
-                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/pdf/{{ $dato->idCotizacion }}" title="Descargar Reporte" target="_blank">
+                                        <a class="d-inline-block me-2" href="/cotizador/cotizacion/pdf/{{ $dato->idCotizacion }}" target="_blank">
                                             {{-- <img class="action-ico" src="{{ asset('assets/img/veris/reporte-ico.svg') }}" alt="" title="Editar"> --}}
-                                            <i class="fs-14 mt-1 fa-regular fa-file-pdf text-success action-ico" title="Editar"></i>
+                                            <i class="fs-14 mt-1 fa-regular fa-file-pdf text-success action-ico" title="Descargar Reporte"></i>
                                         </a>
                                         {{-- <div class="dropdown">
                                             <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

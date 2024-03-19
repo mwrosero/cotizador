@@ -71,7 +71,7 @@ class CotizadorController extends Controller
 
     public function cotizaciones(Request $request){
         $method = '/empresarial/v1/cotizacion';
-        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=TODOS&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=ACTIVO&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
@@ -332,15 +332,15 @@ class CotizadorController extends Controller
                 "aplicaSolicitudEnvioPaperlessLote" => false,
                 "bloquearCreditosPrestaciones" => false
             ],
-            /*"datosContacto" => [
-                "codigoPaisCelular" => (int)$data['telefonoMovilOficinaCode'],
-                "telefonoCelular" => $data['telefonoMovilOficina'],
-                "codigoPaisConvencional" => $data['telefonoFijoOficinaCode'],
-                "telefonoConvencional" => $data['telefonoFijoOficina'],
+            "datosContacto" => [
+                "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
+                "telefonoCelular" => $data['telefonoMovilContacto'],
+                "codigoPaisConvencional" => $data['telefonoFijoContactoCode'],
+                "telefonoConvencional" => $data['telefonoFijoContacto'],
                 "contactoCliente" => null,
-                "correoElectronico" => strtolower($data['correoEmpresa'])
+                "correoElectronico" => strtolower($data['correoContacto'])
             ],
-            "datosResidencia" => [
+            /*"datosResidencia" => [
                 "codigoPais" => (int)$data['pais'],
                 "codigoProvincia" => (int)$data['provincia'],
                 "codigoCiudad" => (int)$data['ciudad'],
@@ -376,7 +376,7 @@ class CotizadorController extends Controller
             $esGrupoEmpresa = "true";
         }
         $method = '/comercial/v1/clientes/'.$data['codigoCliente'];
-        $param = '';
+        $param = '?esGrupoEmpresa='.$esGrupoEmpresa.'&esEntidadAfiliada=true';
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
@@ -385,13 +385,13 @@ class CotizadorController extends Controller
             'method'   => 'PUT'
         ]);
         
-        /*print_r(json_encode($cliente));
-        echo Ism::BASE_URL.$method.$param;
-        echo '<pre>';
-        print_r($cliente);
-        echo '</pre>';
-        dump($cliente);
-        dd($response);*/
+        // print_r(json_encode($cliente));
+        // echo Ism::BASE_URL.$method.$param;
+        // echo '<pre>';
+        // print_r($cliente);
+        // echo '</pre>';
+        // dump($cliente);
+        // dd($response);
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);

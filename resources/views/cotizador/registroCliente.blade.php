@@ -712,7 +712,7 @@
         async function drawTableLocalidades(){
             let elem = ``;
             $.each(localidades, function(key, value){
-                elem += `<tr>
+                elem += `<tr class="localidad_index_${ key }">
                             <td>${value.nombreLocalidad}</td>
                             <td>${(value.esPrincipal) ? "SI" : "NO"}</td>
                             <!--td>${value.nombrePais}</td-->
@@ -722,17 +722,28 @@
                             <td>${value.email}</td>
                             <td>0${value.telefonoMovil}</td>
                             <td>0${value.telefonoFijo}</td>
-                            <td>
-                                <button type="button" 
-                                    data-bs-toggle="offcanvas" 
-                                    data-bs-target="#offcanvasLocalidades" 
-                                    aria-controls="offcanvasLocalidades"
-                                    class="btn btn-sm d-inline-block me-2 shadow-none" 
-                                    idLocalidadTmp-rel="${ value.idLocalidadTmp }" 
-                                    secuenciaLocalidad-rel="${ value.secuenciaLocalidad }"
-                                    onclick="cargarLocalidad(${ value.idLocalidadTmp },${ value.secuenciaLocalidad })">
-                                    <img class="action-ico" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
-                                </button>
+                            <td width="100px" class="text-start align-middle">
+                                <div class="d-flex">
+                                    <button type="button" 
+                                        class="btn btn-sm d-inline-block me-2 shadow-none ps-1 pe-1" 
+                                        href="#" 
+                                        idLocalidadTmp-rel="${ value.idLocalidadTmp }" 
+                                        secuenciaLocalidad-rel="${ value.secuenciaLocalidad }"
+                                        onclick="eliminarLocalidad(${ key }, ${ value.idLocalidadTmp },${ value.secuenciaLocalidad })"
+                                        title="Eliminar localidad">
+                                        <i class="fa-solid fa-trash text-danger d-inline"></i>
+                                    </button>
+                                    <button type="button" 
+                                        data-bs-toggle="offcanvas" 
+                                        data-bs-target="#offcanvasLocalidades" 
+                                        aria-controls="offcanvasLocalidades"
+                                        class="btn btn-sm d-inline-block shadow-none ps-0 pe-0" 
+                                        idLocalidadTmp-rel="${ value.idLocalidadTmp }" 
+                                        secuenciaLocalidad-rel="${ value.secuenciaLocalidad }"
+                                        onclick="cargarLocalidad(${ value.idLocalidadTmp },${ value.secuenciaLocalidad })">
+                                        <img class="action-ico mt-0" src="{{ asset('assets/img/veris/edit-ico.svg') }}" alt="" title="Editar">
+                                    </button>
+                                </div>
                             </td>
                         </tr>`;
             });
@@ -741,9 +752,20 @@
             $("#dataLocalidades").val(JSON.stringify(localidades));
         }
 
+        async function eliminarLocalidad(index, idLocalidadTmp, secuenciaLocalidad){
+            console.log(idLocalidadTmp, secuenciaLocalidad)
+            
+            localidades[index].status = "edit";
+            localidades[index].activo = false;
+
+            $(".localidad_index_"+index).hide();
+            $("#dataLocalidades").val(JSON.stringify(localidades));
+        }
+
         async function cargarLocalidad(idLocalidadTmp,secuenciaLocalidad){
+            console.log(idLocalidadTmp,secuenciaLocalidad);
             allowCall = false;
-            let data = buscarPorIdLocalidadOSequencia(idLocalidadTmp,secuenciaLocalidad);
+            let data = await buscarPorIdLocalidadOSequencia(idLocalidadTmp,secuenciaLocalidad);
             console.log(data);
             if(data){
                 $('#secuenciaLocalidad').val(data.secuenciaLocalidad);
@@ -769,7 +791,7 @@
             allowCall = true;
         }
 
-        function buscarPorIdLocalidadOSequencia(idLocalidad, secuenciaLocalidad) {
+        async function buscarPorIdLocalidadOSequencia(idLocalidad, secuenciaLocalidad) {
             if (idLocalidad === null && secuenciaLocalidad === null) {
                 return null;
             }
@@ -852,7 +874,9 @@
                 }
                 $('#provincia').append(`<option value="${value.codigoProvincia}" ${classSel}>${value.nombreProvincia}</option>`);
             });
-            cargarCiudades();
+            if(allowCall){
+                cargarCiudades();
+            }
         }
 
         async function cargarCiudades(){

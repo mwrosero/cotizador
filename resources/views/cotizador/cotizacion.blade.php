@@ -1308,20 +1308,20 @@
                     if (index !== -1) { 
                         // Si idPrestacion ya existe, reemplazar el elemento en el array
                         costosPrestadores[index] = {
+                            tipo: "masivo",
                             idPrestacion: idPrestacion, 
                             idLocalidad: idLocalidad,
                             costo: costo, 
-                            identificador: identificador,
-                            individual: []
+                            identificador: identificador
                         };
                     } else {
                         // Si no existe, hacer el push al array
                         costosPrestadores.push({ 
+                            tipo: "masivo",
                             idPrestacion: idPrestacion,
                             idLocalidad: idLocalidad,
                             costo: costo, 
-                            identificador: identificador,
-                            individual: []
+                            identificador: identificador
                         });
                     }
 
@@ -1333,6 +1333,7 @@
                     if (index !== -1) { 
                         // Si idPrestacion ya existe, reemplazar el elemento en el array
                         costosPrestadores[index] = {
+                            tipo: "individual",
                             idPrestacion: idPrestacion, 
                             idLocalidad: idLocalidad,
                             idGrupo: idGrupo,
@@ -1341,7 +1342,8 @@
                         };
                     } else {
                         // Si no existe, hacer el push al array
-                        costosPrestadores.push({ 
+                        costosPrestadores.push({
+                            tipo: "individual",
                             idPrestacion: idPrestacion,
                             idLocalidad: idLocalidad,
                             idGrupo: idGrupo,
@@ -2441,21 +2443,23 @@
             const fechaPrevista = `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${anio}`;
             let dataPrestacionesTmp = [...dataPrestaciones];
 
-            /*for (const elemento of dataPrestacionesTmp) {
-                for (const prestacion of elemento.prestaciones) {
+            for (const localidad of dataPrestacionesTmp) {
+                for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
-                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
-                    if( costo_alterno != null){
-                        prestacion.costoUnitario = costo_alterno;
+                    for (const prestacion of grupo.prestaciones) {
+                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'masivo');
+                        if( costo_alterno != null){
+                            prestacion.costoUnitario = costo_alterno;
+                        }
                     }
                 }
-            }*/
+            }
 
             for (const localidad of dataPrestacionesTmp) {
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2513,28 +2517,29 @@
         })
 
         let dataPrestacionesTmp = [...dataPrestaciones];
-
-        // for (const elemento of dataPrestacionesTmp) {
-        //     for (const prestacion of elemento.prestaciones) {
-        //         //Reemplazar costos de provincias
-        //         let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
-        //         if( costo_alterno != null){
-        //             prestacion.costoUnitario = costo_alterno;
-        //         }
-        //     }
-        // }
-
         for (const localidad of dataPrestacionesTmp) {
             for (const grupo of localidad.grupos) {
                 //Reemplazar costos de provincias
                 for (const prestacion of grupo.prestaciones) {
-                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion);
+                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'masivo');
                     if( costo_alterno != null){
                         prestacion.costoUnitario = costo_alterno;
                     }
                 }
             }
         }
+
+        for (const localidad of dataPrestacionesTmp) {
+                for (const grupo of localidad.grupos) {
+                    //Reemplazar costos de provincias
+                    for (const prestacion of grupo.prestaciones) {
+                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'individual');
+                        if( costo_alterno != null){
+                            prestacion.costoUnitario = costo_alterno;
+                        }
+                    }
+                }
+            }
 
         $.each(prestacionesEliminadas, function(num, codigoPrestacion){
             let idItem = codigoPrestacion.split("_");
@@ -2640,14 +2645,12 @@
                         if( costo_alterno == null){
                             total_costos += (v1.costoUnitario*v1.cantidadPacientes);
                         }else{
-                            // console.log("Costo alterno")
                             total_costos += (costo_alterno*v1.cantidadPacientes);
                         }
                         totales += (v1.precioUnitario*v1.cantidadPacientes);
                     })
                 })
             })
-
 
             /*$.each(dataPrestaciones, function(key, value){
                 $.each(value.prestaciones, function(k, v){
@@ -3282,10 +3285,10 @@ $('#tableContainer').html(tableHtml);
         })
     }
 
-    function obtenerCostoPorId(idPrestacion) {
+    function obtenerCostoPorId(idPrestacion, type) {
         // Utilizamos el método find() para buscar el objeto que tenga el idPrestacion específico
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
-            return prestacion.idPrestacion === idPrestacion;
+            return prestacion.idPrestacion === idPrestacion && type == prestacion.tipo;
         });
 
         // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
