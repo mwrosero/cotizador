@@ -528,9 +528,9 @@
                     $('#box-localidades').removeClass('d-none');
                     drawTableLocalidades();
                 }
-                if({{ $cliente->esGrupoEmpresa }}){
+                @if($cliente->esGrupoEmpresa)
                     $('#esGrupoEmpresa').prop('checked',true)
-                }
+                @endif
                 // hideLoader()
             @endif
 
