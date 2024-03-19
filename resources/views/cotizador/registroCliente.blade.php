@@ -1,9 +1,10 @@
 @extends('template.dashboard')
 @section('title')
+    @if(isset($edit) && $edit === true)
+    Veris - Actualizar Cliente
+    @else
     Veris - Registro Cliente
-@endsection
-@section('title-section')
-    Registro Cliente
+    @endif
 @endsection
 @section('content')
     <div class="row">
@@ -624,6 +625,7 @@
             if(valida){
                 let type = "tmp";
                 if(getInput('secuenciaLocalidad') == '' && getInput('idLocalidadTmp') == ''){
+                    console.log("------0-------")
                     secuenciaLocalidad = idLocalidadTmp;
                     idLocalidadTmp++;
                     localidades.push({
@@ -648,6 +650,7 @@
                     });
                     console.log(localidades);
                 }else{
+                    console.log("------1-------")
                     let item = {
                         "activo": true,
                         "status": "edit",
@@ -670,6 +673,7 @@
                     }
 
                     if(getInput('secuenciaLocalidad') != ''){
+                        secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
                         type = "secuencia";
                         item.secuenciaLocalidad = parseInt(getInput('secuenciaLocalidad'));
                         item.idLocalidadTmp =  null;
@@ -679,6 +683,7 @@
                             }
                         })
                     }else{
+                        secuenciaLocalidad = parseInt(getInput('idLocalidadTmp'));
                         item.secuenciaLocalidad = null;
                         item.idLocalidadTmp =  parseInt(getInput('idLocalidadTmp'));
                         $.each(localidades, function(key, value) {
@@ -689,10 +694,12 @@
                     }
                 }
 
+
+                console.log(0);
                 if(getInput('esPrincipal','checkbox')){
-                    await updateLocalidadPrincipal(getInput('secuenciaLocalidad'),type);
+                    await updateLocalidadPrincipal(secuenciaLocalidad,type);
                 }
-                
+                console.log(2);
                 $('#offcanvasLocalidades').offcanvas('hide');
                 $('#offcanvasLocalidades').find('input').val("");
                 $('#esPrincipal').prop('checked',false);
@@ -702,6 +709,7 @@
         }
 
         async function updateLocalidadPrincipal(secuenciaLocalidad, type){
+            console.log(1);
             console.log(secuenciaLocalidad, type)
             if(type == "tmp"){
                 $.each(localidades, function(key, value) {
