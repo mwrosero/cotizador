@@ -527,6 +527,9 @@
                     $('#box-localidades').removeClass('d-none');
                     drawTableLocalidades();
                 }
+                if({{ $cliente->esGrupoEmpresa }}){
+                    $('#esGrupoEmpresa').prop('checked',true)
+                }
                 // hideLoader()
             @endif
 

@@ -70,8 +70,14 @@ class CotizadorController extends Controller
     }
 
     public function cotizaciones(Request $request){
+        $codigoUsuario = session('userData')->codigoUsuario;
+        $filtroCodigoUsuario = '&codigoUsuario='.$codigoUsuario;
+        if( $codigoUsuario == "MVELEZ" || $codigoUsuario == "DREVELO" || $codigoUsuario == "SMERIZALDE" || $codigoUsuario == "TUSCOCOVICH"){
+            $filtroCodigoUsuario = "";
+        }
+
         $method = '/empresarial/v1/cotizacion';
-        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=ACTIVO&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','');
+        $param = '?page='.$request->query('page', '1').'&perPage='.Ism::PERPAGE.'&estado=ACTIVO&estadoCotizacion='.$request->query('estado', 'TODOS').'&codigoTipoContrato='.$request->query('codigoTipoContrato','').$filtroCodigoUsuario;
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method.$param,
@@ -81,6 +87,7 @@ class CotizadorController extends Controller
 
         // echo Ism::BASE_URL.$method.$param;
         // dd($response);
+        // dd(session('userData'));
 
         if($response->code == 200){
             $totalRegistros = $response->data->totalRows; // Número total de registros
@@ -159,8 +166,8 @@ class CotizadorController extends Controller
             'method'   => 'GET'
         ]);
 
-        //echo Ism::BASE_URL.$method.$param;
-        //dd($response);
+        // echo Ism::BASE_URL.$method.$param;
+        // dd($response);
 
         if($response->code == 200){
             $totalRegistros = $response->data->totalRows; // Número total de registros
