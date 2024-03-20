@@ -659,19 +659,19 @@
     <div class="offcanvas-body">
         <div class="row g-3">
             <div class="col-12">
-                <span class="d-block">Prestación:</span>
+                <span class="d-block form-label">Prestación:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="nombrePrestacionEdit"></h6>
             </div>
             <div class="col-12">
-                <span class="d-block">Servicio:</span>
+                <span class="d-block form-label">Servicio:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="nombreServicioEdit"></h6>
             </div>
             <div class="col-12">
-                <span class="d-block">Localidad:</span>
+                <span class="d-block form-label">Localidad:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="localidadEdit"></h6>
             </div>
             <div class="col-12">
-                <span class="d-block">Grupo Perfil:</span>
+                <span class="d-block form-label">Grupo Perfil:</span>
                 <h6 class="txt-veris fs-14 mb-0" id="grupoPerfilEdit"></h6>
             </div>
             <input type="hidden" id="idItemEdit">
@@ -707,12 +707,23 @@
                         placeholder="" />
                 </div>
             </div>
-            {{-- <div class="col-12">
+            <div class="col-12">
                 <label for="aplicaTodoGrupo" class="form-label">Aplicar <b>precio</b> para todos los Grupo Perfiles</label>
+            </div>
+            <div class="col-2">
                 <div class="form-check form-switch mb-2 mt-2">
                     <input class="form-check-input" type="checkbox" id="aplicaTodoGrupo" name="aplicaTodoGrupo" />
                 </div>
-            </div> --}}
+            </div>
+            <div class="col-10">
+                <div class="select2-dark">
+                    <select id="opcionesMasivas" class="select2 form-select">
+                        <option value="all_groups">En todos los Grupo perfil de la cotización</option>
+                        <option value="all_locals">En todos los Grupo perfil de la localidad</option>
+                        <option value="all">En toda la cotización</option>
+                    </select>
+                </div>
+            </div>
             <div class="col-12">
                 <button type="button"
                     class="btn bg-veris w-100"
@@ -1950,6 +1961,7 @@
     }
 
     function cargarItem(idItem,secuenciaLocalidad,codigoGrupo){
+        $('#aplicaTodoGrupo').prop('checked',false);
         console.log(idItem,secuenciaLocalidad,codigoGrupo)
         let localidadIndex = dataPrestaciones.findIndex(function(item) {
             return item.secuenciaLocalidad === parseInt(secuenciaLocalidad);
@@ -2004,29 +2016,114 @@
 
     async function actualizarPrestacion() {
         let idItem = $('#idItemEdit').val();
-        for (const localidades of dataPrestaciones) {
-            for (const elemento of localidades.grupos) {
-                for (const prestacion of elemento.prestaciones) {
-                    if (prestacion.idItem === idItem) {
-                        // console.log(idItem);
-                        prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
-                        prestacion.precioUnitario = getInput('precioUnitarioEdit');
-                        // precioUnitario-rel
-                        $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
-                        $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                        $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                        //$('.precioUnitario_'+prestacion.codigoPrestacion).html("$"+formatDollar(getInput('precioUnitarioEdit')));
-                        $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
-                        $('#offcanvasPrestacion').offcanvas('hide');
-                        //actualizarItemsConCodigoPrestacion(dataPrestaciones, prestacion.codigoPrestacion, getInput('precioUnitarioEdit'));
-                        calcularTH();
-                        calcularTotal();
-                        await drawTable();
-
-                        return true;
+        if(!$('#aplicaTodoGrupo').is(":checked")){
+            console.log("Individual")
+            //modificar solo esa prestacion
+            for (const localidades of dataPrestaciones) {
+                for (const elemento of localidades.grupos) {
+                    for (const prestacion of elemento.prestaciones) {
+                        if (prestacion.idItem === idItem) {
+                            prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
+                            prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                            $('#cantidad_'+idItem).html(getInput('cantidadEdit'));
+                            $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                            $('#precioUnitario_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                            $('#total_'+idItem).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                            $('#offcanvasPrestacion').offcanvas('hide');
+                            calcularTH();
+                            calcularTotal();
+                            await drawTable();
+                            return true;
+                        }
                     }
                 }
             }
+        }else{
+            console.log("Masivo")
+            let optMasiva = getInput('opcionesMasivas','select2');
+            /*
+                0: localidad
+                1: grupoPerfil
+                2: codigoServicio
+                3: codigoPrestacion
+            */
+            var idsArr = idItem.split('_');
+            console.log(idsArr);
+            console.log(optMasiva)
+            switch(optMasiva){
+                case 'all_groups'://En todos los Grupo perfil de la cotización
+                    for (const localidades of dataPrestaciones) {
+                        for (const elemento of localidades.grupos) {
+                            if(parseInt(elemento.codigoGrupo) === parseInt(idsArr[1])){
+                                console.log(elemento.codigoGrupo);
+                                for (const prestacion of elemento.prestaciones) {
+                                    if (parseInt(prestacion.codigoPrestacion) === parseInt(idsArr[3])) {
+                                        let idItemLoop = prestacion.idItem
+                                        prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
+                                        prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                                        $('#cantidad_'+idItemLoop).html(getInput('cantidadEdit'));
+                                        $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                        $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                        $('#total_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                                        $('#offcanvasPrestacion').offcanvas('hide');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                break;
+                case 'all_locals'://En todos los Grupo perfil de la localidad
+                    console.log("all_locals");
+                    for (const localidades of dataPrestaciones) {
+                        if(parseInt(localidades.secuenciaLocalidad) === parseInt(idsArr[0]) ){
+                            console.log("Misma localidad: "+localidades.nombreLocalidad);
+                            for (const elemento of localidades.grupos) {
+                                // if(parseInt(elemento.codigoGrupo) === parseInt(idsArr[1])){
+                                    console.log("Mismo grupo: "+elemento.nombreGrupo);
+                                    for (const prestacion of elemento.prestaciones) {
+                                        if (parseInt(prestacion.codigoPrestacion) === parseInt(idsArr[3]) ) {
+                                            console.log("Cambia prestacion: "+prestacion.idItem);
+                                            let idItemLoop = prestacion.idItem
+                                            prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
+                                            prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                                            $('#cantidad_'+idItemLoop).html(getInput('cantidadEdit'));
+                                            $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                            $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                            $('#total_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                                            $('#offcanvasPrestacion').offcanvas('hide');
+                                        }
+                                    }
+                                // }
+                            }
+                        }
+                    }
+                break;
+                case 'all'://En toda la cotización
+                    for (const localidades of dataPrestaciones) {
+                        for (const elemento of localidades.grupos) {
+                            for (const prestacion of elemento.prestaciones) {
+                                if (parseInt(prestacion.codigoPrestacion) === parseInt(idsArr[3])) {
+                                    console.log("Cambia prestacion: "+prestacion.idItem);
+                                    let idItemLoop = prestacion.idItem
+                                    prestacion.cantidadPacientes = parseInt(getInput('cantidadEdit'));
+                                    prestacion.precioUnitario = getInput('precioUnitarioEdit');
+                                    $('#cantidad_'+idItemLoop).html(getInput('cantidadEdit'));
+                                    $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                    $('#precioUnitario_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit')));
+                                    $('#total_'+idItemLoop).html("$"+formatDollar(getInput('precioUnitarioEdit') * getInput('cantidadEdit')));
+                                    $('#offcanvasPrestacion').offcanvas('hide');
+                                }
+                            }
+                        }
+                    }
+                break;
+            }
+
+            calcularTH();
+            calcularTotal();
+            $('#offcanvasPrestacion').offcanvas('hide');
+            await drawTable();
+            return true;
         }
         return false; // Si no se encuentra el elemento, retorna false
     }
