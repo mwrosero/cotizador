@@ -213,7 +213,7 @@ class CotizadorController extends Controller
         ]);
 
         // echo Ism::BASE_URL.$method;
-        // dd($response);
+        // dd(json_encode($response, JSON_PRETTY_PRINT));
         $cliente = $response->data;
         return view('cotizador.registroCliente', compact('cliente'))
                 ->with('edit', true)
@@ -244,14 +244,16 @@ class CotizadorController extends Controller
                 "aplicaSolicitudEnvioPaperlessLote" => false,
                 "bloquearCreditosPrestaciones" => false
             ],
-            "datosContacto" => [
+            "datosContacto" => [[
                 "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
                 "telefonoCelular" => $data['telefonoMovilContacto'],
-                "codigoPaisConvencional" => $data['telefonoFijoContactoCode'],
+                "codigoPaisConvencional" => (int)$data['telefonoFijoContactoCode'],
                 "telefonoConvencional" => $data['telefonoFijoContacto'],
                 "contactoCliente" => $data['personaContacto'],
-                "correoElectronico" => strtolower($data['correoContacto'])
-            ],
+                "correoElectronico" => strtolower($data['correoContacto']),
+                //QUEMADO, verificar luego
+                "codigoTipoContacto" => 1
+            ]],
             "datosResidencia" => [
                 "codigoPais" => $localidades[0]->codigoPais,
                 "codigoProvincia" => $localidades[0]->codigoProvincia,
@@ -273,7 +275,7 @@ class CotizadorController extends Controller
                     "nombre" => $data['personaContacto'],
                     "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
                     "telefonoMovil" => $data['telefonoMovilContacto'],
-                    "codigoPaisFijo" => $data['telefonoFijoContactoCode'],
+                    "codigoPaisFijo" => (int)$data['telefonoFijoContactoCode'],
                     "telefonoFijo" => $data['telefonoFijoContacto'],
                     "mail" => strtolower($data['correoContacto']),
                     "cargo" => $data['cargoPersonaContacto']
@@ -297,9 +299,8 @@ class CotizadorController extends Controller
         ]);
         
         // echo Ism::BASE_URL.$method.$param;
-        // dump($cliente);
-        // dd($response);
-        // die();
+        // dump($response);
+        // dd(json_encode($cliente, JSON_PRETTY_PRINT));
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);
@@ -339,14 +340,16 @@ class CotizadorController extends Controller
                 "aplicaSolicitudEnvioPaperlessLote" => false,
                 "bloquearCreditosPrestaciones" => false
             ],
-            "datosContacto" => [
+            "datosContacto" => [[
                 "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
                 "telefonoCelular" => $data['telefonoMovilContacto'],
-                "codigoPaisConvencional" => $data['telefonoFijoContactoCode'],
+                "codigoPaisConvencional" => (int)$data['telefonoFijoContactoCode'],
                 "telefonoConvencional" => $data['telefonoFijoContacto'],
                 "contactoCliente" => null,
-                "correoElectronico" => strtolower($data['correoContacto'])
-            ],
+                "correoElectronico" => strtolower($data['correoContacto']),
+                "secuenciaContacto" => $data['secuenciaContacto'],
+                "status" => $data['statusContacto']
+            ]],
             /*"datosResidencia" => [
                 "codigoPais" => (int)$data['pais'],
                 "codigoProvincia" => (int)$data['provincia'],
@@ -369,7 +372,7 @@ class CotizadorController extends Controller
                     "nombre" => $data['personaContacto'],
                     "codigoPaisCelular" => (int)$data['telefonoMovilContactoCode'],
                     "telefonoMovil" => $data['telefonoMovilContacto'],
-                    "codigoPaisFijo" => $data['telefonoFijoContactoCode'],
+                    "codigoPaisFijo" => (int)$data['telefonoFijoContactoCode'],
                     "telefonoFijo" => $data['telefonoFijoContacto'],
                     "mail" => strtolower($data['correoContacto']),
                     "cargo" => $data['cargoPersonaContacto']
@@ -392,13 +395,9 @@ class CotizadorController extends Controller
             'method'   => 'PUT'
         ]);
         
-        // print_r(json_encode($cliente));
         // echo Ism::BASE_URL.$method.$param;
-        // echo '<pre>';
-        // print_r($cliente);
-        // echo '</pre>';
-        // dump($cliente);
-        // dd($response);
+        // dump($response);
+        // dd(json_encode($cliente, JSON_PRETTY_PRINT));
 
         if($response->code != 200){
             session()->flash('mensaje', $response->message);

@@ -23,6 +23,8 @@
                 @if(isset($edit) && $edit === true)
                 <form class="card-body" id="form-registro" action="/cotizador/actualizar-cliente" method="POST">
                     <input type="hidden" name="codigoCliente" id="codigoCliente" value="{{ $codigoCliente }}">
+                    <input type="hidden" name="secuenciaContacto" id="secuenciaContacto" value="{{ $cliente->datosContacto[0]->secuenciaContacto }}">
+                    <input type="hidden" name="statusContacto" id="statusContacto" value="load">
                     @if(isset($cliente->infoEmpresarial->contactoEmpresarial))
                     <input type="hidden" name="idContacto" id="idContacto" value="{{ $cliente->infoEmpresarial->contactoEmpresarial->idContacto }}">
                     @else
@@ -437,8 +439,43 @@
     <script>
         let modalGiroNegocio;
         let localidades = [];
+        let cliente = null;
         @if(!isset($edit))
-        let dataLocalidades = "{{ old('dataLocalidades', isset($cliente) ? $cliente->localidades : '' ) }}";
+            let dataLocalidades = "{{ old('dataLocalidades', isset($cliente) ? $cliente->localidades : '' ) }}";
+        @else
+            cliente = @json($cliente);
+            const originalData = cliente.datosContacto[0];
+
+            function hasChanges() {
+                for (const key in originalData) {
+                    const input = document.getElementById(key);
+                    if (input && input.value !== originalData[key]) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            // Escuchar cambios en los inputs
+            function addInputListeners() {
+                Object.keys(originalData).forEach(key => {
+                    const input = document.getElementById(key);
+                    if (input) {
+                        input.addEventListener("input", () => {
+                            if (hasChanges()) {
+                                console.log("Hay cambios en el formulario");
+                                $('#statusContacto').val("edit");
+                            } else {
+                                console.log("No hay cambios");
+                                $('#statusContacto').val("load");
+                            }
+                        });
+                    }
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", addInputListeners);
+
         @endif
         
         let allowCall = true;
@@ -643,9 +680,9 @@
                         "nombreCiudad": getHtmlSelect('ciudad'),
                         "direccion": getInput('direccion'),
                         "email": getInput('correoEmpresa'),
-                        "codigoPaisMovil": getInput('telefonoMovilOficinaCode'),
+                        "codigoPaisMovil": parseInt(getInput('telefonoMovilOficinaCode')),
                         "telefonoMovil": getInput('telefonoMovilOficina'),
-                        "codigoPaisFijo": getInput('telefonoFijoOficinaCode'),
+                        "codigoPaisFijo": parseInt(getInput('telefonoFijoOficinaCode')),
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     });
                     console.log(localidades);
@@ -666,9 +703,9 @@
                         "nombreCiudad": getHtmlSelect('ciudad'),
                         "direccion": getInput('direccion'),
                         "email": getInput('correoEmpresa'),
-                        "codigoPaisMovil": getInput('telefonoMovilOficinaCode'),
+                        "codigoPaisMovil": parseInt(getInput('telefonoMovilOficinaCode')),
                         "telefonoMovil": getInput('telefonoMovilOficina'),
-                        "codigoPaisFijo": getInput('telefonoFijoOficinaCode'),
+                        "codigoPaisFijo": parseInt(getInput('telefonoFijoOficinaCode')),
                         "telefonoFijo": getInput('telefonoFijoOficina')
                     }
 

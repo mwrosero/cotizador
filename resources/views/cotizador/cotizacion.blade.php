@@ -1221,7 +1221,7 @@
         });
 
         $('body').on('click', '.item-prestadores', function(){
-            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'), $(this).attr('idGrupo-rel'));
+            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'), $(this).attr('idGrupo-rel'),'individual');
         })
 
         $('body').on('click', '.item-edit', function(){
@@ -2544,7 +2544,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'masivo');
+                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2556,7 +2556,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2612,13 +2612,13 @@
                 "status": "edit"
             })
         })
-
+//
         let dataPrestacionesTmp = [...dataPrestaciones];
         for (const localidad of dataPrestacionesTmp) {
             for (const grupo of localidad.grupos) {
                 //Reemplazar costos de provincias
                 for (const prestacion of grupo.prestaciones) {
-                    let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'masivo');
+                    let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
                     if( costo_alterno != null){
                         prestacion.costoUnitario = costo_alterno;
                     }
@@ -2630,7 +2630,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2704,7 +2704,7 @@
             $('#btn-crear-cotizacion').prop('disabled',false);
             showMessage('success','Atención',"Cotización actualizada");
             // location.href = '/cotizador/consulta-cotizaciones';
-            location.reload();
+            //location.reload();
         }else{
             showMessage('warning','Atención',data.message);
             $('#btn-crear-cotizacion').prop('disabled',false);
@@ -2738,7 +2738,15 @@
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.grupos, function(k, v){
                     $.each(v.prestaciones, function(k1, v1){
-                        let costo_alterno = obtenerCostoPorId(v1.codigoPrestacion);
+                        let costo_alterno = obtenerCostoPorId(value.codigoCiudad,v1.codigoPrestacion,'masivo');
+                        let costo_alterno_individual = obtenerCostoPorId(value.codigoCiudad,v1.codigoPrestacion,'individual');
+                        console.log("-----AKOLD-----")
+                        console.log(costo_alterno,costo_alterno_individual);
+                        if(costo_alterno_individual != null){
+                            costo_alterno = costo_alterno_individual
+                        }
+                        console.log(costo_alterno,costo_alterno_individual);
+                        console.log("----------")
                         if( costo_alterno == null){
                             total_costos += (v1.costoUnitario*v1.cantidadPacientes);
                         }else{
@@ -3091,7 +3099,7 @@ tableHtml += '</table>';
 
 $('#tableContainer').html(tableHtml);
 */
-    function drawTablePrestadores(data){
+    function drawTablePrestadores(data, type = ""){
         let dataGrouped = agruparDatos(data)
         console.log({dataGrouped})
         
@@ -3133,7 +3141,7 @@ $('#tableContainer').html(tableHtml);
             theader += `</tr>`;
             $('#box-prestadores-list-th').html(theader);
 
-            //institucionesArr = []; 
+            //institucionesArr = [];  
             let prestacionesArr = []
             let tbody = ``;
             $.each(data.data, function(key, value){
@@ -3148,7 +3156,7 @@ $('#tableContainer').html(tableHtml);
                 })
             })
             $('#box-prestadores-list').html(tbody);
-            asignTdCostos(dataGrouped);
+            asignTdCostos(dataGrouped, type);
             $('#modalPrestadores').modal('show');
         }else{
             showMessage('warning','Atención',"La prestación seleccionada no tiene prestadores externos asociados.");
@@ -3164,7 +3172,7 @@ $('#tableContainer').html(tableHtml);
         return elemTd;
     }
 
-    function asignTdCostos(dataGrouped){
+    function asignTdCostos(dataGrouped, type = ""){
         console.log({dataGrouped});
         $.each(dataGrouped, function(key,value){
             $.each(value.listadoCiudades, function(k, v){
@@ -3172,9 +3180,15 @@ $('#tableContainer').html(tableHtml);
                     let thId = 'th_'+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
                     let position = $('#box-prestadores-list-th .tr_second th#' + thId).index();
                     let isChecked = "";
-                    if(existeItemPorIdentificador(costosPrestadores,v.codigoCiudad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion)){
-                        isChecked = "checked";
+                    if(existeItemPorIdentificador(costosPrestadores,v.codigoLocalidad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion)){
+                        if(type != ""){
+                            isChecked = "checked";
+                        } 
                     }
+                    console.log("**************")
+                    console.log(costosPrestadores,v.codigoLocalidad+"_"+v.codigoCiudad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion);
+                    console.log(v);
+                    console.log("**************")
 
                     let elem = `<div class="w-100 d-flex align-items-center">
                                     <input type="checkbox" name="ck_prestacion_costo[${value.codigoPrestacion}_${ v.codigoLocalidad }][]" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoLocalidad }" identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacionLocalidad="${value.codigoPrestacion}_${ v.codigoLocalidad }" ${isChecked}>
@@ -3187,6 +3201,7 @@ $('#tableContainer').html(tableHtml);
     }
 
     function existeItemPorIdentificador(array, identificador) {
+        console.log(identificador);
         return array.some(function(item) {
             return item.identificador === identificador;
         });
@@ -3298,7 +3313,8 @@ $('#tableContainer').html(tableHtml);
     }
 
     let idGrupoPrestadorSeleccionado = null;
-    async function obtenerPrestadores(id = null, idCiudades = null, idGrupo = null){
+    async function obtenerPrestadores(id = null, idCiudades = null, idGrupo = null, type=""){
+        console.log(id, idCiudades, idGrupo)
         //let ciudades = getInput('ciudadChequeo','select2');
         let ciudades = [];
         /*if(ciudades == ""){
@@ -3339,8 +3355,10 @@ $('#tableContainer').html(tableHtml);
         })
 
         const data = await call(args);
+        // console.log("++++++++++++++++++++++++++");
         // console.log(data);
-        drawTablePrestadores(data);
+        // console.log("++++++++++++++++++++++++++");
+        drawTablePrestadores(data, type);
     }
 
     async function obtenerEntidadesAfiliadas(){
@@ -3382,14 +3400,16 @@ $('#tableContainer').html(tableHtml);
         })
     }
 
-    function obtenerCostoPorId(idPrestacion, type) {
+    function obtenerCostoPorId(codigoCiudad,idPrestacion, type) {
         // Utilizamos el método find() para buscar el objeto que tenga el idPrestacion específico
+        console.log(costosPrestadores)
+        console.table(codigoCiudad,idPrestacion, type)
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
-            return prestacion.idPrestacion === idPrestacion && type == prestacion.tipo;
+            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad;
         });
 
         // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
-        return prestacionEncontrada ? prestacionEncontrada.costo : null;
+        return (prestacionEncontrada != undefined) ? prestacionEncontrada.costo : null;
     }
 
     function search(){
