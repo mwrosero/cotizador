@@ -60,7 +60,8 @@ async function call(args){
         myHeaders.append("Content-Type", "application/json");
         requestOptions.headers = myHeaders;
     }
-        
+    
+    myHeaders.append("Accept","application/json");
     myHeaders.append("Application", _application);
     myHeaders.append("IdOrganizacion", _idOrganizacion);
     myHeaders.append("Authorization","Bearer "+ _token);
