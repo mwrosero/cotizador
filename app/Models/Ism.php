@@ -15,8 +15,11 @@ class Ism extends Model
     //PROD
     // public const BASE_URL = 'https://api.phantomx.com.ec';
     public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
-    public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
-    // public const IDORGANIZACION = 'adf4e264-cd20-4653-9a44-025b13050992';
+    
+    // dev
+    //public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
+    // test
+    public const IDORGANIZACION = 'adf4e264-cd20-4653-9a44-025b13050992';
     
     public const CODIGOSUCURSAL = 12;
     public const PERPAGE = 10;
