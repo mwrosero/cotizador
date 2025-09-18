@@ -22,7 +22,7 @@ class SeguridadesController extends Controller
         $user = $data['user'];
         $password = $data['password'];
 
-        $method = '/seguridad/v1/usuarios/verificacion_cuenta';
+        $method = '/seguridadtest/v1/usuarios/verificacion_cuenta';
         $param = '?usuario='.strtoupper($user);
 
         $response = Ism::call([
@@ -34,7 +34,7 @@ class SeguridadesController extends Controller
         
 
         if($response->code == 200){
-            $method = '/seguridad/v1/autenticacion/login';
+            $method = '/seguridadtest/v1/autenticacion/login';
 
             /*$response = Ism::call([
                 'endpoint'  => Ism::BASE_URL.$method,
@@ -51,7 +51,7 @@ class SeguridadesController extends Controller
             $response = json_decode($res->body());
 
             //dd($response);
-            /*$method = '/seguridad/v1/usuarios/'.$response->data->secuenciaUsuario;
+            /*$method = '/seguridadtest/v1/usuarios/'.$response->data->secuenciaUsuario;
             $response = Ism::call([
                 'endpoint' => Ism::BASE_URL.$method.$param,
                 'token'    => $response->data->idToken,
@@ -64,7 +64,7 @@ class SeguridadesController extends Controller
                         Session::put('userData', $response->data);
                         Session::put('accessToken', $response->data->idToken);
                         
-                        $method = '/seguridad/v1/usuarios/'.$response->data->secuenciaUsuario.'/modulos_opciones_acceso';
+                        $method = '/seguridadtest/v1/usuarios/'.$response->data->secuenciaUsuario.'/modulos_opciones_acceso';
                         $param = '?codigoSucursal='.Ism::CODIGOSUCURSAL;
 
                         $response = Ism::call([
@@ -112,7 +112,7 @@ class SeguridadesController extends Controller
         $data = $request->all();
         $user = $data['user'];
 
-        $method = '/seguridad/v1/usuarios/solicitud_recuperacion_clave';
+        $method = '/seguridadtest/v1/usuarios/solicitud_recuperacion_clave';
 
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method,
@@ -138,7 +138,7 @@ class SeguridadesController extends Controller
 
     public function actualizarClave(Request $request){
         $data = $request->all();
-        $method = '/seguridad/v1/usuarios/recuperacion_clave';
+        $method = '/seguridadtest/v1/usuarios/recuperacion_clave';
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method,
             //'token'    => Ism::getToken(),
@@ -158,7 +158,7 @@ class SeguridadesController extends Controller
     /*Refresh Token*/
     public function refreshToken(){
         $info = Session::get('userData');
-        $method = '/seguridad/v1/autenticacion/refresh_token';
+        $method = '/seguridadtest/v1/autenticacion/refresh_token';
         $response = Ism::call([
             'endpoint'  => Ism::BASE_URL.$method,
             'data'      => ["refreshToken" => $info->refreshToken],
