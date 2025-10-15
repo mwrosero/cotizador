@@ -12,9 +12,18 @@ class Ism extends Model
     use HasFactory;
     //DEV
     public const BASE_URL = 'https://api-phantomx.veris.com.ec';   
+    public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
+    public const PASSWORD_VERIS_GENERIC = 'Cl@ve1234';
+    public const WAR_SEGURIDAD = 'seguridadtest';
+
+
     //PROD
     // public const BASE_URL = 'https://api.phantomx.com.ec';
     public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
+    public const APPLICATION_GENERIC = 'UEhBTlRPTVhfQkFDS0VORA==';
+    // public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
+    // public const PASSWORD_VERIS_GENERIC = 'B@Ck3nFID3Liz@C10N!2025$$';
+    // public const WAR_SEGURIDAD = 'seguridad';
     
     // dev
     //public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';

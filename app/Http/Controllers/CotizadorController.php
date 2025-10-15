@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Http;
 
 use App\Models\Ism;
 
@@ -129,12 +130,29 @@ class CotizadorController extends Controller
             ->with('data',$response);
     }
 
+    public function getGenericToken(){
+        $method = '/'.Ism::WAR_SEGURIDAD.'/v1/autenticacion/login';
+        $user = Ism::USER_VERIS_GENERIC;
+        $password = Ism::PASSWORD_VERIS_GENERIC;
+        $res =  Http::withOptions([
+                    'verify' => false, // Desactivar verificación de certificados
+                ])->withHeaders([
+                    'Application' => Ism::APPLICATION_GENERIC,
+                    'Authorization' => 'Basic '.base64_encode(strtoupper($user) .":". $password),
+                ])->post(Ism::BASE_URL.$method);
+        $response = json_decode($res->body());
+        return $response->data->idToken;
+    }
+
     public function visualizarCotizacion($idCotizacion){
-        $method = '/empresarial/v1/cotizacion/resumen?idCotizacion='.base64_decode($idCotizacion);
         
+        // dd($response);
+        $accessToken = $this->getGenericToken();
+        
+        $method = '/empresarial/v1/cotizacion/resumen?idCotizacion='.base64_decode($idCotizacion);
         $response = Ism::call([
             'endpoint' => Ism::BASE_URL.$method,
-            'token'    => '',
+            'token'    => $accessToken,
             'method'   => 'GET'
         ]);
 
