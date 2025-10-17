@@ -157,8 +157,8 @@ class CotizadorController extends Controller
             'method'   => 'GET'
         ]);
 
-        echo Ism::BASE_URL.$method;
-        dd($response);
+        // echo Ism::BASE_URL.$method;
+        // dd($response);
         return view('cotizador.visualizarCotizador')
             ->with('data',$response->data)
             ->with('idCotizacion',base64_decode($idCotizacion));
