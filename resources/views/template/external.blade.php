@@ -79,6 +79,7 @@
             let _token = "";
             const _application = "{{ \App\Models\Ism::APPLICATION }}";
             const _idOrganizacion = "{{ \App\Models\Ism::IDORGANIZACION }}";
+            const _applicationGeneric = "{{ \App\Models\Ism::APPLICATION_GENERIC }}";
             const api_url = "{{ \App\Models\Ism::BASE_URL }}";
             const url_site = "{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}";
         </script>
@@ -138,6 +139,6 @@
     {{-- <script src="../../assets/js/typeahead.bundle.js"></script> --}}
 
     <!-- ISM -->
-    <script src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/js/ism-helper.js?v=1.0.0"></script>
+    <script src="{{ request()->getHost() === '127.0.0.1' ? url('/') : secure_url('/') }}/assets/js/ism-helper.js?v=1.0.1"></script>
     </body>
 </html>

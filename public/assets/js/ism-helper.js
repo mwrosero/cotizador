@@ -62,11 +62,12 @@ async function call(args){
     }
     
     myHeaders.append("Accept","application/json");
-    myHeaders.append("Application", _application);
     myHeaders.append("IdOrganizacion", _idOrganizacion);
     if(args.hasOwnProperty('genericToken')){
+        myHeaders.append("Application", _applicationGeneric);
         myHeaders.append("Authorization","Bearer "+ args.genericToken);
     }else{
+        myHeaders.append("Application", _application);
         myHeaders.append("Authorization","Bearer "+ _token);
     }
 
