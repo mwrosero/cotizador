@@ -124,10 +124,10 @@
             }
         });
     });
-
+    console.log("{{ $genericToken }}")
     async function  aprobarCotizacion() {
         let args = [];
-        https://api-phantomx.veris.com.ec/empresarial/v1/cotizacion/aceptacion?idCotizacion=122
+        //https://api-phantomx.veris.com.ec/empresarial/v1/cotizacion/aceptacion?idCotizacion=122
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/aceptacion?idCotizacion={{ $idCotizacion }}";
         args["method"] = "POST";
         args["bodyType"] = "json";

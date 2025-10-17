@@ -141,6 +141,7 @@ class CotizadorController extends Controller
                     'Authorization' => 'Basic '.base64_encode(strtoupper($user) .":". $password),
                 ])->post(Ism::BASE_URL.$method);
         $response = json_decode($res->body());
+        // dd($response);
         return $response->data->idToken;
     }
 

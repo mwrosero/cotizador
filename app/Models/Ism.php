@@ -12,7 +12,7 @@ class Ism extends Model
     use HasFactory;
     //DEV
     public const BASE_URL = 'https://api-phantomx.veris.com.ec';   
-    public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
+    public const USER_VERIS_GENERIC = 'BACKENDPHANTOM';
     public const PASSWORD_VERIS_GENERIC = 'Cl@ve1234';
     public const WAR_SEGURIDAD = 'seguridadtest';
 
