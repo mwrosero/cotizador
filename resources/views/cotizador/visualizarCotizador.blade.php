@@ -131,6 +131,7 @@
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/aceptacion?idCotizacion={{ $idCotizacion }}";
         args["method"] = "POST";
         args["bodyType"] = "json";
+        args["genericToken"] = "{{ $genericToken }}";
         args["showLoader"] = true;
         //args["data"] = [];
 

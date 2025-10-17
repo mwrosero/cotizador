@@ -64,7 +64,11 @@ async function call(args){
     myHeaders.append("Accept","application/json");
     myHeaders.append("Application", _application);
     myHeaders.append("IdOrganizacion", _idOrganizacion);
-    myHeaders.append("Authorization","Bearer "+ _token);
+    if(args.hasOwnProperty('genericToken')){
+        myHeaders.append("Authorization","Bearer "+ args.genericToken);
+    }else{
+        myHeaders.append("Authorization","Bearer "+ _token);
+    }
 
     if(args.method == "POST" || args.method == "PUT" || args.method == "DELETE"){
         if(args.data){

@@ -161,6 +161,7 @@ class CotizadorController extends Controller
         // dd($response);
         return view('cotizador.visualizarCotizador')
             ->with('data',$response->data)
+            ->with('genericToken',$accessToken)
             ->with('idCotizacion',base64_decode($idCotizacion));
     }
 
