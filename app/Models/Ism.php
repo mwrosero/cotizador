@@ -11,25 +11,23 @@ class Ism extends Model
 {
     use HasFactory;
     //DEV
-    // public const BASE_URL = 'https://api-phantomx.veris.com.ec';   
-    // public const USER_VERIS_GENERIC = 'BACKENDPHANTOM';
-    // public const PASSWORD_VERIS_GENERIC = 'Cl@ve1234';
-    // public const WAR_SEGURIDAD = 'seguridadtest';
-
+    public const BASE_URL = 'https://api-phantomx.veris.com.ec';   
+    public const USER_VERIS_GENERIC = 'BACKENDPHANTOM';
+    public const PASSWORD_VERIS_GENERIC = 'Cl@ve1234';
+    public const WAR_SEGURIDAD = 'seguridadtest';
+    public const IDORGANIZACION = 'adf4e264-cd20-4653-9a44-025b13050992';
 
     //PROD
-    public const BASE_URL = 'https://api.phantomx.com.ec';
-    public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
-    public const APPLICATION_GENERIC = 'UEhBTlRPTVhfQkFDS0VORA==';
-    public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
-    public const PASSWORD_VERIS_GENERIC = 'B@Ck3nFID3Liz@C10N!2025$$';
-    public const WAR_SEGURIDAD = 'seguridad';
-    public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
+    // public const BASE_URL = 'https://api.phantomx.com.ec';
+    // public const APPLICATION = 'UEhBTlRPTVhfRU1QUkVTQVJJQUw=';
+    // public const APPLICATION_GENERIC = 'UEhBTlRPTVhfQkFDS0VORA==';
+    // public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
+    // public const PASSWORD_VERIS_GENERIC = 'B@Ck3nFID3Liz@C10N!2025$$';
+    // public const WAR_SEGURIDAD = 'seguridad';
+    // public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
     
     // dev
     //public const IDORGANIZACION = '365509c8-9596-4506-a5b3-487782d5876e';
-    // test
-    // public const IDORGANIZACION = 'adf4e264-cd20-4653-9a44-025b13050992';
     
     public const CODIGOSUCURSAL = 12;
     public const PERPAGE = 10;
