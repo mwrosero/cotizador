@@ -17,7 +17,6 @@ class Ism extends Model
     public const WAR_SEGURIDAD = 'seguridadtest';
     public const IDORGANIZACION = 'adf4e264-cd20-4653-9a44-025b13050992';
     public const APPLICATION_GENERIC = 'UEhBTlRPTVhfQkFDS0VORA==';
-    public const USER_VERIS_GENERIC = 'BACKENDFIDELIZACION';
 
     //PROD
     // public const BASE_URL = 'https://api.phantomx.com.ec';
