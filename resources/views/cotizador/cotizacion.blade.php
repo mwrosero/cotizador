@@ -2920,7 +2920,7 @@
 
     async function obtenerNivel1(){
         let args = [];
-        args["endpoint"] = api_url+"/comercial/v1/convenios/consulta_servicios_primer_nivel/?idTarifario=1-1-4";
+        args["endpoint"] = api_url+"/comercial/v1/convenios/consulta_servicios_primer_nivel?idTarifario=1-1-4";
         args["method"] = "GET";
         args["bodyType"] = "json";
         args["showLoader"] = false;
@@ -2981,7 +2981,7 @@
 
     async function obtenerPrestaciones(){
         let args = [];
-        args["endpoint"] = api_url+"/comercial/v1/tarifarios/1-1-4/detalle/?idTarifario=1-1-4&incluirPrestacionesNoParametrizadas=false";
+        args["endpoint"] = api_url+"/comercial/v1/tarifarios/1-1-4/detalle?idTarifario=1-1-4&incluirPrestacionesNoParametrizadas=false";
         args["method"] = "GET";
         args["bodyType"] = "json";
         args["showLoader"] = false;
