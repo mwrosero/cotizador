@@ -1115,7 +1115,10 @@
                 // console.log(prestacion);
                 // console.log({costoUnitario});
 
-                let idItem = localidad+"_"+grupo+"_"+inputChanged.attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion;
+                let localidadAnatomicaStr = (prestacion.codigoLocalidadAnatomica !== null) ? `_${prestacion.codigoLocalidadAnatomica}` : ``;
+                
+                let idItem = localidad+"_"+grupo+"_"+inputChanged.attr("codigoServicio-rel")+"_"+prestacion.codigoPrestacion+localidadAnatomicaStr;
+                console.log({idItem})
 
                 prestacionesEliminadas = $.grep(prestacionesEliminadas, function(valor) {
                     return valor !== idItem;
@@ -1126,6 +1129,7 @@
                     "idItem":idItem,
                     "codigoPrestacion": parseInt(prestacion.codigoPrestacion),
                     "nombrePrestacion": prestacion.nombrePrestacion,
+                    "codigoLocalidadAnatomica": parseInt(prestacion.codigoLocalidadAnatomica),
                     "codigoServicio": parseInt(inputChanged.attr("codigoServicio-rel")),
                     "nombreServicio": inputChanged.attr("nombreServicio-rel"),
                     "cantidadPacientes": parseInt(inputChanged.val()),
@@ -1149,7 +1153,7 @@
                 };
 
                 let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
-                    return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                    return (item.codigoPrestacion === prestacionObj.codigoPrestacion && item.codigoLocalidadAnatomica === prestacionObj.codigoLocalidadAnatomica);
                 });
 
                 if (prestacionExistenteIndex !== -1) {
@@ -1169,7 +1173,7 @@
                         let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
                         // console.log(grupoExistente);
                         let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
-                            return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                            return (item.codigoPrestacion === prestacionObj.codigoPrestacion && item.codigoLocalidadAnatomica === prestacionObj.codigoLocalidadAnatomica);
                         });
 
                         // Si la prestación existe en el grupo, se elimina
@@ -1193,7 +1197,7 @@
                         let grupoExistente = dataPrestaciones[localidadIndex].grupos[grupoIndex];
                         // console.log(grupoExistente);
                         let prestacionExistenteIndex = grupoExistente.prestaciones.findIndex(function(item) {
-                            return item.codigoPrestacion === prestacionObj.codigoPrestacion;
+                            return (item.codigoPrestacion === prestacionObj.codigoPrestacion && item.codigoLocalidadAnatomica === prestacionObj.codigoLocalidadAnatomica);
                         });
 
                         // Si la prestación existe en el grupo
@@ -1221,7 +1225,13 @@
         });
 
         $('body').on('click', '.item-prestadores', function(){
-            obtenerPrestadores($(this).attr('idPrestacion-rel'), $(this).attr('idCiudad-rel'), $(this).attr('idGrupo-rel'),'individual');
+            let prestacion = {
+                "codigoServicio": parseInt($(this).attr('codigoServicio-rel')),
+                "codigoPrestacion": parseInt($(this).attr('idPrestacion-rel')),
+                "codigoLocalidadAnatomica": parseInt($(this).attr('codigoLocalidadAnatomica-rel')),
+                "cantidadPacientes": parseInt($(this).attr('cantidadPacientes-rel'))
+            }
+            obtenerPrestadores(prestacion, $(this).attr('idCiudad-rel'), $(this).attr('idGrupo-rel'), $(this).attr('codigoLocalidadAnatomica-rel'),'individual');
         })
 
         $('body').on('click', '.item-edit', function(){
@@ -1750,7 +1760,7 @@
                                         <td id="total_${ v.idItem }">$${ formatDollar(v.precioUnitario*v.cantidadPacientes) }</td>
                                         <td width="100px" class="text-end align-middle">
                                             <div class="d-flex justify-content-center">
-                                                <a idPrestacion-rel="${ v.codigoPrestacion }" idCiudad-rel="${vp.codigoCiudad}" idGrupo-rel="${ vg.codigoGrupo }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
+                                                <a idPrestacion-rel="${ v.codigoPrestacion }" codigoServicio-rel="${ v.codigoServicio }" idCiudad-rel="${vp.codigoCiudad}" idGrupo-rel="${ vg.codigoGrupo }" cantidadPacientes-rel="${v.cantidadPacientes}" codigoLocalidadAnatomica-rel="${ v.codigoLocalidadAnatomica }" title="Ver Prestadores" href="javascript:;" class="btn btn-sm btn-icon pt-1 item-prestadores">
                                                     <i class="fa-solid fa-eye text-info align-items-center justify-content-center"></i>
                                                 </a>
                                                 <a idItem-rel="${ v.idItem }" secuenciaLocalidad-rel="${ vp.secuenciaLocalidad }" codigoGrupo-rel="${ vg.codigoGrupo }" title="Editar" href="javascript:;" class="btn btn-sm btn-icon item-edit align-items-center justify-content-center" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasPrestacion" aria-controls="offcanvasPrestacion">
@@ -3005,17 +3015,14 @@
                                 <div class="card-body content">
                                     <ul class="p-0 m-0">`
                     $.each(v1.prestaciones, function(k2, v2){
+                        let localidadAnatomicaStr = (v2.codigoLocalidadAnatomica !== null) ? `_${v2.codigoLocalidadAnatomica}` : ``;
                         elem += `       <li class="mb-1 d-flex align-items-center">
                                             <input type="checkbox" id="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="me-2 ck-input-prestacion">
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="flex-fill fs-10">${ v2.nombrePrestacion } (${v2.codigoPrestacion})</label>
                                             <div title="Cantidad" class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}'>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }${localidadAnatomicaStr}" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}'>
                                             </div>
-                                            <!--div title="Precio" class="align-self-start input-group input-price ms-2">
-                                                <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-dollar-sign"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" id="price_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion price_input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}' value="${v2.pvpBaseOriginal}">
-                                            </div-->
                                         </li>`;
                     })
                     elem += `           </ul>
@@ -3313,8 +3320,10 @@ $('#tableContainer').html(tableHtml);
     }
 
     let idGrupoPrestadorSeleccionado = null;
-    async function obtenerPrestadores(id = null, idCiudades = null, idGrupo = null, type=""){
-        console.log(id, idCiudades, idGrupo)
+    
+    async function obtenerPrestadores(prestacion = null, idCiudades = null, idGrupo = null, codigoLocalidadAnatomica = null, type=""){
+        console.log(prestacion, idCiudades, idGrupo, codigoLocalidadAnatomica, type)
+        // return;
         //let ciudades = getInput('ciudadChequeo','select2');
         let ciudades = [];
         /*if(ciudades == ""){
@@ -3322,7 +3331,7 @@ $('#tableContainer').html(tableHtml);
             return;
         }*/
         let prestaciones = [];
-        if(id == null){
+        if(prestacion == null){
             idGrupoPrestadorSeleccionado = null;
             ciudades = await getCiudadesDeLocalidades();
             $.each(dataPrestaciones, function(key, value){
@@ -3331,16 +3340,31 @@ $('#tableContainer').html(tableHtml);
                         let id = v1.codigoPrestacion;
                         if ($.inArray(id, prestaciones) !== -1) {
                             var indice = $.inArray(id, prestaciones);
-                            prestaciones[indice] = id;
+                            // prestaciones[indice] = id;
+                            console.log("1111")
+                            prestaciones[indice] = {
+                              "codigoServicio": v1.codigoServicio,
+                              "codigoPrestacion": v1.codigoPrestacion,
+                              "codigoLocalidadAnatomica": v1.codigoLocalidadAnatomica,
+                              "cantidadPacientes": v1.cantidadPacientes
+                            };
                         } else {
-                            prestaciones.push(id);
+                            console.log("2222")
+                            //prestaciones.push(id);
+                            prestaciones.push({
+                              "codigoServicio": v1.codigoServicio,
+                              "codigoPrestacion": v1.codigoPrestacion,
+                              "codigoLocalidadAnatomica": v1.codigoLocalidadAnatomica,
+                              "cantidadPacientes": v1.cantidadPacientes
+                            })
                         }
                     })
                 })
             })
         }else{
+            console.log("ELSE")
             ciudades.push(idCiudades);
-            prestaciones.push(id);
+            prestaciones.push(prestacion);
             idGrupoPrestadorSeleccionado = idGrupo
         }
 
