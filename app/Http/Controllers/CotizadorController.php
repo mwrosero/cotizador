@@ -31,7 +31,7 @@ class CotizadorController extends Controller
             return redirect()->route('consulta-cotizaciones');
         }
 
-        //dd($response);
+        // dd($response);
         return view('cotizador.cotizacion')
             ->with('edit', true)
             ->with('data',$response->data);
