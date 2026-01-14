@@ -1441,51 +1441,31 @@
             $('#lugarServicio').val(lugarServicio.split(',')).trigger("change");
             let detalle = @json($data->detalle);
             console.log(detalle);
+            
             //Lleno arrays
-            /*$.each(detalle, function(key, value){
-                $('#grupoPerfil').val(value.codigoGrupo).trigger('change')
-                $.each(value.prestaciones, function(k,v){
-                    if(v.activo){
-                        // console.log(">>>>>"+v.idDetalle)
-                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
-                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
-                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
-                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("costoUnitario-rel",v.costoUnitario);
-                        let gruposRel = $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel");
-                        if(gruposRel){
-                            let gruposRelArr = gruposRel.split(',').map( Number );
-                            if(!gruposRelArr.includes(parseInt(value.codigoGrupo))){
-                                gruposRelArr.push(parseInt(value.codigoGrupo));
-                                $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",gruposRelArr.join(","))
-                            }
-                        }else{
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",parseInt(value.codigoGrupo));
-                        }
-                        $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');
-                    }
-                })
-            })*/
             $.each(detalle, function(kp, vp){
                 $('#localidad').val(vp.secuenciaLocalidad).trigger('change')
                 $.each(vp.grupos, function(kg, vg){
                     $('#grupoPerfil').val(vg.codigoGrupo).trigger('change')
                     $.each(vg.prestaciones, function(k, v){
                         if(v.activo){
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("item-loaded","S");
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("idDetalle-rel",v.idDetalle);
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("precioUnitario-rel",v.precioUnitario);
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("costoUnitario-rel",v.costoUnitario);
-                            let gruposRel = $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel");
+                            let idGen = v.codigoServicio+'_'+v.codigoPrestacion+'_'+v.codigoLocalidadAnatomica;
+                            console.log(idGen);
+                            $('.input_' + idGen).attr("item-loaded","S");
+                            $('.input_' + idGen).attr("idDetalle-rel",v.idDetalle);
+                            $('.input_' + idGen).attr("precioUnitario-rel",v.precioUnitario);
+                            $('.input_' + idGen).attr("costoUnitario-rel",v.costoUnitario);
+                            let gruposRel = $('.input_' + idGen).attr("grupos-rel");
                             if(gruposRel){
                                 let gruposRelArr = gruposRel.split(',').map( Number );
                                 if(!gruposRelArr.includes(parseInt(vg.codigoGrupo))){
                                     gruposRelArr.push(parseInt(vg.codigoGrupo));
-                                    $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",gruposRelArr.join(","))
+                                    $('.input_' + idGen).attr("grupos-rel",gruposRelArr.join(","))
                                 }
                             }else{
-                                $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).attr("grupos-rel",parseInt(vg.codigoGrupo));
+                                $('.input_' + idGen).attr("grupos-rel",parseInt(vg.codigoGrupo));
                             }
-                            $('.input_'+v.codigoServicio+'_'+v.codigoPrestacion).val(v.cantidadPacientes).trigger('change');                
+                            $('.input_' + idGen).val(v.cantidadPacientes).trigger('change');                
                         }
                     })
                 })
@@ -3030,7 +3010,7 @@
                                             <label for="ck_prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }${localidadAnatomicaStr}" class="flex-fill fs-10">${ v2.nombrePrestacion } (${v2.codigoPrestacion})</label>
                                             <div title="Cantidad" class="align-self-start input-group input-price ms-2">
                                                 <span class="input-group-text ps-1 pe-1 pt-1 pb-1 fw-bold"><i class="fa-solid fa-hashtag"></i></span>
-                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }${localidadAnatomicaStr}" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}'>
+                                                <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="prestacion_${value.codigoServicio}_${v1.codigoServicio}_${ v2.codigoPrestacion }${localidadAnatomicaStr}" class="form-control text-center fs-12 ps-1 pe-1 input-prestacion input_${v1.codigoServicio}_${ v2.codigoPrestacion }${localidadAnatomicaStr}" placeholder="" codigoServicio-rel="${v1.codigoServicio}" nombreServicio-rel='${value.nombreServicio}' prestacion-rel='${JSON.stringify(v2)}'>
                                             </div>
                                         </li>`;
                     })
