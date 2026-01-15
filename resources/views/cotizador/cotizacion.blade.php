@@ -3302,7 +3302,9 @@ $('#tableContainer').html(tableHtml);
         let ciudadesArr = [];
         $.each(dataPrestaciones, function(key,value){
             if($.inArray(value.codigoCiudad, ciudadesArr) === -1){
-                ciudadesArr.push(value.codigoCiudad)
+                if(value.codigoCiudad !== null){
+                    ciudadesArr.push(value.codigoCiudad)
+                }
             }
         })
         return ciudadesArr;
