@@ -56,9 +56,9 @@
                                         <tr>
                                             <th>Localidad</th>
                                             <th>Grupo</th>
-                                            <th>Servicio</th>
+                                            {{-- <th>Servicio</th> --}}
                                             <th>Prestación</th>
-                                            <th>Cód. Prestación</th>
+                                            {{-- <th>Cód. Prestación</th> --}}
                                             <th>Precio Unit.</th>
                                             <th>Cantidad</th>
                                             <th>Precio Total</th>
@@ -72,17 +72,17 @@
                                                     <tr class="text-uppercase">
                                                         <td>{{ $localidad->nombreLocalidad }}</td>
                                                         <td>{{ $grupo->nombreGrupo }}</td>
-                                                        <td>
+                                                        {{-- <td>
                                                             @if(isset($prestacion->nombreServicio))
                                                             {{ $prestacion->nombreServicio }}
                                                             @endif
-                                                        </td>
+                                                        </td> --}}
                                                         <td>
                                                             @if(isset($prestacion->nombrePrestacion))
                                                             {{ $prestacion->nombrePrestacion }}
                                                             @endif
                                                         </td>
-                                                        <td>{{ $prestacion->codigoPrestacion }}</td>
+                                                        {{-- <td>{{ $prestacion->codigoPrestacion }}</td> --}}
                                                         <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario, '0')), 2, '.', ',') }}</td>
                                                         <td>{{ $prestacion->cantidadPacientes }}</td>
                                                         <td>${{ number_format(floatval(ltrim($prestacion->precioUnitario * $prestacion->cantidadPacientes, '0')), 2, '.', ',') }}</td>
