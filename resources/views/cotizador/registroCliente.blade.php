@@ -23,7 +23,7 @@
                 @if(isset($edit) && $edit === true)
                 <form class="card-body" id="form-registro" action="/cotizador/actualizar-cliente" method="POST">
                     <input type="hidden" name="codigoCliente" id="codigoCliente" value="{{ $codigoCliente }}">
-                    <input type="hidden" name="secuenciaContacto" id="secuenciaContacto" value="{{ $cliente->datosContacto[0]->secuenciaContacto }}">
+                    <input type="hidden" name="secuenciaContacto" id="secuenciaContacto" value="{{ isset($cliente->datosContacto[0]->secuenciaContacto) ? $cliente->datosContacto[0]->secuenciaContacto : '' }}">
                     <input type="hidden" name="statusContacto" id="statusContacto" value="load">
                     @if(isset($cliente->infoEmpresarial->contactoEmpresarial))
                     <input type="hidden" name="idContacto" id="idContacto" value="{{ $cliente->infoEmpresarial->contactoEmpresarial->idContacto }}">
