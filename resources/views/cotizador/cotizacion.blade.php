@@ -2349,6 +2349,10 @@
     }
 
     function agregarCosto(){
+        if(getInput('costo') == ""){
+            showMessage('warning','Atención','Revisar campos ingresados');
+            return;
+        }
         let idLocalidad = parseInt(getInput('localidadCosto'));
         let nombreLocalidad = $('#localidadCosto option:selected').html();
         let idCosto = parseInt(getInput('servicioCosto'));
