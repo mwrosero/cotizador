@@ -252,7 +252,7 @@
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+idCotizacionEliminar+"/activar?activo=false";
         args["method"] = "PUT";
         args["bodyType"] = "json";
-        args["showLoader"] = false;
+        args["showLoader"] = true;
 
         const data = await call(args);
 
@@ -272,7 +272,7 @@
         args["endpoint"] = api_url+"/empresarial/v1/cotizacion/"+idCotizacion+"/estado?estadoCotizacion="+estadoCotizacion;
         args["method"] = "PUT";
         args["bodyType"] = "json";
-        args["showLoader"] = false;
+        args["showLoader"] = true;
 
         const data = await call(args);
 

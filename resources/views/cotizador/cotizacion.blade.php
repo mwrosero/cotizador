@@ -1075,12 +1075,13 @@
                 }
 
                 if(inputChanged.val() != ''){
+                    console.log(565)
                     $('#ck_'+inputChanged.attr("id")).prop('checked',true);
                     //if(inputChanged.attr('item-loaded') && inputChanged.attr('item-loaded') == "S"){);
-                    let gruposRel = $('.input_'+inputChanged.attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion).attr("grupos-rel");
+                    let gruposRel = $('.input_'+inputChanged.attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion+'_'+prestacion.codigoLocalidadAnatomica).attr("grupos-rel");
                     // Para cuando se esta editando la cotizacion
+                    console.log(gruposRel);
                     if(gruposRel){
-                        // console.log(gruposRel);
                         let gruposRelArr = gruposRel.split(',').map( Number );
                         // console.log(parseInt(grupo));
                         // console.log(gruposRelArr);
@@ -1088,10 +1089,11 @@
                             // console.log("----------")
                             // console.log("Agregar idDetalle, activo:true y status:edit");
                             idDetalle = inputChanged.attr("idDetalle-rel");
-                            // console.log(idDetalle)
+                            console.log({idDetalle})
                         }
                     }
                 }else{
+                    console.log(777)
                     $('#ck_'+inputChanged.attr("id")).prop('checked',false);
                 }
 
@@ -1154,6 +1156,8 @@
                     @endif
                     "idDetalle": parseInt(idDetalle)
                 };
+
+                console.log(prestacionObj)
 
                 let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
                     return (item.codigoPrestacion === prestacionObj.codigoPrestacion && item.codigoLocalidadAnatomica === prestacionObj.codigoLocalidadAnatomica);
@@ -1453,7 +1457,9 @@
                     $.each(vg.prestaciones, function(k, v){
                         if(v.activo){
                             let idGen = v.codigoServicio+'_'+v.codigoPrestacion+'_'+v.codigoLocalidadAnatomica;
-                            console.log(idGen);
+                            {{-- console.log(v);
+                            console.log(v.idDetalle);
+                            console.log(idGen); --}}
                             $('.input_' + idGen).attr("item-loaded","S");
                             $('.input_' + idGen).attr("idDetalle-rel",v.idDetalle);
                             $('.input_' + idGen).attr("precioUnitario-rel",v.precioUnitario);
