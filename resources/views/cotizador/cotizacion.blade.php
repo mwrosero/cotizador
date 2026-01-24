@@ -845,9 +845,11 @@
         $('body').on('click', '.ck-input-prestacion-costo:checkbox', function(){
             var $box = $(this);
             if ($box.is(":checked")) {
-                var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                {{-- var group = "input:checkbox[name='" + $box.attr("name") + "']";
                 $(group).prop("checked", false);
-                $box.prop("checked", true);
+                $box.prop("checked", true); --}}
+                var group = "input:checkbox[id='" + $box.attr("id") + "']";
+                $box.closest('div').find('input:checkbox').not($box).prop("checked", false);
             } else {
                 $box.prop("checked", false);
             }
@@ -1321,97 +1323,59 @@
         });
 
         $('body').on('change', '.ck-input-prestacion-costo', function() {
-            // Obtener el idPrestacion del grupo al que pertenece el checkbox actual
-            let itemPrestador = $(this).attr("data-idPrestacionLocalidad").split("_");
-            let idPrestacion = parseInt(itemPrestador[0]);
-            let codigoLocalidadAnatomica = $(this).attr("codigoLocalidadAnatomica-rel");
-            let idLocalidad = itemPrestador[1];
-            console.log(itemPrestador,idPrestacion,idLocalidad)
-            let costo = parseFloat($(this).val());
-            let identificador = $(this).attr("identificador-rel");
-            let idGrupo = (idGrupoPrestadorSeleccionado === null) ? '' : parseInt(idGrupoPrestadorSeleccionado);
-            // Deseleccionar todos los checkboxes del grupo actual, excepto el checkbox actual
-            $("[data-idPrestacionLocalidad='" + $(this).attr("data-idPrestacionLocalidad") + "']").not(this).prop("checked", false);
+            let $el = $(this);
             
-            if ($(this).prop("checked")) {
-                if(idGrupo == ''){
-                    // Agregar el idPrestacion y costo al array costosPrestadores si el checkbox está seleccionado
-                    // const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion);
-                    const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion && item.idLocalidad === idLocalidad && item.codigoLocalidadAnatomica == codigoLocalidadAnatomica);
-                    console.log({index});
-                    if (index !== -1) { 
-                        // Si idPrestacion ya existe, reemplazar el elemento en el array
-                        costosPrestadores[index] = {
-                            tipo: "masivo",
-                            idPrestacion: idPrestacion, 
-                            codigoLocalidadAnatomica: codigoLocalidadAnatomica,
-                            idLocalidad: idLocalidad,
-                            costo: costo, 
-                            identificador: identificador
-                        };
-                    } else {
-                        // Si no existe, hacer el push al array
-                        costosPrestadores.push({ 
-                            tipo: "masivo",
-                            idPrestacion: idPrestacion,
-                            codigoLocalidadAnatomica: codigoLocalidadAnatomica,
-                            idLocalidad: idLocalidad,
-                            costo: costo, 
-                            identificador: identificador
-                        });
-                    }
+            // Obtenemos los datos del input actual
+            let itemPrestador = $el.attr("data-idPrestacionLocalidad").split("_");
+            let idPrestacion = parseInt(itemPrestador[0]);
+            let idLocalidad = itemPrestador[1];
+            let codigoLocalidadAnatomica = $el.attr("codigoLocalidadAnatomica-rel");
+            
+            let costo = parseFloat($el.val());
+            let identificador = $el.attr("identificador-rel");
+            let idGrupo = (idGrupoPrestadorSeleccionado === null) ? '' : parseInt(idGrupoPrestadorSeleccionado);
 
-                    console.log('remove masivo')
-                    bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, null, 'remove');
-                }else{
-                    const index = costosPrestadores.findIndex(item => item.idPrestacion === idPrestacion && item.idLocalidad === idLocalidad && item.idGrupo === idGrupo && item.codigoLocalidadAnatomica == codigoLocalidadAnatomica);
-                    console.log({index});
-                    if (index !== -1) { 
-                        // Si idPrestacion ya existe, reemplazar el elemento en el array
-                        costosPrestadores[index] = {
-                            tipo: "individual",
-                            idPrestacion: idPrestacion, 
-                            idLocalidad: idLocalidad,
-                            idGrupo: idGrupo,
-                            costo: costo, 
-                            identificador: identificador
-                        };
-                    } else {
-                        // Si no existe, hacer el push al array
-                        costosPrestadores.push({
-                            tipo: "individual",
-                            idPrestacion: idPrestacion,
-                            idLocalidad: idLocalidad,
-                            idGrupo: idGrupo,
-                            costo: costo, 
-                            identificador: identificador
-                        });
-                    }
+            // Este es el ID del grupo único (Fila + Ciudad)
+            let grupoUnico = $el.attr("data-idPrestacionLocalidad");
 
-                    console.log('remove individual')
-                    bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, idGrupo, 'remove');
-                }
+            if ($el.prop("checked")) {
+                // --- SELECCIÓN ÚNICA SOLO EN ESTA FILA Y CIUDAD ---
+                // Buscamos otros checks que tengan EXACTAMENTE el mismo data-idPrestacionLocalidad
+                $(`.ck-input-prestacion-costo[data-idPrestacionLocalidad="${grupoUnico}"]`)
+                    .not(this)
+                    .prop("checked", false);
+
+                // Limpiamos el array de otros prestadores que estaban en esta misma celda (Prestación/Localidad/Anatomía)
+                costosPrestadores = costosPrestadores.filter(item => 
+                    !(item.idPrestacion === idPrestacion && 
+                      item.idLocalidad === idLocalidad && 
+                      item.codigoLocalidadAnatomica == codigoLocalidadAnatomica)
+                );
+
+                // --- AGREGAR EL NUEVO SELECCIONADO AL ARRAY ---
+                let nuevoRegistro = {
+                    tipo: (idGrupo == '') ? "masivo" : "individual",
+                    idPrestacion: idPrestacion,
+                    codigoLocalidadAnatomica: codigoLocalidadAnatomica,
+                    idLocalidad: idLocalidad,
+                    costo: costo,
+                    identificador: identificador
+                };
+                
+                if (idGrupo !== '') { nuevoRegistro.idGrupo = idGrupo; }
+                
+                costosPrestadores.push(nuevoRegistro);
+
+                // UI: Quitar alerta de costo 0
+                bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, (idGrupo == '' ? null : idGrupo), 'remove');
 
             } else {
-                // Si el checkbox está deseleccionado, eliminar el objeto correspondiente del array costosPrestadores
-                if(idGrupo == ''){
-                    console.log('add masivo')
-                    if(prestacionTieneCosto0(idPrestacion,idLocalidad,null) == 0){
-                        bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, null, 'add');
-                    }
-                    costosPrestadores = costosPrestadores.filter(function(item) {
-                        // return item.idPrestacion !== idPrestacion;
-                        return item.idPrestacion !== idPrestacion || item.idLocalidad !== idLocalidad;
-                    });
-                }else{
-                    console.log('add individual')
-                    if(prestacionTieneCosto0(idPrestacion,idLocalidad,idGrupo) == 0){
-                        bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, idGrupo, 'add');
-                    }
-                    costosPrestadores = costosPrestadores.filter(function(item) {
-                        // return item.idPrestacion !== idPrestacion;
-                        return item.idPrestacion !== idPrestacion || item.idLocalidad !== idLocalidad || item.idGrupo !== idGrupo;
-                    });
+                // --- AL DESMARCAR MANUALMENTE ---
+                costosPrestadores = costosPrestadores.filter(item => item.identificador !== identificador);
+
+                // UI: Si la celda quedó vacía, marcar alerta
+                if (prestacionTieneCosto0(idPrestacion, idLocalidad, (idGrupo == '' ? null : idGrupo)) == 0) {
+                    bg_costo_0(idPrestacion, codigoLocalidadAnatomica, idLocalidad, (idGrupo == '' ? null : idGrupo), 'add');
                 }
             }
 
@@ -3188,20 +3152,79 @@ $('#tableContainer').html(tableHtml);
                     let thId = 'th_'+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
                     let position = $('#box-prestadores-list-th .tr_second th#' + thId).index();
                     let isChecked = "";
-                    if(existeItemPorIdentificador(costosPrestadores,v.codigoLocalidad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion)){
+                    if(existeItemPorIdentificador(costosPrestadores,v.codigoLocalidad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion+"_"+value.codigoLocalidadAnatomica)){
                         if(type != ""){
                             isChecked = "checked";
                         } 
                     }
 
                     let elem = `<div class="w-100 d-flex align-items-center">
-                                    <input type="checkbox" name="ck_prestacion_costo[${value.codigoPrestacion}_${ v.codigoLocalidad }][]" id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoLocalidad }_${ value.codigoLocalidadAnatomica }" codigoLocalidadAnatomica-rel="${value.codigoLocalidadAnatomica}" identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}_${value.codigoLocalidadAnatomica}" class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" value="${v1.valorCosto}" data-idPrestacionLocalidad="${value.codigoPrestacion}_${ v.codigoLocalidad }" ${isChecked}>
-                                    <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${ v.codigoLocalidad }" class="flex-fill fs-10">$${ formatDollar(v1.valorCosto) }</label>
-                                </div>`;
-                    $('#prestacion_'+value.codigoPrestacion+'_'+value.codigoLocalidadAnatomica+'_'+position).html(elem);
+                                <input type="checkbox" 
+                                    name="ck_prestacion_costo[${value.codigoPrestacion}_${v.codigoLocalidad}][]" 
+                                    id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" 
+                                    codigoLocalidadAnatomica-rel="${value.codigoLocalidadAnatomica}" 
+                                    identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}_${value.codigoLocalidadAnatomica}" 
+                                    class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" 
+                                    value="${v1.valorCosto}" 
+                                    data-idPrestacionLocalidad="${value.codigoPrestacion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" 
+                                    ${isChecked}>
+                                <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" class="flex-fill fs-10">$${formatDollar(v1.valorCosto)}</label>
+                            </div>`;
+                    $('#prestacion_' + value.codigoPrestacion + '_' + value.codigoLocalidadAnatomica + '_' + position).html(elem);
                 })
             })
         })
+
+        refrescarEstadoCheckboxes();
+    }
+
+    function refrescarEstadoCheckboxes() {
+        // Recorremos todos los checkboxes de la tabla
+        $('.ck-input-prestacion-costo').each(function() {
+            let $input = $(this);
+            let idRel = $input.attr('identificador-rel');
+            
+            // Buscamos si este input específico existe en nuestro array global
+            // Filtramos por el identificador único (Localidad_Institucion_Prestacion_Anatomica)
+            let registros = costosPrestadores.filter(item => item.identificador === idRel);
+
+            // Limpiamos estados previos (por si se re-dibuja)
+            $input.prop('checked', false);
+            $input.parent().find('.info-individual-icon').remove();
+
+            if (registros.length > 0) {
+                let tieneMasivo = registros.some(r => r.tipo === "masivo");
+                let tieneIndividual = registros.some(r => r.tipo === "individual");
+
+                // 1. Si es masivo o mixto: Marcar Check
+                if (tieneMasivo) {
+                    $input.prop('checked', true);
+                }
+
+                // 2. Si es individual o mixto: Mostrar icono de información
+                if (tieneIndividual) {
+                    let tooltipText = "Configuración individual detectada para este prestador.";
+                    
+                    // Agregamos el icono (usando FontAwesome o un caracter)
+                    let iconHtml = `<span class="ms-1 info-individual-icon" 
+                                         style="cursor:pointer; color: #17a2b8;" 
+                                         data-bs-toggle="tooltip" 
+                                         title="${tooltipText}">
+                                        <i class="fas fa-info-circle"></i>
+                                    </span>`;
+                    
+                    $input.after(iconHtml);
+                }
+            }
+        });
+
+        // Inicializar tooltips de Bootstrap si los usas
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+        }
     }
 
     function existeItemPorIdentificador(array, identificador) {
