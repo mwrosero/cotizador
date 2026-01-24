@@ -841,6 +841,61 @@
         await obtenerPrestaciones();
         showPrestaciones();
 
+        document.addEventListener('keydown', function(e) {
+            const isCantidad = e.target.classList.contains('input-prestacion') || e.target.id === 'cantidadEdit' || e.target.id === 'costo';
+            const isPrecio = e.target.id === 'precioUnitarioEdit';
+
+            if (isCantidad) {
+                // Bloquear puntos, comas y signos (Solo enteros > 0)
+                if (['e', 'E', '.', ',', '-', '+'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            } else if (isPrecio) {
+                // Bloquear solo signos negativos y exponente (Permitir punto decimal y cero)
+                if (['e', 'E', '-', '+'].includes(e.key)) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        document.addEventListener('input', function(e) {
+            const input = e.target;
+
+            // LÓGICA PARA CANTIDADES (Enteros > 0)
+            if (input.classList.contains('input-prestacion') || input.id === 'cantidadEdit' || input.id === 'costo') {
+                let valor = input.value.replace(/[^0-9]/g, '');
+                if (valor !== '' && parseInt(valor) <= 0) {
+                    valor = ''; 
+                }
+                input.value = valor;
+            }
+
+            // LÓGICA PARA PRECIO (Decimales >= 0)
+            if (input.id === 'precioUnitarioEdit') {
+                // Si por alguna razón el valor es negativo, lo reseteamos a 0 o vacío
+                if (parseFloat(input.value) < 0) {
+                    input.value = 0;
+                }
+            }
+        });
+
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('input-prestacion') || e.target.id === 'cantidadEdit') {
+                const input = e.target;
+                
+                // 1. Eliminar cualquier caracter no numérico (por si pegan texto)
+                let valor = input.value.replace(/[^0-9]/g, '');
+
+                // 2. Forzar a que sea mayor a cero
+                // Si el usuario borra todo o pone 0, lo dejamos vacío para que el placeholder actúe
+                if (valor !== '' && parseInt(valor) <= 0) {
+                    valor = '';
+                }
+
+                input.value = valor;
+            }
+        });
+
         //$("input:checkbox").on('click', function() {
         $('body').on('click', '.ck-input-prestacion-costo:checkbox', function(){
             var $box = $(this);
@@ -1989,6 +2044,10 @@
     }
 
     async function actualizarPrestacion() {
+        if(getInput('cantidadEdit') == "" || getInput('cantidadEdit') == 0 || getInput('precioUnitarioEdit') == "" || getInput('precioUnitarioEdit') == ""){
+            showMessage('warning','Atención','Revisar campos ingresados');
+            return;
+        }
         let idItem = $('#idItemEdit').val();
         if(!$('#aplicaTodoGrupo').is(":checked")){
             console.log("Individual")
@@ -3396,7 +3455,7 @@ $('#tableContainer').html(tableHtml);
         args["endpoint"] = api_url+"/empresarial/v1/util/costos_prestadores?codigoEmpresa=1";
         args["method"] = "POST";
         args["bodyType"] = "json";
-        args["showLoader"] = false;
+        args["showLoader"] = true;
         args["data"] = JSON.stringify({
             "ciudades": ciudades,
             "prestaciones": prestaciones
