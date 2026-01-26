@@ -2649,7 +2649,7 @@
                 "status": "edit"
             })
         })
-//
+
         let dataPrestacionesTmp = [...dataPrestaciones];
         for (const localidad of dataPrestacionesTmp) {
             for (const grupo of localidad.grupos) {
@@ -2741,7 +2741,7 @@
             $('#btn-crear-cotizacion').prop('disabled',false);
             showMessage('success','Atención',"Cotización actualizada");
             // location.href = '/cotizador/consulta-cotizaciones';
-            //location.reload();
+            location.reload();
         }else{
             showMessage('warning','Atención',data.message);
             $('#btn-crear-cotizacion').prop('disabled',false);
@@ -3417,6 +3417,7 @@ $('#tableContainer').html(tableHtml);
             showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
             return;
         }*/
+        
         let prestaciones = [];
         if(prestacion == null){
             idGrupoPrestadorSeleccionado = null;
@@ -3455,14 +3456,53 @@ $('#tableContainer').html(tableHtml);
             idGrupoPrestadorSeleccionado = idGrupo
         }
 
+        let prestacionesPorLocalidad = [];
+
+        if(prestacion == null){
+            $.each(dataPrestaciones, function(key, value){
+                let codigosArea = value.codigoCiudad.split('-');
+                let prestacionesItem = [];
+                $.each(value.grupos, function(k, v){
+                    $.each(v.prestaciones, function(k1, v1){
+                        prestacionesItem.push({
+                            "codigoServicio": v1.codigoServicio,
+                            "codigoPrestacion": v1.codigoPrestacion,
+                            "codigoLocalidadAnatomica": v1.codigoLocalidadAnatomica,
+                            "cantidadPacientes": v1.cantidadPacientes
+                        })
+                    })
+                })
+                prestacionesPorLocalidad.push({
+                    "codigoPais": parseInt(codigosArea[0]),
+                    "codigoProvincia": parseInt(codigosArea[1]),
+                    "codigoCiudad": parseInt(codigosArea[2]),
+                    "prestaciones": prestacionesItem
+                })
+            })
+        }else{
+            let codigosArea = idCiudades.split('-');
+            prestacionesPorLocalidad.push({
+                "codigoPais": parseInt(codigosArea[0]),
+                "codigoProvincia": parseInt(codigosArea[1]),
+                "codigoCiudad": parseInt(codigosArea[2]),
+                "prestaciones": [
+                    prestacion
+                ]
+            })
+        }
+
+
         let args = [];
         args["endpoint"] = api_url+"/empresarial/v1/util/costos_prestadores?codigoEmpresa=1";
         args["method"] = "POST";
         args["bodyType"] = "json";
         args["showLoader"] = true;
-        args["data"] = JSON.stringify({
+        {{-- args["data"] = JSON.stringify({
             "ciudades": ciudades,
             "prestaciones": prestaciones
+        }) --}}
+        args["data"] = JSON.stringify({
+            "prestacionesPorLocalidad": prestacionesPorLocalidad
         })
 
         const data = await call(args);
