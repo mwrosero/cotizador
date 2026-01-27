@@ -1132,25 +1132,25 @@
                 }
 
                 if(inputChanged.val() != ''){
-                    console.log(565)
+                    // console.log(565)
                     $('#ck_'+inputChanged.attr("id")).prop('checked',true);
                     //if(inputChanged.attr('item-loaded') && inputChanged.attr('item-loaded') == "S"){);
                     let gruposRel = $('.input_'+inputChanged.attr("codigoServicio-rel")+'_'+prestacion.codigoPrestacion+'_'+prestacion.codigoLocalidadAnatomica).attr("grupos-rel");
                     // Para cuando se esta editando la cotizacion
-                    console.log(gruposRel);
+                    // console.log(gruposRel);
                     if(gruposRel){
                         let gruposRelArr = gruposRel.split(',').map( Number );
-                        // console.log(parseInt(grupo));
-                        // console.log(gruposRelArr);
+                        // // console.log(parseInt(grupo));
+                        // // console.log(gruposRelArr);
                         if(gruposRelArr.includes(parseInt(grupo))){
-                            // console.log("----------")
-                            // console.log("Agregar idDetalle, activo:true y status:edit");
+                            // // console.log("----------")
+                            // // console.log("Agregar idDetalle, activo:true y status:edit");
                             idDetalle = inputChanged.attr("idDetalle-rel");
-                            console.log({idDetalle})
+                            // console.log({idDetalle})
                         }
                     }
                 }else{
-                    console.log(777)
+                    // console.log(777)
                     $('#ck_'+inputChanged.attr("id")).prop('checked',false);
                 }
 
@@ -1214,7 +1214,7 @@
                     "idDetalle": parseInt(idDetalle)
                 };
 
-                console.log(prestacionObj)
+                // console.log(prestacionObj)
 
                 let prestacionExistenteIndex = dataPrestaciones[localidadIndex].grupos[grupoIndex].prestaciones.findIndex(function(item) {
                     return (item.codigoPrestacion === prestacionObj.codigoPrestacion && item.codigoLocalidadAnatomica === prestacionObj.codigoLocalidadAnatomica);
@@ -1385,6 +1385,7 @@
             let idPrestacion = parseInt(itemPrestador[0]);
             let idLocalidad = itemPrestador[1];
             let codigoLocalidadAnatomica = $el.attr("codigoLocalidadAnatomica-rel");
+            let codigoGrupo = parseInt($el.attr("codigoGrupo-rel"));
             
             let costo = parseFloat($el.val());
             let identificador = $el.attr("identificador-rel");
@@ -1404,13 +1405,15 @@
                 costosPrestadores = costosPrestadores.filter(item => 
                     !(item.idPrestacion === idPrestacion && 
                       item.idLocalidad === idLocalidad && 
-                      item.codigoLocalidadAnatomica == codigoLocalidadAnatomica)
+                      item.codigoLocalidadAnatomica === codigoLocalidadAnatomica &&
+                      item.codigoGrupo === codigoGrupo)
                 );
 
                 // --- AGREGAR EL NUEVO SELECCIONADO AL ARRAY ---
                 let nuevoRegistro = {
                     tipo: (idGrupo == '') ? "masivo" : "individual",
                     idPrestacion: idPrestacion,
+                    codigoGrupo: codigoGrupo,
                     codigoLocalidadAnatomica: codigoLocalidadAnatomica,
                     idLocalidad: idLocalidad,
                     costo: costo,
@@ -1438,7 +1441,6 @@
         });
 
         @if(isset($edit))
-            console.log('1111111111111111111');
             await buscarClientePorCodigo({{ $data->codigoCliente }});
             loadComentarios();
             $('#box-info-cliente').removeClass('d-none');
@@ -1466,7 +1468,7 @@
             let lugarServicio = "{{ $data->nemonicoLugarServicio }}";
             $('#lugarServicio').val(lugarServicio.split(',')).trigger("change");
             let detalle = @json($data->detalle);
-            console.log(detalle);
+            
             
             //Lleno arrays
             $.each(detalle, function(kp, vp){
@@ -1502,7 +1504,7 @@
             modificadoPorCarga = true;
             
             let costosAdicionales = @json($data->costosAdicionales);
-            console.log(costosAdicionales);
+            {{-- console.log(costosAdicionales); --}}
             /*$.each(costosAdicionales, function(key, value){
                 let idItem = "costo_"+value.idCosto;
                 let msg = "";
@@ -1582,7 +1584,7 @@
         args["bodyType"] = "json";
         args["showLoader"] = true;
         const data = await call(args);
-        console.log(data);
+        // console.log(data);
         if(data.code == 200){
             $.each(data.data.localidades,function(key, value){
                 $('#localidad').append(`<option class="localidad-item" codigoCiudad-rel="${value.codigoPais}-${value.codigoProvincia}-${value.codigoCiudad}" nombreCiudad-rel="${value.nombreCiudad}" value="${value.secuenciaLocalidad}">${value.nombreLocalidad}</option>`);
@@ -3145,31 +3147,35 @@ $('#tableContainer').html(tableHtml);
             $.each(data.data, function(key, value){
                 let total = 0;
                 let existenPrestadores = false;
-                $.each(value.prestaciones, function(k,v){
-                    $.each(v.prestadores, function(k1,v1){
-                        if(!institucionesArr.includes(value.codigoCiudad+"_"+v1.idInstitucion)){
-                            total++;
-                            existenPrestadores = true;
-                            institucionesArr.push(value.codigoCiudad+"_"+v1.idInstitucion);
-                        }
+                $.each(value.grupos, function(kg,vg){
+                    $.each(vg.prestaciones, function(k,v){
+                        $.each(v.prestadores, function(k1,v1){
+                            if(!institucionesArr.includes(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion)){
+                                total++;
+                                existenPrestadores = true;
+                                institucionesArr.push(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion);
+                            }
+                        })
+                        // total = v.prestadores.length;
                     })
-                    // total = v.prestadores.length;
-                })
                 // console.log({total});
-                if(existenPrestadores){
-                    theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
-                }
+                    if(existenPrestadores){
+                        theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
+                    }
+                })
             })
             institucionesArr = [];
             theader += `</tr>
                         <tr class="tr_second"><th class="fs-12">Prestadores</th>`;
             $.each(data.data, function(key, value){
-                $.each(value.prestaciones, function(k,v){
-                    $.each(v.prestadores, function(k1,v1){
-                        if(!institucionesArr.includes(value.codigoCiudad+"_"+v1.idInstitucion)){
-                            theader += `<th class="fs-12 text-center" id="th_${value.codigoCiudad+"_"+v1.idInstitucion}">${v1.nombreInstitucion}</th>`
-                            institucionesArr.push(value.codigoCiudad+"_"+v1.idInstitucion);
-                        }
+                $.each(value.grupos, function(kg,vg){
+                    $.each(vg.prestaciones, function(k,v){
+                        $.each(v.prestadores, function(k1,v1){
+                            if(!institucionesArr.includes(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion)){
+                                theader += `<th class="fs-12 text-center" id="th_${vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion}">${v1.nombreInstitucion}</th>`
+                                institucionesArr.push(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion);
+                            }
+                        })
                     })
                 })
             })
@@ -3180,14 +3186,16 @@ $('#tableContainer').html(tableHtml);
             let prestacionesArr = []
             let tbody = ``;
             $.each(data.data, function(key, value){
-                $.each(value.prestaciones, function(k,v){
-                    if(!prestacionesArr.includes(v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica)){
-                        tbody += `<tr id="tr_prestacion_${v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica}">`;
-                        tbody += `<td>${v.nombrePrestacion}</td>`;
-                        prestacionesArr.push(v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica);
-                        tbody += getTds(v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica, dataGrouped);
-                        tbody += '<tr>';
-                    }
+                $.each(value.grupos, function(kg,vg){
+                    $.each(vg.prestaciones, function(k,v){
+                        if(!prestacionesArr.includes(vg.codigoGrupo+"_"+v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica)){
+                            tbody += `<tr id="tr_prestacion_${vg.codigoGrupo+"_"+v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica}">`;
+                            tbody += `<td>${v.nombrePrestacion} - <p class="txt-veris mb-0" style="font-size: 10px;">${vg.nombreGrupo}</p></td>`;
+                            prestacionesArr.push(vg.codigoGrupo+"_"+v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica);
+                            tbody += getTds(vg.codigoGrupo+"_"+v.codigoPrestacion+"_"+v.codigoLocalidadAnatomica, dataGrouped);
+                            tbody += '<tr>';
+                        }
+                    })
                 })
             })
             $('#box-prestadores-list').html(tbody);
@@ -3199,6 +3207,8 @@ $('#tableContainer').html(tableHtml);
     }
 
     function getTds(codigoPrestacion, dataGrouped){
+        console.log("---------getTds---------")
+        console.log(codigoPrestacion, dataGrouped)
         var maxThPrestadores = $('#box-prestadores-list-th .tr_second th').length - 1;
         let elemTd = ``;
         for(var i=0; i < maxThPrestadores; i++){
@@ -3208,11 +3218,12 @@ $('#tableContainer').html(tableHtml);
     }
 
     function asignTdCostos(dataGrouped, type = ""){
-        // console.log({dataGrouped});
+        console.log("---------asignTdCostos---------")
+        console.log(dataGrouped)
         $.each(dataGrouped, function(key,value){
             $.each(value.listadoCiudades, function(k, v){
                 $.each(v.listadoPrestadores, function(k1, v1){
-                    let thId = 'th_'+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
+                    let thId = 'th_'+value.codigoGrupo+"_"+v.codigoCiudad+"_"+v1.idInstitucion; // Cambia esto al id que estés buscando
                     let position = $('#box-prestadores-list-th .tr_second th#' + thId).index();
                     let isChecked = "";
                     if(existeItemPorIdentificador(costosPrestadores,v.codigoLocalidad+"_"+v1.idInstitucion+"_"+value.codigoPrestacion+"_"+value.codigoLocalidadAnatomica)){
@@ -3226,14 +3237,15 @@ $('#tableContainer').html(tableHtml);
                                     name="ck_prestacion_costo[${value.codigoPrestacion}_${v.codigoLocalidad}][]" 
                                     id="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" 
                                     codigoLocalidadAnatomica-rel="${value.codigoLocalidadAnatomica}" 
-                                    identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}_${value.codigoLocalidadAnatomica}" 
+                                    identificador-rel="${v.codigoLocalidad}_${v1.idInstitucion}_${value.codigoPrestacion}_${value.codigoLocalidadAnatomica}" codigoGrupo-rel="${value.codigoGrupo}" 
                                     class="me-2 ck-input-prestacion-costo ck_prestacion_costo_${value.codigoPrestacion}" 
                                     value="${v1.valorCosto}" 
                                     data-idPrestacionLocalidad="${value.codigoPrestacion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" 
                                     ${isChecked}>
                                 <label for="ck_prestacion_costo_${value.codigoPrestacion}_${v1.idInstitucion}_${v.codigoLocalidad}_${value.codigoLocalidadAnatomica}" class="flex-fill fs-10">$${formatDollar(v1.valorCosto)}</label>
                             </div>`;
-                    $('#prestacion_' + value.codigoPrestacion + '_' + value.codigoLocalidadAnatomica + '_' + position).html(elem);
+                    console.log('#prestacion_'+ value.codigoGrupo + '_' + value.codigoPrestacion + '_' + value.codigoLocalidadAnatomica + '_' + position)
+                    $('#prestacion_'+ value.codigoGrupo + '_' + value.codigoPrestacion + '_' + value.codigoLocalidadAnatomica + '_' + position).html(elem);
                 })
             })
         })
@@ -3309,57 +3321,67 @@ $('#tableContainer').html(tableHtml);
         console.log("**********");
         console.log(data);
         console.log("**********");
-        let dataPrestadores = []
+        let dataPrestadores = [];
         $.each(data.data, function(key,value) {
-            $.each(value.prestaciones, function(k,v){
-                $.each(v.prestadores, function(k1,v1){
-                    dataPrestadores.push({
-                        "nombreInstitucion":v1.nombreInstitucion,
-                        "idInstitucion":v1.idInstitucion,
-                        "valorCosto":v1.valorCosto,
-                        "aplicaIva":v1.aplicaIva,
-                        "nombrePrestacion":v.nombrePrestacion,
-                        "codigoPrestacion":v.codigoPrestacion,
-                        "codigoLocalidadAnatomica": v.codigoLocalidadAnatomica,
-                        "nombreCiudad":value.nombreCiudad,
-                        "codigoCiudad":value.codigoCiudad,
-                        "codigoProvincia":value.codigoProvincia,
-                        "codigoLocalidad":value.codigoPais+"-"+value.codigoProvincia+"-"+value.codigoCiudad
+            $.each(value.grupos, function(kg,vg) {
+                $.each(vg.prestaciones, function(k,v){
+                    $.each(v.prestadores, function(k1,v1){
+                        dataPrestadores.push({
+                            "codigoGrupo":vg.codigoGrupo,
+                            "nombreGrupo":vg.nombreGrupo,
+                            "nombreInstitucion":v1.nombreInstitucion,
+                            "idInstitucion":v1.idInstitucion,
+                            "valorCosto":v1.valorCosto,
+                            "aplicaIva":v1.aplicaIva,
+                            "nombrePrestacion":v.nombrePrestacion + ' - <small>' + vg.nombreGrupo + '</small>',
+                            "codigoPrestacion":v.codigoPrestacion,
+                            "codigoLocalidadAnatomica": v.codigoLocalidadAnatomica,
+                            "nombreCiudad":value.nombreCiudad,
+                            "codigoCiudad":value.codigoCiudad,
+                            "codigoProvincia":value.codigoProvincia,
+                            "codigoLocalidad":value.codigoPais+"-"+value.codigoProvincia+"-"+value.codigoCiudad
+                        })
                     })
                 })
             })
         })
 
+        console.log(dataPrestadores);
+
         const resultado = [];
         const auxData = {};
 
         dataPrestadores.forEach((item) => {
-            const { codigoPrestacion, nombrePrestacion, codigoLocalidadAnatomica, nombreCiudad, codigoCiudad, codigoProvincia, codigoLocalidad, nombreInstitucion, idInstitucion, valorCosto, aplicaIva } = item;
+            const { codigoGrupo, nombreGrupo, codigoPrestacion, nombrePrestacion, codigoLocalidadAnatomica, nombreCiudad, codigoCiudad, codigoProvincia, codigoLocalidad, nombreInstitucion, idInstitucion, valorCosto, aplicaIva } = item;
 
-            if (!auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica]) {
-                auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica] = {
+            if (!auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica]) {
+                auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica] = {
+                    codigoGrupo,
+                    nombreGrupo,
                     codigoPrestacion,
                     nombrePrestacion,
                     codigoLocalidadAnatomica,
                     listadoCiudades: [],
                 };
-                resultado.push(auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica]);
+                resultado.push(auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica]);
             }
 
-            const indexCiudad = auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades.findIndex((ciudad) => {
+            const indexCiudad = auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades.findIndex((ciudad) => {
                 return ciudad.codigoCiudad === codigoCiudad && ciudad.codigoProvincia === codigoProvincia;
             });
 
 
             if (indexCiudad === -1) {
-                auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades.push({
+                auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades.push({
                     nombreCiudad,
                     codigoCiudad,
                     codigoLocalidad,
+                    codigoGrupo,
+                    nombreGrupo,
                     listadoPrestadores: [{ nombreInstitucion, idInstitucion, valorCosto, aplicaIva }],
                 });
             } else {
-                auxData[codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades[indexCiudad].listadoPrestadores.push({ nombreInstitucion, idInstitucion, valorCosto, aplicaIva });
+                auxData[codigoGrupo+"-"+codigoPrestacion+"-"+codigoLocalidadAnatomica].listadoCiudades[indexCiudad].listadoPrestadores.push({ nombreInstitucion, idInstitucion, valorCosto, aplicaIva });
             }
         });
 
@@ -3520,6 +3542,7 @@ $('#tableContainer').html(tableHtml);
         })
 
         const data = await call(args);
+        console.log(data);
         // console.log("++++++++++++++++++++++++++");
         // console.log(data);
         // console.log("++++++++++++++++++++++++++");
