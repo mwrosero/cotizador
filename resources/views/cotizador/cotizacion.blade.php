@@ -2583,7 +2583,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion, prestacion.codigoLocalidadAnatomica,'masivo');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2595,7 +2595,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion, prestacion.codigoLocalidadAnatomica,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2657,7 +2657,7 @@
             for (const grupo of localidad.grupos) {
                 //Reemplazar costos de provincias
                 for (const prestacion of grupo.prestaciones) {
-                    let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
+                    let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion, prestacion.codigoLocalidadAnatomica,'masivo');
                     if( costo_alterno != null){
                         prestacion.costoUnitario = costo_alterno;
                     }
@@ -2669,7 +2669,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,localidad.codigoCiudad,prestacion.codigoPrestacion, prestacion.codigoLocalidadAnatomica,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
