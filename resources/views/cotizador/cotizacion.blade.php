@@ -2583,7 +2583,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2595,7 +2595,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2657,7 +2657,7 @@
             for (const grupo of localidad.grupos) {
                 //Reemplazar costos de provincias
                 for (const prestacion of grupo.prestaciones) {
-                    let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
+                    let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,prestacion.codigoPrestacion,'masivo');
                     if( costo_alterno != null){
                         prestacion.costoUnitario = costo_alterno;
                     }
@@ -2669,7 +2669,7 @@
                 for (const grupo of localidad.grupos) {
                     //Reemplazar costos de provincias
                     for (const prestacion of grupo.prestaciones) {
-                        let costo_alterno = obtenerCostoPorId(localidad.codigoCiudad,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
+                        let costo_alterno = obtenerCostoPorId(grupo.codigoGrupo,localidad.codigoCiudad,localidad.codigoCiudad,prestacion.codigoPrestacion,'individual');
                         if( costo_alterno != null){
                             prestacion.costoUnitario = costo_alterno;
                         }
@@ -2777,8 +2777,8 @@
             $.each(dataPrestaciones, function(key, value){
                 $.each(value.grupos, function(k, v){
                     $.each(v.prestaciones, function(k1, v1){
-                        let costo_alterno = obtenerCostoPorId(value.codigoCiudad,v1.codigoPrestacion,v1.codigoLocalidadAnatomica,'masivo');
-                        let costo_alterno_individual = obtenerCostoPorId(value.codigoCiudad,v1.codigoPrestacion,v1.codigoLocalidadAnatomica,'individual');
+                        let costo_alterno = obtenerCostoPorId(v.codigoGrupo,value.codigoCiudad,v1.codigoPrestacion,v1.codigoLocalidadAnatomica,'masivo');
+                        let costo_alterno_individual = obtenerCostoPorId(v.codigoGrupo,value.codigoCiudad,v1.codigoPrestacion,v1.codigoLocalidadAnatomica,'individual');
                         // console.log("-----AKOLD-----")
                         // console.log(costo_alterno,costo_alterno_individual);
                         if(costo_alterno_individual != null){
@@ -3588,12 +3588,12 @@ $('#tableContainer').html(tableHtml);
         })
     }
 
-    function obtenerCostoPorId(codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type) {
+    function obtenerCostoPorId(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type) {
         // Utilizamos el método find() para buscar el objeto que tenga el idPrestacion específico
         // console.log(costosPrestadores)
         // console.table(codigoCiudad,idPrestacion, type)
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
-            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && prestacion.codigoLocalidadAnatomica == codigoLocalidadAnatomica;
+            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && prestacion.codigoLocalidadAnatomica == codigoLocalidadAnatomica && prestacion.codigoGrupo == codigoGrupo;
         });
 
         // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
