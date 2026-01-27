@@ -3159,14 +3159,15 @@ $('#tableContainer').html(tableHtml);
                         // total = v.prestadores.length;
                     })
                 // console.log({total});
-                    if(existenPrestadores){
-                        theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
-                    }
                 })
+                if(existenPrestadores){
+                    theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
+                }
             })
             institucionesArr = [];
             theader += `</tr>
                         <tr class="tr_second"><th class="fs-12">Prestadores</th>`;
+                        console.log(data.data)
             $.each(data.data, function(key, value){
                 $.each(value.grupos, function(kg,vg){
                     $.each(vg.prestaciones, function(k,v){
