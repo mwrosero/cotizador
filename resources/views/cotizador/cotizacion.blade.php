@@ -3460,24 +3460,33 @@ $('#tableContainer').html(tableHtml);
 
         if(prestacion == null){
             $.each(dataPrestaciones, function(key, value){
-                let codigosArea = value.codigoCiudad.split('-');
-                let prestacionesItem = [];
-                $.each(value.grupos, function(k, v){
-                    $.each(v.prestaciones, function(k1, v1){
-                        prestacionesItem.push({
-                            "codigoServicio": v1.codigoServicio,
-                            "codigoPrestacion": v1.codigoPrestacion,
-                            "codigoLocalidadAnatomica": v1.codigoLocalidadAnatomica,
-                            "cantidadPacientes": v1.cantidadPacientes
+                {{-- if(value.codigoCiudad !== undefined || value.codigoCiudad !== null){ --}}
+                if (typeof value.codigoCiudad !== 'undefined' && value.codigoCiudad) {
+                    let codigosArea = value.codigoCiudad.split('-');
+                    console.log(codigosArea)
+                    let gruposItem = [];
+                    $.each(value.grupos, function(k, v){
+                        let prestacionesItem = [];
+                        $.each(v.prestaciones, function(k1, v1){
+                            prestacionesItem.push({
+                                "codigoServicio": v1.codigoServicio,
+                                "codigoPrestacion": v1.codigoPrestacion,
+                                "codigoLocalidadAnatomica": v1.codigoLocalidadAnatomica,
+                                "cantidadPacientes": v1.cantidadPacientes
+                            })
+                        })
+                        gruposItem.push({
+                            "codigoGrupo": v.codigoGrupo,
+                            "prestaciones": prestacionesItem
+                        })
+                        prestacionesPorLocalidad.push({
+                            "codigoPais": parseInt(codigosArea[0]),
+                            "codigoProvincia": parseInt(codigosArea[1]),
+                            "codigoCiudad": parseInt(codigosArea[2]),
+                            "grupos": gruposItem                        
                         })
                     })
-                })
-                prestacionesPorLocalidad.push({
-                    "codigoPais": parseInt(codigosArea[0]),
-                    "codigoProvincia": parseInt(codigosArea[1]),
-                    "codigoCiudad": parseInt(codigosArea[2]),
-                    "prestaciones": prestacionesItem
-                })
+                }
             })
         }else{
             let codigosArea = idCiudades.split('-');
@@ -3485,8 +3494,13 @@ $('#tableContainer').html(tableHtml);
                 "codigoPais": parseInt(codigosArea[0]),
                 "codigoProvincia": parseInt(codigosArea[1]),
                 "codigoCiudad": parseInt(codigosArea[2]),
-                "prestaciones": [
-                    prestacion
+                "grupos": [
+                    {
+                        "codigoGrupo": parseInt(idGrupo),
+                        "prestaciones": [
+                            prestacion
+                        ]
+                    }
                 ]
             })
         }
