@@ -3431,14 +3431,7 @@ $('#tableContainer').html(tableHtml);
     let idGrupoPrestadorSeleccionado = null;
     
     async function obtenerPrestadores(prestacion = null, idCiudades = null, idGrupo = null, codigoLocalidadAnatomica = null, type=""){
-        // console.log(prestacion, idCiudades, idGrupo, codigoLocalidadAnatomica, type)
-        // return;
-        //let ciudades = getInput('ciudadChequeo','select2');
         let ciudades = [];
-        /*if(ciudades == ""){
-            showMessage('warning','Atención',"Debe elegir una ciudad del listado.");
-            return;
-        }*/
         
         let prestaciones = [];
         if(prestacion == null){
@@ -3482,7 +3475,6 @@ $('#tableContainer').html(tableHtml);
 
         if(prestacion == null){
             $.each(dataPrestaciones, function(key, value){
-                {{-- if(value.codigoCiudad !== undefined || value.codigoCiudad !== null){ --}}
                 if (typeof value.codigoCiudad !== 'undefined' && value.codigoCiudad) {
                     let codigosArea = value.codigoCiudad.split('-');
                     console.log(codigosArea)
@@ -3501,12 +3493,13 @@ $('#tableContainer').html(tableHtml);
                             "codigoGrupo": v.codigoGrupo,
                             "prestaciones": prestacionesItem
                         })
-                        prestacionesPorLocalidad.push({
-                            "codigoPais": parseInt(codigosArea[0]),
-                            "codigoProvincia": parseInt(codigosArea[1]),
-                            "codigoCiudad": parseInt(codigosArea[2]),
-                            "grupos": gruposItem                        
-                        })
+                    })
+                    console.log(gruposItem)
+                    prestacionesPorLocalidad.push({
+                        "codigoPais": parseInt(codigosArea[0]),
+                        "codigoProvincia": parseInt(codigosArea[1]),
+                        "codigoCiudad": parseInt(codigosArea[2]),
+                        "grupos": gruposItem                        
                     })
                 }
             })
@@ -3533,19 +3526,12 @@ $('#tableContainer').html(tableHtml);
         args["method"] = "POST";
         args["bodyType"] = "json";
         args["showLoader"] = true;
-        {{-- args["data"] = JSON.stringify({
-            "ciudades": ciudades,
-            "prestaciones": prestaciones
-        }) --}}
         args["data"] = JSON.stringify({
             "prestacionesPorLocalidad": prestacionesPorLocalidad
         })
 
         const data = await call(args);
         console.log(data);
-        // console.log("++++++++++++++++++++++++++");
-        // console.log(data);
-        // console.log("++++++++++++++++++++++++++");
         drawTablePrestadores(data, type);
     }
 
