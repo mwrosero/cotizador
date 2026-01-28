@@ -1595,7 +1595,7 @@
     }
 
     function bg_costo_0(codigoPrestacion, codigoLocalidadAnatomica, idLocalidad, idGrupo, type){
-        console.log(codigoPrestacion, codigoLocalidadAnatomica, idLocalidad, idGrupo, type);
+        //console.log(codigoPrestacion, codigoLocalidadAnatomica, idLocalidad, idGrupo, type);
         
         if(idGrupo === null){
             if(type == "add"){
@@ -1603,7 +1603,7 @@
             }else{
                 console.log("----------------")
                 console.log('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion+'-'+codigoLocalidadAnatomica);
-                $('.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion+'-'+codigoLocalidadAnatomica).removeClass('tr_costo_0');
+                $('.localidad_ciudad_'+idLocalidad+'_perfil'+idGrupo+'.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion+'-'+codigoLocalidadAnatomica).removeClass('tr_costo_0');
             }
         }else{
             console.log('.localidad_ciudad_'+idLocalidad+'_perfil'+idGrupo+'.tr-prestacion-'+idLocalidad+'-'+codigoPrestacion+'-'+codigoLocalidadAnatomica);
@@ -3585,12 +3585,12 @@ $('#tableContainer').html(tableHtml);
     }
 
     function obtenerCostoPorId(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type) {
-        console.log(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type)
+        // console.log(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type)
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
             const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
             let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
             let valorBuscado = normalize(codigoLocalidadAnatomica);
-            console.log(valorDB, valorBuscado)
+            // console.log(valorDB, valorBuscado)
 
             return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB == valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
