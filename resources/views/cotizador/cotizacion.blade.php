@@ -634,7 +634,7 @@
             <div class="modal-body pt-2">
                 <div class="row" id="box-prestadores">
                 </div>
-                <div class="row table-responsive">
+                <div class="row table-responsive box-table-prestadores">
                     <table class="table table-bordered">
                         <thead class="sticky-top" id="box-prestadores-list-th"></thead>
                         <tbody id="box-prestadores-list"></tbody>
@@ -3170,7 +3170,7 @@ $('#tableContainer').html(tableHtml);
                 // console.log({total});
                 })
                 if(existenPrestadores){
-                    theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
+                    theader += `<th class="fs-10 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
                 }
             })
             institucionesArr = [];
@@ -3182,7 +3182,7 @@ $('#tableContainer').html(tableHtml);
                     $.each(vg.prestaciones, function(k,v){
                         $.each(v.prestadores, function(k1,v1){
                             if(!institucionesArr.includes(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion)){
-                                theader += `<th class="fs-12 text-center" id="th_${vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion}">${v1.nombreInstitucion}</th>`
+                                theader += `<th class="fs-10 text-center" id="th_${vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion}">${v1.nombreInstitucion}</th>`
                                 institucionesArr.push(vg.codigoGrupo+"_"+value.codigoCiudad+"_"+v1.idInstitucion);
                             }
                         })
@@ -3952,6 +3952,27 @@ $('#tableContainer').html(tableHtml);
     .perfil:hover{
         background: rgb(23 29 73 / 15%);
         cursor: pointer;
+    }
+
+    /* 1. Forzamos a la tabla a no colapsar y a crecer horizontalmente */
+    .box-table-prestadores .table-responsive .table {
+        width: auto !important; /* Permite que la tabla supere el 100% del ancho */
+        min-width: 100%;
+        table-layout: fixed;   /* Esto obliga al navegador a usar el ancho que TÚ digas */
+    }
+
+    /* 2. Definimos anchos específicos por columna */
+    .box-table-prestadores .table-responsive .table th, 
+    .box-table-prestadores .table-responsive .table td {
+        width: 200px !important; /* Ajusta este valor según el nombre más largo */
+        word-wrap: break-word;
+        white-space: normal !important;
+        overflow: hidden;
+    }
+
+    /* 3. Si quieres que la primera columna (Prestadores) sea más ancha que las de precios */
+    .box-table-prestadores .table-responsive .table th:first-child {
+        width: 300px !important;
     }
 
     @media only screen and (max-width: 600px) {
