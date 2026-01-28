@@ -1840,6 +1840,7 @@
         $('#precio_total').html("Total: $"+formatDollar(total_precios));
         calcularTH();
         $(window).scrollTop($(document).height());
+        refreshCostosCero();
     }
 
     let tabla;
