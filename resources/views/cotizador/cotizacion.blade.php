@@ -3585,18 +3585,16 @@ $('#tableContainer').html(tableHtml);
     }
 
     function obtenerCostoPorId(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type) {
-        // Utilizamos el método find() para buscar el objeto que tenga el idPrestacion específico
-        // console.log(costosPrestadores)
-        // console.table(codigoCiudad,idPrestacion, type)
+        console.log(codigoGrupo, codigoCiudad, idPrestacion, codigoLocalidadAnatomica, type)
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
             const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
             let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
             let valorBuscado = normalize(codigoLocalidadAnatomica);
+            console.log(valorDB, valorBuscado)
 
-            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB === valorBuscado && prestacion.codigoGrupo == codigoGrupo;
+            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB == valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
 
-        // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
         return (prestacionEncontrada != undefined) ? prestacionEncontrada.costo : null;
     }
 
