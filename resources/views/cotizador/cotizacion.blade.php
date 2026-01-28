@@ -634,12 +634,24 @@
             <div class="modal-body pt-2">
                 <div class="row" id="box-prestadores">
                 </div>
-                <div class="row table-responsive">
+                <div class="row">
+                    <div class="col-12"> 
+                        <div class="table-responsive" style="max-height: 70vh; overflow-y: auto;">
+                            <table class="table table-bordered table-hover">
+                                <thead class="sticky-top bg-white" id="box-prestadores-list-th" style="z-index: 10;">
+                                    </thead>
+                                <tbody id="box-prestadores-list">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="row table-responsive">
                     <table class="table table-bordered">
                         <thead class="sticky-top" id="box-prestadores-list-th"></thead>
                         <tbody id="box-prestadores-list"></tbody>
                     </table>                    
-                </div>
+                </div> --}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal" onclick="calcularTH()">
@@ -3583,7 +3595,7 @@ $('#tableContainer').html(tableHtml);
             const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
             let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
             let valorBuscado = normalize(codigoLocalidadAnatomica);
-            
+
             return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB === valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
 
