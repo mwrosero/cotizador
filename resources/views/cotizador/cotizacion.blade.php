@@ -3580,7 +3580,11 @@ $('#tableContainer').html(tableHtml);
         // console.log(costosPrestadores)
         // console.table(codigoCiudad,idPrestacion, type)
         let prestacionEncontrada = costosPrestadores.find(function(prestacion) {
-            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && prestacion.codigoLocalidadAnatomica == codigoLocalidadAnatomica && prestacion.codigoGrupo == codigoGrupo;
+            const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
+            let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
+            let valorBuscado = normalize(codigoLocalidadAnatomica);
+            
+            return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB === valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
 
         // Si encontramos la prestación, devolvemos su costo; de lo contrario, devolvemos null o un valor predeterminado
