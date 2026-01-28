@@ -634,24 +634,12 @@
             <div class="modal-body pt-2">
                 <div class="row" id="box-prestadores">
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="table-responsive" style="overflow-x: auto; width: 100%;">
-                            <table class="table table-bordered align-middle">
-                                <thead class="sticky-top bg-dark text-white" id="box-prestadores-list-th">
-                                    </thead>
-                                <tbody id="box-prestadores-list">
-                                    </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                {{-- <div class="row table-responsive">
+                <div class="row table-responsive">
                     <table class="table table-bordered">
                         <thead class="sticky-top" id="box-prestadores-list-th"></thead>
                         <tbody id="box-prestadores-list"></tbody>
                     </table>                    
-                </div> --}}
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal" onclick="calcularTH()">
@@ -3173,7 +3161,7 @@ $('#tableContainer').html(tableHtml);
                 // console.log({total});
                 })
                 if(existenPrestadores){
-                    theader += `<th class="fs-12 text-center" style="min-width: 200px;" colspan="${total}">${value.nombreCiudad}</th>`;
+                    theader += `<th class="fs-12 text-center" colspan="${total}">${value.nombreCiudad}</th>`;
                 }
             })
             institucionesArr = [];
@@ -3595,7 +3583,7 @@ $('#tableContainer').html(tableHtml);
             const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
             let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
             let valorBuscado = normalize(codigoLocalidadAnatomica);
-
+            
             return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB === valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
 
@@ -3925,24 +3913,6 @@ $('#tableContainer').html(tableHtml);
 
     .tr_costo_0{
         background: rgb(255 0 0 / 10%) !important;
-    }
-
-    #box-prestadores-list-th th {
-        /* Evita que el texto se amontone */
-        min-width: 200px !important; 
-        white-space: normal; /* Permite saltos de línea controlados */
-        vertical-align: middle;
-        padding: 10px;
-    }
-
-    /* La primera columna (Ciudades/Prestaciones) puede ser más ancha */
-    #box-prestadores-list-th th:first-child, 
-    #box-prestadores-list td:first-child {
-        min-width: 250px !important;
-        position: sticky;
-        left: 0;
-        background-color: #f8f9fa; /* Color de fondo para que no se vea transparente al hacer scroll */
-        z-index: 11;
     }
 
     /*Nueva tabla Prestaciones*/
