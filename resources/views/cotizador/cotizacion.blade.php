@@ -3955,15 +3955,15 @@ $('#tableContainer').html(tableHtml);
     }
 
     /* 1. Forzamos a la tabla a no colapsar y a crecer horizontalmente */
-    .box-table-prestadores .table-responsive .table {
+    .table-responsive .table {
         width: auto !important; /* Permite que la tabla supere el 100% del ancho */
         min-width: 100%;
         table-layout: fixed;   /* Esto obliga al navegador a usar el ancho que TÚ digas */
     }
 
     /* 2. Definimos anchos específicos por columna */
-    .box-table-prestadores .table-responsive .table th, 
-    .box-table-prestadores .table-responsive .table td {
+    .table-responsive .table th, 
+    .table-responsive .table td {
         width: 200px !important; /* Ajusta este valor según el nombre más largo */
         word-wrap: break-word;
         white-space: normal !important;
@@ -3971,7 +3971,7 @@ $('#tableContainer').html(tableHtml);
     }
 
     /* 3. Si quieres que la primera columna (Prestadores) sea más ancha que las de precios */
-    .box-table-prestadores .table-responsive .table th:first-child {
+    .table-responsive .table th:first-child {
         width: 300px !important;
     }
 
