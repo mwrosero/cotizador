@@ -2821,6 +2821,14 @@
             }
             th_cotizacion = t_h.toFixed(2);
         }
+
+        refreshCostosCero();
+    }
+
+    function refreshCostosCero(){
+        $.each(costosPrestadores, function(key, value){
+            $(`.localidad_ciudad_${value.idLocalidad}_perfil${value.codigoGrupo}.tr-prestacion-${value.idLocalidad}-${value.idPrestacion}-${value.codigoLocalidadAnatomica}`).removeClass('tr_costo_0')
+        })
     }
 
     // Función para escapar las comillas dobles en el valor del atributo
@@ -3583,7 +3591,7 @@ $('#tableContainer').html(tableHtml);
             const normalize = (val) => (val === 'null' || val === null || val === undefined) ? null : val;
             let valorDB = normalize(prestacion.codigoLocalidadAnatomica);
             let valorBuscado = normalize(codigoLocalidadAnatomica);
-            
+
             return prestacion.idPrestacion == idPrestacion && type == prestacion.tipo && prestacion.idLocalidad == codigoCiudad && valorDB === valorBuscado && prestacion.codigoGrupo == codigoGrupo;
         });
 
